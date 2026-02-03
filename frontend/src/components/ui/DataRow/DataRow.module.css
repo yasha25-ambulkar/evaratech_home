@@ -1,0 +1,21 @@
+.dataRow {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.dataRow:last-child {
+    border-bottom: none;
+}
+
+.label {
+    color: #666;
+}
+
+.value {
+    font-weight: bold;
+    color: var(--color-primary);
+    text-align: right;
+    max-width: 65%;
+}

@@ -1,0 +1,117 @@
+.container {
+    padding: var(--spacing-lg);
+    background-color: var(--color-background);
+    min-height: 100vh;
+}
+
+.header {
+    background: var(--color-white);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+.stationIdLabel {
+    font-size: 0.9rem;
+    color: #888;
+}
+
+.stationId {
+    font-weight: bold;
+    color: var(--color-primary);
+}
+
+.header h1 {
+    margin: var(--spacing-sm) 0 0 0;
+    color: var(--color-primary);
+    font-size: 1.5rem;
+}
+
+.backBtn {
+    text-decoration: none;
+    color: #555;
+    font-weight: bold;
+    border: 1px solid #ddd;
+    padding: 8px 15px;
+    border-radius: var(--radius-sm);
+    transition: background var(--transition-fast);
+}
+
+.backBtn:hover {
+    background: #eee;
+}
+
+.gridContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.card {
+    background: var(--color-white);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+}
+
+.card h2 {
+    font-size: 1.1rem;
+    color: #333;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: var(--spacing-sm);
+    margin-top: 0;
+    margin-bottom: var(--spacing-md);
+}
+
+.dataRow {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.dataRow:last-child {
+    border-bottom: none;
+}
+
+.label {
+    color: #666;
+}
+
+.value {
+    font-weight: bold;
+    color: var(--color-primary);
+}
+
+.statusBadge {
+    background: var(--color-normal-bg);
+    color: var(--color-normal-text);
+    padding: 5px 10px;
+    border-radius: var(--radius-lg);
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: var(--spacing-md);
+    }
+
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-md);
+    }
+
+    .header h1 {
+        font-size: 1.2rem;
+    }
+
+    .gridContainer {
+        grid-template-columns: 1fr;
+    }
+}

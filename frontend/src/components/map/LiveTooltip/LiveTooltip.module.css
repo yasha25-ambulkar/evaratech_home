@@ -1,0 +1,182 @@
+/* LiveTooltip - Real-time data display on map markers */
+
+.tooltip {
+    min-width: 280px;
+    max-width: 320px;
+    background: var(--bg-elevated);
+    backdrop-filter: blur(var(--blur)) saturate(180%);
+    -webkit-backdrop-filter: blur(var(--blur)) saturate(180%);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    padding: 0;
+    overflow: hidden;
+}
+
+[data-theme="dark"] .tooltip {
+    background: var(--bg-elevated);
+    border-color: var(--border-focus);
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-4);
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.statusDot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.statusDot.active {
+    background: #4CAF50;
+    animation: pulse 2s infinite;
+}
+
+.statusDot.inactive {
+    background: #FF5252;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.6;
+    }
+}
+
+/* Content */
+.content {
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-2) 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.row:last-child {
+    border-bottom: none;
+}
+
+.label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.value {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+}
+
+/* Trend indicators */
+.trend {
+    font-size: 16px;
+    margin-left: var(--space-1);
+}
+
+.trend:contains('↑') {
+    color: var(--accent-green);
+}
+
+.trend:contains('↓') {
+    color: var(--accent-red);
+}
+
+/* Status badges */
+.statusBadge {
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.statusRunning {
+    background: rgba(76, 175, 80, 0.2);
+    color: #2e7d32;
+    border: 1px solid rgba(76, 175, 80, 0.4);
+}
+
+[data-theme="dark"] .statusRunning {
+    background: rgba(76, 175, 80, 0.3);
+    color: #81c784;
+}
+
+.statusStopped {
+    background: rgba(158, 158, 158, 0.2);
+    color: #616161;
+    border: 1px solid rgba(158, 158, 158, 0.4);
+}
+
+[data-theme="dark"] .statusStopped {
+    background: rgba(158, 158, 158, 0.3);
+    color: #bdbdbd;
+}
+
+/* Footer */
+.footer {
+    padding: var(--space-3) var(--space-4);
+    background: var(--bg-hover);
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: center;
+}
+
+.timestamp {
+    font-size: 11px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+}
+
+.timestamp i {
+    font-size: 10px;
+}
+
+/* Leaflet tooltip override */
+:global(.leaflet-tooltip) {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+:global(.leaflet-tooltip-top):before,
+:global(.leaflet-tooltip-bottom):before,
+:global(.leaflet-tooltip-left):before,
+:global(.leaflet-tooltip-right):before {
+    display: none !important;
+}

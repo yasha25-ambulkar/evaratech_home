@@ -1,0 +1,228 @@
+.container {
+    min-height: calc(100vh - 64px);
+    background: #f8f9fa;
+    padding: 30px 20px;
+}
+
+.header {
+    max-width: 1400px;
+    margin: 0 auto 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.title {
+    font-size: 2rem;
+    color: #212529;
+    margin: 0 0 5px 0;
+    font-weight: 700;
+}
+
+.subtitle {
+    color: #6c757d;
+    margin: 0;
+    font-size: 1rem;
+}
+
+.newBtn {
+    background: #0077b6;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+}
+
+.newBtn:hover {
+    background: #023e8a;
+    transform: translateY(-2px);
+}
+
+.grid {
+    max-width: 1400px;
+    margin: 0 auto 50px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.cardIcon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 20px;
+    background: linear-gradient(135deg, #0077b6, #00b4d8);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.75rem;
+}
+
+.cardTitle {
+    font-size: 1.1rem;
+    color: #212529;
+    margin: 0 0 10px 0;
+    font-weight: 600;
+}
+
+.cardDescription {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin: 0 0 20px 0;
+    line-height: 1.5;
+}
+
+.generateBtn {
+    background: #f8f9fa;
+    color: #0077b6;
+    padding: 10px 20px;
+    border: 1px solid #0077b6;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+}
+
+.generateBtn:hover {
+    background: #0077b6;
+    color: white;
+}
+
+.section {
+    max-width: 1400px;
+    margin: 0 auto;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.sectionTitle {
+    font-size: 1.5rem;
+    color: #212529;
+    margin: 0 0 20px 0;
+    font-weight: 600;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.reportItem {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+.reportItem:hover {
+    background: #e9ecef;
+}
+
+.reportIcon {
+    width: 48px;
+    height: 48px;
+    background: #0077b6;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.reportInfo {
+    flex: 1;
+}
+
+.reportInfo h4 {
+    font-size: 1rem;
+    color: #212529;
+    margin: 0 0 5px 0;
+    font-weight: 600;
+}
+
+.reportInfo p {
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin: 0;
+}
+
+.downloadBtn {
+    background: white;
+    color: #0077b6;
+    padding: 10px 20px;
+    border: 1px solid #0077b6;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+}
+
+.downloadBtn:hover {
+    background: #0077b6;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .newBtn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .reportItem {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .downloadBtn {
+        width: 100%;
+        justify-content: center;
+    }
+}

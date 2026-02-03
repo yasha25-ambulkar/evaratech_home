@@ -1,0 +1,1016 @@
+/* ==========================================================================
+   GLOBAL RESET
+   ========================================================================== */
+:root {
+    --primary-color: #2196F3;
+    --bg-light: #f0f2f5;
+    --text-dark: #333;
+    --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --header-height: 90px;
+    --pipe-outer-width: 14px;
+    --pipe-inner-width: 8px;
+    --pipe-glass-color: rgba(255, 255, 255, 0.4);
+    --pipe-border-color: rgba(38, 50, 56, 0.3);
+    --water-color: #29b6f6;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* ==========================================================================
+   HEADER
+   ========================================================================== */
+.app-header {
+    height: var(--header-height);
+    background-color: #fff;
+    border-bottom: 2px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.header-content {
+    width: 95%;
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo-row {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.evara-logo {
+    height: 65px;
+    width: auto;
+}
+
+.iiit-logo {
+    height: 70px;
+    width: auto;
+}
+
+.analytics-btn,
+.back-btn {
+    padding: 8px 25px;
+    border-radius: 25px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.analytics-btn {
+    background: #fff;
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+.analytics-btn:hover {
+    background: var(--primary-color);
+    color: #fff;
+}
+
+.back-btn {
+    background: none;
+    border: 2px solid #ccc;
+    color: #555;
+}
+
+/* ==========================================================================
+   DASHBOARD LAYOUT
+   ========================================================================== */
+.app-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    background: #fff;
+}
+
+.main-title {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 30px;
+    color: #2c3e50;
+    letter-spacing: 1.5px;
+}
+
+.diagram-wrapper {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    position: relative;
+    width: 95%;
+    max-width: 1200px;
+    height: 550px;
+    border: 2px dashed #e0e0e0;
+    border-radius: 20px;
+    background: #fafafa;
+    padding: 0 40px 60px 40px;
+}
+
+/* --- DASHBOARD INFO PANEL --- */
+.dashboard-info-panel {
+    position: absolute;
+    top: 40px;
+
+    /* 🔴 UPDATED: Shifted further left (was 170px) */
+    right: 220px;
+
+    /* 🔴 UPDATED: Made box slightly smaller */
+    width: 290px;
+
+    background: #fff;
+    border: 1px solid #cfd8dc;
+    border-radius: 12px;
+
+    /* 🔴 UPDATED: Reduced padding to make it "shorter" */
+    padding: 15px;
+
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    z-index: 20;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    /* 🔴 UPDATED: Reduced spacing between rows */
+    margin-bottom: 4px;
+    padding-bottom: 4px;
+
+    border-bottom: 1px dashed #eceff1;
+}
+
+.info-row:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.info-label {
+    font-size: 0.9rem;
+    /* Slightly smaller text */
+    color: #000;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.info-value {
+    font-size: 1.2rem;
+    /* Slightly smaller text */
+    color: #2196F3;
+    font-weight: 800;
+}
+
+.info-value.highlight {
+    color: #2196F3;
+    font-size: 1.4rem;
+}
+
+/* ==========================================================================
+   PIPELINE
+   ========================================================================== */
+.pipeline-svg-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.pipe-glass-tube {
+    fill: none;
+    stroke: var(--pipe-glass-color);
+    stroke-width: var(--pipe-outer-width);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.1));
+}
+
+.pipe-border-lines {
+    fill: none;
+    stroke: var(--pipe-border-color);
+    stroke-width: var(--pipe-outer-width);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.6;
+}
+
+.pipe-water-inner {
+    fill: none;
+    stroke: var(--water-color);
+    stroke-width: var(--pipe-inner-width);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 15, 15;
+    /* opacity handled by JS */
+    /* animation handled by Framer Motion */
+    filter: drop-shadow(0 0 3px rgba(41, 182, 246, 0.8));
+}
+
+.pipe-water-inner-off {
+    fill: none;
+    stroke: var(--water-color);
+    stroke-width: var(--pipe-inner-width);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0;
+}
+
+.flow-active .pipe-water-inner {
+    /* Animation handled by Framer Motion */
+}
+
+/* Removed keyframes flowAnimation */
+
+.valve-lever {
+    transform-origin: 0 0;
+    /* transition handled by Framer Motion */
+}
+
+/* valve-open handled by Framer Motion */
+
+/* ==========================================================================
+   ASSEMBLIES
+   ========================================================================== */
+.assembly-building {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+}
+
+.repositioned-tank {
+    transform: translate(-14%, -25%);
+    margin-top: -30px;
+}
+
+.tank-wrapper {
+    margin-bottom: 5px;
+    z-index: 3;
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.level-indicator-box {
+    width: 60px;
+    height: 80px;
+    background: #263238;
+    border: 2px solid #546e7a;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    margin-bottom: 10px;
+}
+
+.level-label {
+    font-size: 0.6rem;
+    color: #b0bec5;
+    font-weight: 700;
+}
+
+.level-value {
+    font-size: 0.7rem;
+    color: #4fc3f7;
+    margin-bottom: 5px;
+}
+
+.level-bar-bg {
+    width: 100%;
+    height: 40px;
+    background: #37474f;
+    border-radius: 2px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* SMALL INDICATOR BAR */
+.level-bar-fill {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(to top, #0288d1, #29b6f6);
+    transition: height 0.1s linear;
+}
+
+/* MAIN GLASS TANK */
+.css-tank-glass {
+    width: 120px;
+    height: 130px;
+    background: rgba(220, 240, 255, 0.15);
+    border: 3px solid #37474f;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.3), 0 4px 8px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(1px);
+}
+
+.enlarged-tank {
+    width: 200px;
+    height: 280px;
+    border: 4px solid #37474f;
+}
+
+/* VISUAL WATER */
+.glass-tank-water {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(41, 182, 246, 0.85);
+    border-top: 2px solid rgba(255, 255, 255, 0.9);
+    transition: height 0.1s linear;
+    z-index: 1;
+}
+
+.measure-lines {
+    position: absolute;
+    top: 10px;
+    right: 5px;
+    bottom: 10px;
+    width: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.m-line {
+    width: 100%;
+    height: 2px;
+    background: rgba(55, 71, 79, 0.8);
+}
+
+.glass-shine {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 40%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0));
+    transform: skewX(-15deg);
+    pointer-events: none;
+    z-index: 3;
+}
+
+.css-building {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    filter: drop-shadow(0 8px 5px rgba(0, 0, 0, 0.2));
+}
+
+.building-roof {
+    width: 190px;
+    height: 15px;
+    background: #546e7a;
+    border-radius: 4px 4px 0 0;
+    border-bottom: 4px solid #37474f;
+    z-index: 2;
+}
+
+.building-facade {
+    width: 170px;
+    height: 180px;
+    background: linear-gradient(to right, #eceff1, #fff, #eceff1);
+    border: 2px solid #cfd8dc;
+    border-top: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 15px;
+    position: relative;
+}
+
+.window-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.window {
+    width: 25px;
+    height: 35px;
+    background: #90a4ae;
+    border: 2px solid #546e7a;
+    background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, transparent 50%);
+}
+
+.building-door {
+    width: 40px;
+    height: 50px;
+    background: #37474f;
+    margin-top: auto;
+    border-radius: 4px 4px 0 0;
+    border: 2px solid #263238;
+    border-bottom: none;
+}
+
+.building-base {
+    width: 190px;
+    height: 8px;
+    background: #4caf50;
+    border-radius: 4px;
+    margin-top: -2px;
+    z-index: 2;
+}
+
+.label-ghc {
+    margin-top: -20px;
+    margin-bottom: 25px;
+    margin-left: 15px;
+    font-weight: 800;
+    font-size: 1.4rem;
+    color: #333;
+}
+
+/* DRAINAGE CONTROL */
+.drainage-control {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.drainage-header {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 8px;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border: 2px solid #e0e0e0;
+    border-radius: 50px;
+    padding: 8px 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.orange-led {
+    background: #ccc;
+}
+
+.glow-orange {
+    background: #ff9800;
+    box-shadow: 0 0 10px #ff9800;
+    border-color: #e65100;
+}
+
+.gray-led {
+    background: #ccc;
+}
+
+.glow-gray {
+    background: #757575;
+    box-shadow: 0 0 8px #757575;
+    border-color: #424242;
+}
+
+.label-drainage {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #555;
+    margin-top: 5px;
+    text-transform: uppercase;
+}
+
+.external-drainage {
+    position: absolute;
+    bottom: -5px;
+    left: 200px;
+    z-index: 15;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+/* MOTOR & PUMP */
+.motor-group-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 25px;
+    margin-left: -30px;
+    position: relative;
+    z-index: 10;
+    transform: translateX(-13%);
+}
+
+.control-Header {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 8px;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border: 2px solid #e0e0e0;
+    border-radius: 50px;
+    padding: 8px 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.led-indicators {
+    display: flex;
+    gap: 8px;
+}
+
+.led-light {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #ccc;
+    border: 1px solid #999;
+}
+
+.glow-green {
+    background: #00e676;
+    box-shadow: 0 0 10px #00e676;
+    border-color: #00c853;
+}
+
+.glow-red {
+    background: #ff1744;
+    box-shadow: 0 0 10px #ff1744;
+    border-color: #d50000;
+}
+
+.switch {
+    position: relative;
+    width: 45px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked+.slider {
+    background-color: #2196F3;
+}
+
+input:checked+.slider:before {
+    transform: translateX(21px);
+}
+
+.img-motor {
+    width: 110px;
+    height: auto;
+    margin-top: 5px;
+    transition: transform 0.1s;
+}
+
+.flow-active .img-motor {
+    animation: rumble 0.2s linear infinite;
+}
+
+@keyframes rumble {
+    0% {
+        transform: translate(0, 0);
+    }
+
+    25% {
+        transform: translate(-1px, 1px);
+    }
+
+    50% {
+        transform: translate(1px, -1px);
+    }
+
+    75% {
+        transform: translate(-1px, -1px);
+    }
+
+    100% {
+        transform: translate(0, 0);
+    }
+}
+
+/* MOTOR Label Position */
+.label-motor {
+    font-weight: 900;
+    font-size: 1rem;
+    margin-top: 5px;
+    color: #333;
+    margin-left: 20px;
+    /* Moved slightly right */
+}
+
+/* PUMP HOUSE Styles */
+.assembly-pump-house {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 25px;
+    z-index: 2;
+}
+
+.css-pump-house {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    filter: drop-shadow(0 8px 5px rgba(0, 0, 0, 0.2));
+    transform: scale(1.25);
+    /* Larger Pump House */
+    transform-origin: bottom center;
+    margin-bottom: 12px;
+}
+
+.ph-roof {
+    width: 140px;
+    height: 12px;
+    background: #37474f;
+    border-radius: 3px 3px 0 0;
+    z-index: 2;
+}
+
+.ph-body {
+    width: 130px;
+    height: 110px;
+    background: #eceff1;
+    border: 2px solid #cfd8dc;
+    border-top: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    background: linear-gradient(to right, #cfd8dc, #eceff1, #cfd8dc);
+}
+
+.ph-water-window {
+    width: 80px;
+    height: 50px;
+    background: #fff;
+    border: 3px solid #546e7a;
+    border-radius: 4px;
+    margin-top: 15px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+/* 🔴 CORRECTED: Matches height via JS inline-style */
+.ph-water-level {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(to top, #0288d1, #4fc3f7);
+    transition: height 0.2s linear;
+    /* Smooth fill/drain */
+    opacity: 0.8;
+}
+
+.ph-level-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+    z-index: 10;
+}
+
+.ph-door {
+    width: 40px;
+    height: 40px;
+    background: #455a64;
+    border-radius: 3px 3px 0 0;
+    border: 1px solid #263238;
+    border-bottom: none;
+    margin-top: auto;
+}
+
+.ph-base {
+    width: 145px;
+    height: 6px;
+    background: #795548;
+    border-radius: 3px;
+    margin-top: -2px;
+    z-index: 2;
+}
+
+.label-tank {
+    font-weight: 900;
+    font-size: 1.1rem;
+    margin-top: 15px;
+    color: #333;
+}
+
+/* ANALYTICS */
+.analytics-page {
+    width: 100%;
+    padding: 30px 20px;
+    background-color: var(--bg-light);
+    height: calc(100vh - var(--header-height));
+    overflow-y: auto;
+}
+
+.analytics-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.analytics-heading {
+    font-size: 1.8rem;
+    color: #2c3e50;
+    margin-bottom: 30px;
+    font-weight: 700;
+}
+
+.summary-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.summary-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: var(--card-shadow);
+    border: 1px solid #fff;
+    transition: transform 0.2s;
+}
+
+.summary-card:hover {
+    transform: translateY(-3px);
+}
+
+.sc-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #e3f2fd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.sc-info h4 {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #777;
+    font-weight: 600;
+}
+
+.sc-info p {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #333;
+    font-weight: 700;
+}
+
+.analytics-grid-layout {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+}
+
+@media (max-width: 1024px) {
+    .analytics-grid-layout {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .analytics-grid-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+.full-width {
+    grid-column: 1 / -1;
+}
+
+.card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: var(--card-shadow);
+    border: 1px solid #eef0f2;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.card h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #444;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.badge {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    font-size: 0.75rem;
+    padding: 4px 12px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    font-weight: 800;
+}
+
+.chart-area-large {
+    width: 100%;
+    height: 320px;
+}
+
+.chart-area-medium {
+    width: 100%;
+    height: 250px;
+}
+
+.chart-area-small {
+    width: 100%;
+    height: 200px;
+}
+
+.insights-row {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.insight-item {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.kpi-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: auto;
+}
+
+.kpi-box {
+    background: #fafafa;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid #eee;
+}
+
+.kpi-box span {
+    display: block;
+    font-size: 0.8rem;
+    color: #888;
+    margin-bottom: 5px;
+}
+
+.kpi-box strong {
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.text-insight {
+    margin-top: auto;
+    background: #fff3e0;
+    padding: 15px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    color: #5d4037;
+    border-left: 4px solid #ff9800;
+}
+
+.timeline-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.timeline-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #f9f9f9;
+}
+
+.timeline-item:last-child {
+    border-bottom: none;
+}
+
+.time {
+    font-size: 0.8rem;
+    color: #999;
+    font-family: monospace;
+    min-width: 65px;
+}
+
+.event {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #333;
+}
+
+.timeline-item.warning .event {
+    color: #f57c00;
+}
+
+.dashboard-row {
+    display: flex;
+    width: 100%;
+    gap: 20px;
+}
+
+.dashboard-card {
+    flex: 1;
+}
+
+/* --- FORCE FULL WIDTH OVERRIDES --- */
+.analytics-page,
+.analytics-container,
+.analytics-grid-layout {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 20px;
+    padding-right: 20px;
+    box-sizing: border-box;
+}
+
+.card {
+    width: auto !important;
+    flex-grow: 1 !important;
+}
+
+iframe {
+    width: 100% !important;
+}

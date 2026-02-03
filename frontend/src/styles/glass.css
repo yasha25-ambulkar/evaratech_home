@@ -1,0 +1,222 @@
+/* Clean Light Professional Design System */
+/* Replaces previous "Glassmorphism" system */
+
+:root {
+    /* ===== Backgrounds - Professional Light ===== */
+    --bg-primary: #f8f9fa;
+    /* Main App Background (Off-white) */
+    --bg-secondary: #ffffff;
+    /* Content Background (Pure White) */
+    --bg-card: #ffffff;
+    /* Card Background */
+    --bg-card-hover: #f1f3f5;
+    --bg-input: #ffffff;
+    --bg-elevated: #ffffff;
+    --bg-overlay: rgba(255, 255, 255, 0.95);
+
+    /* ===== Text Colors - High Contrast ===== */
+    --text-primary: #212529;
+    /* Almost Black */
+    --text-secondary: #495057;
+    /* Dark Gray */
+    --text-muted: #868e96;
+    /* Medium Gray */
+    --text-disabled: #adb5bd;
+    /* Light Gray */
+    --text-inverse: #ffffff;
+    /* Text on colored backgrounds */
+
+    /* ===== Borders - Crisp & Subtle ===== */
+    --border-subtle: #e9ecef;
+    --border-medium: #dee2e6;
+    --border-focus: #4dabf7;
+
+    /* ===== Accent Colors (Professional Palette) ===== */
+    --color-primary: #0288d1;
+    /* Water Blue */
+    --color-secondary: #455a64;
+    /* Slate */
+    --color-success: #2e7d32;
+    /* Green */
+    --color-warning: #ed6c02;
+    /* Orange/Amber */
+    --color-error: #d32f2f;
+    /* Red */
+    --color-info: #0288d1;
+    /* Light Blue */
+
+    /* ===== Shadows (Soft Depth) ===== */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+
+    /* ===== Border Radius ===== */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    --radius-full: 9999px;
+
+    /* ===== Spacing ===== */
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.25rem;
+    --space-6: 1.5rem;
+    --space-8: 2rem;
+    --space-10: 2.5rem;
+    --space-12: 3rem;
+    --space-16: 4rem;
+
+    /* ===== Typography ===== */
+    --font-display: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: 'JetBrains Mono', 'SF Mono', 'Monaco', monospace;
+
+    /* ===== Transitions ===== */
+    --transition-fast: 150ms ease-in-out;
+    --transition-base: 250ms ease-in-out;
+    --transition-slow: 400ms ease-in-out;
+}
+
+/* ===== Global Reset & Base ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-display);
+    font-size: 14px;
+    line-height: 1.5;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== Typography ===== */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: var(--text-primary);
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: var(--space-3);
+}
+
+h1 {
+    font-size: 2rem;
+}
+
+h2 {
+    font-size: 1.75rem;
+}
+
+h3 {
+    font-size: 1.5rem;
+}
+
+h4 {
+    font-size: 1.25rem;
+}
+
+h5 {
+    font-size: 1rem;
+}
+
+p {
+    color: var(--text-secondary);
+    margin-bottom: var(--space-3);
+}
+
+/* ===== Component Utilities (Replacing Glass Classes) ===== */
+
+/* Card Styling - Solid White, Subtle Shadow */
+.glass-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow var(--transition-base), transform var(--transition-base);
+}
+
+.glass-card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--border-focus);
+}
+
+/* Button Styling */
+.glass-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-2) var(--space-4);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    box-shadow: var(--shadow-sm);
+}
+
+.glass-button:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--text-secondary);
+    box-shadow: var(--shadow-md);
+}
+
+.glass-button:active {
+    background: var(--border-medium);
+    transform: translateY(0);
+}
+
+/* Input Styling */
+.glass-input {
+    width: 100%;
+    padding: var(--space-2) var(--space-3);
+    background: var(--bg-input);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    transition: all var(--transition-fast);
+}
+
+.glass-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(2, 136, 209, 0.15);
+    /* Focus Ring */
+}
+
+.glass-input::placeholder {
+    color: var(--text-muted);
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}

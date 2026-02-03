@@ -1,0 +1,13 @@
+.footer {
+    text-align: center;
+    padding: var(--space-8);
+    background: var(--bg-primary);
+    border-top: 1px solid var(--border-subtle);
+    color: var(--text-muted);
+    margin-top: auto;
+}
+
+.footer p {
+    margin: 0;
+    font-size: 0.9rem;
+}

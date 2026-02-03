@@ -1,0 +1,122 @@
+.card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-base);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    gap: var(--space-4);
+    align-items: flex-start;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--border-hover);
+}
+
+.icon {
+    font-size: 2.5rem;
+    width: 60px;
+    height: 60px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background: var(--bg-elevated);
+    transition: transform var(--transition-base);
+}
+
+.card:hover .icon {
+    transform: scale(1.1);
+}
+
+.content {
+    flex: 1;
+    min-width: 0;
+}
+
+.value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--space-1);
+    letter-spacing: -0.02em;
+}
+
+.label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-2);
+    font-weight: 500;
+}
+
+.percentage {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: var(--radius-sm);
+}
+
+.trendIcon {
+    font-size: 1rem;
+}
+
+.trendUp {
+    color: var(--status-success);
+    background: rgba(76, 175, 80, 0.1);
+}
+
+.trendDown {
+    color: var(--status-error);
+    background: rgba(255, 82, 82, 0.1);
+}
+
+.trendNeutral {
+    color: var(--text-muted);
+    background: var(--bg-elevated);
+}
+
+/* Color Variants */
+.blue .icon {
+    color: var(--accent-blue);
+    background: rgba(74, 144, 226, 0.1);
+}
+
+.green .icon {
+    color: var(--accent-green);
+    background: rgba(76, 175, 80, 0.1);
+}
+
+.orange .icon {
+    color: var(--accent-orange);
+    background: rgba(255, 152, 0, 0.1);
+}
+
+.red .icon {
+    color: var(--accent-red);
+    background: rgba(255, 82, 82, 0.1);
+}
+
+@media (max-width: 640px) {
+    .card {
+        padding: var(--space-4);
+    }
+
+    .icon {
+        width: 50px;
+        height: 50px;
+        font-size: 2rem;
+    }
+
+    .value {
+        font-size: 1.5rem;
+    }
+}
