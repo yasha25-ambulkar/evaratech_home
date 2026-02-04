@@ -54,7 +54,7 @@ function Sidebar({ isOpen, onClose, asset }: SidebarProps) {
 
                 {/* 1. General Info Card */}
                 <div className={styles.infoCard}>
-                    <h3>General Information</h3>
+                    <h3><i className="fas fa-info-circle"></i> General Information</h3>
                     <div className={styles.dataRow}>
                         <span className={styles.label}>Asset ID</span>
                         <span className={styles.value}>{asset.id}</span>
@@ -82,7 +82,7 @@ function Sidebar({ isOpen, onClose, asset }: SidebarProps) {
 
                 {/* 2. Controls Card */}
                 <div className={styles.infoCard}>
-                    <h3>System Controls</h3>
+                    <h3><i className="fas fa-sliders-h"></i> System Controls</h3>
                     <div className={styles.controlsGrid}>
                         <div className={styles.controlItem}>
                             <span className={styles.controlLabel}>Remote Operation</span>
@@ -122,40 +122,42 @@ function Sidebar({ isOpen, onClose, asset }: SidebarProps) {
 
                 {/* 3. Performance Metrics Card (Graph) */}
                 <div className={styles.infoCard}>
-                    <h3>Performance Metrics (24h)</h3>
+                    <h3><i className="fas fa-chart-line"></i> Performance Metrics (24h)</h3>
                     <div className={styles.graphContainer}>
                         <ResponsiveContainer width="100%" height="100%">
                             <AreaChart data={mockData}>
                                 <defs>
                                     <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="5%" stopColor="#0288d1" stopOpacity={0.3} />
-                                        <stop offset="95%" stopColor="#0288d1" stopOpacity={0} />
+                                        <stop offset="5%" stopColor="#0ea5e9" stopOpacity={0.8} />
+                                        <stop offset="95%" stopColor="#0ea5e9" stopOpacity={0.1} />
                                     </linearGradient>
                                 </defs>
-                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e0e0e0" />
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(0,0,0,0.05)" />
                                 <XAxis
                                     dataKey="time"
-                                    tick={{ fontSize: 10, fill: '#6c757d' }}
+                                    tick={{ fontSize: 10, fill: '#94a3b8' }}
                                     axisLine={false}
                                     tickLine={false}
                                 />
                                 <YAxis
-                                    tick={{ fontSize: 10, fill: '#6c757d' }}
+                                    tick={{ fontSize: 10, fill: '#94a3b8' }}
                                     axisLine={false}
                                     tickLine={false}
                                 />
                                 <Tooltip
                                     contentStyle={{
-                                        borderRadius: '8px',
-                                        border: 'none',
-                                        boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+                                        borderRadius: '12px',
+                                        border: '1px solid rgba(255,255,255,0.8)',
+                                        background: 'rgba(255,255,255,0.9)',
+                                        backdropFilter: 'blur(8px)',
+                                        boxShadow: '0 8px 16px rgba(0,0,0,0.05)'
                                     }}
                                 />
                                 <Area
                                     type="monotone"
                                     dataKey="value"
-                                    stroke="#0288d1"
-                                    strokeWidth={2}
+                                    stroke="#0ea5e9"
+                                    strokeWidth={3}
                                     fillOpacity={1}
                                     fill="url(#colorValue)"
                                 />

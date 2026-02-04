@@ -1,13 +1,13 @@
 /* Fixed Map Container - No Scrolling */
 .container {
     position: fixed;
-    top: 70px;
-    /* Below header */
+    top: 0;
+    /* Full screen */
     left: 0;
     right: 0;
     bottom: 0;
     width: 100%;
-    height: calc(100vh - 70px);
+    height: 100vh;
     overflow: hidden;
 }
 
@@ -20,83 +20,267 @@
 /* INDEX Box (LayerControl) - Bottom Left */
 .sidebarContainer {
     position: absolute;
-    top: 0;
-    right: 0;
+    top: 100px;
+    /* Below header */
+    left: 20px;
     z-index: 1000;
 }
 
-/* Dashboard Controls */
+/* Dashboard Controls - Right Side Stack (Below Search) */
 .dashboardControls {
     position: absolute;
-    top: 20px;
+    top: 100px;
+    /* Move up (30px + 44px + gap) */
     right: 20px;
-    /* Right aligned */
     z-index: 1000;
     display: flex;
+    flex-direction: column;
+    /* Stack vertically to save horizontal space */
     gap: 12px;
 }
 
 .dashboardBtn {
-    width: 44px;
-    height: 44px;
-    border-radius: var(--radius-md);
-    background: var(--bg-card);
-    border: 1px solid var(--border-medium);
-    color: var(--text-primary);
-    font-size: 18px;
+    width: 48px;
+    height: 48px;
+    border-radius: 16px;
+    /* Squircle */
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    color: var(--gray-700);
+    font-size: 20px;
     cursor: pointer;
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all var(--transition-base);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .dashboardBtn:hover {
-    transform: translateY(-2px);
-    background: var(--bg-card-hover);
-    color: var(--color-primary);
-    border-color: var(--color-primary);
-    box-shadow: var(--shadow-lg);
+    transform: translateY(-4px);
+    background: rgba(255, 255, 255, 0.95);
+    color: var(--color-primary-600);
+    border-color: var(--color-primary-300);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.dashboardBtn i {
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
 }
 
 /* Dashboard Overlay */
 .dashboardOverlay {
     position: absolute;
-    top: 20px;
+    top: 90px;
     left: 20px;
     right: 20px;
     bottom: 20px;
     z-index: 2000;
-    background: var(--bg-overlay);
-    border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-xl);
+    background: rgba(255, 255, 255, 0.85);
+    /* Liquid Glass */
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border-radius: 24px;
+    box-shadow: var(--shadow-2xl);
     overflow: hidden;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid var(--border-medium);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
 
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
 
-/* Custom Leaflet Marker Styles */
+/* Custom Popup Glass Style */
+:global(.leaflet-popup-content-wrapper) {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    padding: 0;
+}
+
+:global(.leaflet-popup-content) {
+    margin: 0;
+}
+
+:global(.leaflet-popup-tip) {
+    background: rgba(255, 255, 255, 0.85);
+}
+
+:global(.leaflet-popup-close-button) {
+    color: var(--gray-500) !important;
+    font-size: 18px !important;
+    top: 12px !important;
+    right: 12px !important;
+    font-weight: bold !important;
+}
+
+/* Custom Tooltip Styles */
+:global(.leaflet-tooltip-top:before) {
+    border-top-color: white;
+}
+
+:global(.leaflet-tooltip) {
+    background: white;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    color: #1a1a1a;
+    white-space: nowrap;
+}
+
+/* Custom Leaflet Marker Styles - 3D Effect */
 :global(.custom-marker) {
     background: transparent !important;
     border: none !important;
 }
 
+/* Phase 18: Solid 3D Markers (No Transparency) */
+.glassMarker {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--marker-color);
+    box-shadow:
+        0 4px 8px rgba(0, 0, 0, 0.2),
+        0 2px 4px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    color: white;
+    font-weight: 700;
+    font-size: 15px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.glassMarker:hover {
+    transform: scale(1.2) translateY(-4px);
+    box-shadow:
+        0 8px 16px rgba(0, 0, 0, 0.3),
+        0 4px 8px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    z-index: 1000;
+}
+
+.glassMarker.critical {
+    animation: markerPulse 2s infinite;
+}
+
+@keyframes markerPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+    }
+
+    70% {
+        box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+    }
+}
+
+/* Pipeline Visuals */
+:global(.liquid-pipeline-glow) {
+    stroke-linecap: round;
+    filter: drop-shadow(0 0 2px rgba(0, 150, 255, 0.3));
+    transition: all 0.3s ease;
+}
+
+:global(.liquid-bore-glow) {
+    stroke-linecap: round;
+    filter: drop-shadow(0 0 2px rgba(239, 68, 68, 0.3));
+    transition: all 0.3s ease;
+}
+
+:global(.liquid-pipeline-glow):hover,
+:global(.liquid-bore-glow):hover {
+    stroke-width: 8px !important;
+    filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.2));
+    z-index: 1000;
+}
+
 :global(.leaflet-container) {
-    background: #f5f5f5;
+    background: #eef2f6;
+    /* Lighter background */
 }
 
 @media (max-width: 768px) {
     .container {
-        top: 64px;
-        height: calc(100vh - 64px);
+        top: 0;
     }
 
-    .indexBox {
-        bottom: 10px;
-        left: 10px;
+    .dashboardControls {
+        bottom: 24px;
+        right: 16px;
+        flex-direction: column;
     }
+
+    .dashboardBtn {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+        background: rgba(255, 255, 255, 0.85);
+    }
+
+    .sidebarContainer {
+        top: auto;
+        bottom: 24px;
+        left: 16px;
+    }
+
+    /* Move zoom controls or hide */
+    :global(.leaflet-control-zoom) {
+        display: none;
+    }
+}
+
+.filterBtn {
+    position: absolute;
+    top: 30px;
+    /* Align with search bar */
+    right: 20px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    font-size: 18px;
+    color: var(--gray-700);
+    transition: all 0.2s;
+}
+
+.filterBtn:hover {
+    background: white;
+    transform: scale(1.05);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    color: var(--color-primary-600);
 }

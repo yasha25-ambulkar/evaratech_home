@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
-import type { NodeData } from '../../../types/evaratech.types';
-import { useEvaraTechDataStore } from '../../../store/evaratechDataStore';
+import { useAssets } from '../../../hooks/useAssets';
+import type { Asset } from '../../../types';
 import styles from './StatusNode.module.css';
 
 // Components (will be extracted later if needed)
@@ -10,7 +10,7 @@ type FilterType = 'all' | 'active' | 'inactive' | 'alert';
 type TabType = 'all' | 'pump' | 'sump' | 'tank' | 'bore';
 
 interface StatusNodeProps {
-    onNodeSelect: (node: NodeData) => void;
+    onNodeSelect: (node: Asset) => void;
     onClose: () => void;
 }
 
@@ -21,9 +21,7 @@ interface StatusNodeProps {
 function StatusNode({ onNodeSelect, onClose }: StatusNodeProps) {
     const [activeTab, setActiveTab] = useState<TabType>('all');
     const [filter, setFilter] = useState<FilterType>('all');
-    const { nodesData } = useEvaraTechDataStore();
-
-    const allNodes = Object.values(nodesData);
+    const { assets: allNodes } = useAssets();
 
     // Filter nodes based on tab and status filter
     const filteredNodes = useMemo(() => {
@@ -38,9 +36,12 @@ function StatusNode({ onNodeSelect, onClose }: StatusNodeProps) {
             }
 
             // 2. Filter by Status
-            if (filter === 'active' && !node.isActive) return false;
-            if (filter === 'inactive' && node.isActive) return false;
-            // TODO: Implement alert filter logic
+            const s = node.status.toLowerCase();
+            const isActive = s === 'running' || s === 'active' || s === 'working' || s === 'flowing' || s === 'normal';
+
+            if (filter === 'active' && !isActive) return false;
+            if (filter === 'inactive' && isActive) return false;
+            if (filter === 'alert' && !node.isCritical) return false;
 
             return true;
         });
@@ -121,9 +122,9 @@ function StatusNode({ onNodeSelect, onClose }: StatusNodeProps) {
             </div>
 
             <div className={styles.grid}>
-                {filteredNodes.map((node) => (
+                {filteredNodes.map((node: Asset) => (
                     <StatusCard
-                        key={node.nodeId}
+                        key={node.id}
                         node={node}
                         onClick={() => onNodeSelect(node)}
                     />

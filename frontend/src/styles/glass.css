@@ -1,222 +1,136 @@
-/* Clean Light Professional Design System */
-/* Replaces previous "Glassmorphism" system */
-
-:root {
-    /* ===== Backgrounds - Professional Light ===== */
-    --bg-primary: #f8f9fa;
-    /* Main App Background (Off-white) */
-    --bg-secondary: #ffffff;
-    /* Content Background (Pure White) */
-    --bg-card: #ffffff;
-    /* Card Background */
-    --bg-card-hover: #f1f3f5;
-    --bg-input: #ffffff;
-    --bg-elevated: #ffffff;
-    --bg-overlay: rgba(255, 255, 255, 0.95);
-
-    /* ===== Text Colors - High Contrast ===== */
-    --text-primary: #212529;
-    /* Almost Black */
-    --text-secondary: #495057;
-    /* Dark Gray */
-    --text-muted: #868e96;
-    /* Medium Gray */
-    --text-disabled: #adb5bd;
-    /* Light Gray */
-    --text-inverse: #ffffff;
-    /* Text on colored backgrounds */
-
-    /* ===== Borders - Crisp & Subtle ===== */
-    --border-subtle: #e9ecef;
-    --border-medium: #dee2e6;
-    --border-focus: #4dabf7;
-
-    /* ===== Accent Colors (Professional Palette) ===== */
-    --color-primary: #0288d1;
-    /* Water Blue */
-    --color-secondary: #455a64;
-    /* Slate */
-    --color-success: #2e7d32;
-    /* Green */
-    --color-warning: #ed6c02;
-    /* Orange/Amber */
-    --color-error: #d32f2f;
-    /* Red */
-    --color-info: #0288d1;
-    /* Light Blue */
-
-    /* ===== Shadows (Soft Depth) ===== */
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
-    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
-
-    /* ===== Border Radius ===== */
-    --radius-sm: 4px;
-    --radius-md: 8px;
-    --radius-lg: 12px;
-    --radius-xl: 16px;
-    --radius-full: 9999px;
-
-    /* ===== Spacing ===== */
-    --space-1: 0.25rem;
-    --space-2: 0.5rem;
-    --space-3: 0.75rem;
-    --space-4: 1rem;
-    --space-5: 1.25rem;
-    --space-6: 1.5rem;
-    --space-8: 2rem;
-    --space-10: 2.5rem;
-    --space-12: 3rem;
-    --space-16: 4rem;
-
-    /* ===== Typography ===== */
-    --font-display: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    --font-mono: 'JetBrains Mono', 'SF Mono', 'Monaco', monospace;
-
-    /* ===== Transitions ===== */
-    --transition-fast: 150ms ease-in-out;
-    --transition-base: 250ms ease-in-out;
-    --transition-slow: 400ms ease-in-out;
-}
-
-/* ===== Global Reset & Base ===== */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+/* 
+  EvaraTech Liquid Glass System 
+  Professional Frosted Glass Aesthetics
+*/
 
 body {
-    font-family: var(--font-display);
-    font-size: 14px;
-    line-height: 1.5;
-    background-color: var(--bg-primary);
-    color: var(--text-primary);
+    background-color: #f1f5f9;
+    /* Slate 100 base */
+    background-image:
+        radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 0) 0, transparent 50%),
+        radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 0) 0, transparent 50%),
+        radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 0) 0, transparent 50%);
+    font-family: var(--font-sans);
+    color: var(--gray-800);
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
 }
 
-/* ===== Typography ===== */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    color: var(--text-primary);
-    font-weight: 600;
-    line-height: 1.2;
-    margin-bottom: var(--space-3);
-}
-
-h1 {
-    font-size: 2rem;
-}
-
-h2 {
-    font-size: 1.75rem;
-}
-
-h3 {
-    font-size: 1.5rem;
-}
-
-h4 {
-    font-size: 1.25rem;
-}
-
-h5 {
-    font-size: 1rem;
-}
-
-p {
-    color: var(--text-secondary);
-    margin-bottom: var(--space-3);
-}
-
-/* ===== Component Utilities (Replacing Glass Classes) ===== */
-
-/* Card Styling - Solid White, Subtle Shadow */
-.glass-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border-medium);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
-    transition: box-shadow var(--transition-base), transform var(--transition-base);
-}
-
-.glass-card:hover {
+/* Base Glass Containers */
+.glass-panel {
+    background: var(--glass-base-light);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.5);
     box-shadow: var(--shadow-md);
-    border-color: var(--border-focus);
+    border-radius: var(--radius-lg);
 }
 
-/* Button Styling */
+.glass-panel-heavy {
+    background: var(--glass-base-heavy);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow: var(--shadow-lg);
+    border-radius: var(--radius-lg);
+}
+
+/* Interactive Elements */
 .glass-button {
+    background: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: var(--radius-md);
+    padding: var(--space-2) var(--space-4);
+    font-weight: 600;
+    color: var(--gray-700);
+    transition: all var(--duration-fast) var(--ease-ios);
+    cursor: pointer;
+    backdrop-filter: blur(4px);
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    padding: var(--space-2) var(--space-4);
-    background: var(--bg-card);
-    color: var(--text-primary);
-    border: 1px solid var(--border-medium);
-    border-radius: var(--radius-md);
-    font-weight: 500;
-    font-size: 0.875rem;
-    cursor: pointer;
-    transition: all var(--transition-fast);
-    box-shadow: var(--shadow-sm);
+    gap: var(--space-2);
 }
 
 .glass-button:hover {
-    background: var(--bg-card-hover);
-    border-color: var(--text-secondary);
-    box-shadow: var(--shadow-md);
+    background: rgba(255, 255, 255, 0.8);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
 }
 
 .glass-button:active {
-    background: var(--border-medium);
-    transform: translateY(0);
+    transform: translateY(0) scale(0.98);
 }
 
-/* Input Styling */
-.glass-input {
-    width: 100%;
-    padding: var(--space-2) var(--space-3);
-    background: var(--bg-input);
-    border: 1px solid var(--border-medium);
-    border-radius: var(--radius-md);
-    color: var(--text-primary);
-    font-size: 0.9rem;
-    transition: all var(--transition-fast);
+.glass-button.primary {
+    background: var(--color-primary-500);
+    color: white;
+    border: 1px solid var(--color-primary-400);
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
 }
 
-.glass-input:focus {
-    outline: none;
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(2, 136, 209, 0.15);
-    /* Focus Ring */
+.glass-button.primary:hover {
+    background: var(--color-primary-600);
 }
 
-.glass-input::placeholder {
-    color: var(--text-muted);
+/* Typography Utilities */
+.text-display {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--gray-900);
 }
 
-/* Scrollbar Styling */
-::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+.text-heading {
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--gray-800);
 }
 
-::-webkit-scrollbar-track {
-    background: transparent;
+.text-body {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--gray-600);
 }
 
-::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 4px;
+.text-caption {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
-::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
+/* Status Badges (Capsules) */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 600;
+    border: 1px solid transparent;
+}
+
+.status-badge.success {
+    background: var(--success-bg);
+    color: var(--success-text);
+    border-color: rgba(22, 101, 52, 0.1);
+}
+
+.status-badge.warning {
+    background: var(--warning-bg);
+    color: var(--warning-text);
+    border-color: rgba(146, 64, 14, 0.1);
+}
+
+.status-badge.error {
+    background: var(--error-bg);
+    color: var(--error-text);
+    border-color: rgba(153, 27, 27, 0.1);
+}
+
+.status-badge.info {
+    background: var(--info-bg);
+    color: var(--info-text);
+    border-color: rgba(7, 89, 133, 0.1);
 }

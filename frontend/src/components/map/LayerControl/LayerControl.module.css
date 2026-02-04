@@ -1,21 +1,98 @@
-/* Layer Control - Design match */
+/* Layer Control - Dynamic Index Widget */
 .container {
     position: absolute;
     bottom: 24px;
     left: 24px;
-    width: 240px;
+    width: 60px;
+    /* Initial state */
+    height: 60px;
+    /* Initial state */
     background: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    padding: 16px;
+    border-radius: 50%;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
     z-index: 1000;
-    max-height: calc(100vh - 100px);
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+    overflow: hidden;
+    /* Hide content when collapsed */
+    transition: box-shadow 0.3s ease;
 }
 
+.container:hover {
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+}
+
+/* Trigger Button (Circular) */
+.triggerBtn {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #4A90E2;
+    z-index: 2;
+}
+
+.triggerBtn i {
+    font-size: 20px;
+    margin-bottom: 2px;
+}
+
+.triggerText {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+/* Expandable Content */
+.contentContainer {
+    display: none;
+    /* Hidden by default */
+    flex-direction: column;
+    padding: 16px;
+    height: 100%;
+    overflow-y: auto;
+    opacity: 0;
+    /* Animated */
+    width: 100%;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #333;
+    margin: 0;
+}
+
+.closeBtn {
+    border: none;
+    background: transparent;
+    color: #999;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 4px;
+    transition: color 0.2s;
+}
+
+.closeBtn:hover {
+    color: #ff4444;
+}
+
+/* Sections */
 .section {
     display: flex;
     flex-direction: column;
@@ -26,7 +103,6 @@
     font-size: 11px;
     font-weight: 700;
     color: #4A90E2;
-    /* Blue title as in image */
     text-transform: uppercase;
     margin: 0 0 4px 0;
     letter-spacing: 0.5px;
@@ -36,6 +112,7 @@
     height: 1px;
     background-color: #f0f0f0;
     width: 100%;
+    margin: 12px 0;
 }
 
 .layerList {
@@ -51,10 +128,16 @@
     cursor: pointer;
     transition: opacity 0.2s ease;
     user-select: none;
+    padding: 4px 6px;
+    border-radius: 6px;
 }
 
 .layerItem:hover {
-    opacity: 0.8;
+    background-color: #f8f9fa;
+}
+
+.layerItem.active {
+    opacity: 1;
 }
 
 .layerItem:not(.active) {
@@ -113,6 +196,5 @@
         bottom: 80px;
         /* Above bottom nav on mobile */
         left: 12px;
-        width: 200px;
     }
 }

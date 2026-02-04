@@ -1,6 +1,11 @@
+import { useState } from 'react';
+import { AnimatePresence } from 'framer-motion';
+import ReportBuilder from './ReportBuilder';
 import styles from './Reports.module.css';
 
 function Reports() {
+    const [showBuilder, setShowBuilder] = useState(false);
+
     const reportTemplates = [
         { id: 'consumption', name: 'Water Consumption Report', icon: 'fa-tint', description: 'Daily/weekly/monthly consumption analysis' },
         { id: 'efficiency', name: 'System Efficiency Report', icon: 'fa-chart-line', description: 'Performance metrics and efficiency trends' },
@@ -12,12 +17,16 @@ function Reports() {
 
     return (
         <div className={styles.container}>
+            <AnimatePresence>
+                {showBuilder && <ReportBuilder onClose={() => setShowBuilder(false)} />}
+            </AnimatePresence>
+
             <div className={styles.header}>
                 <div>
                     <h1 className={styles.title}>Reports</h1>
                     <p className={styles.subtitle}>Generate and export system reports</p>
                 </div>
-                <button className={styles.newBtn}>
+                <button onClick={() => setShowBuilder(true)} className={styles.newBtn}>
                     <i className="fas fa-plus"></i> New Report
                 </button>
             </div>
@@ -33,7 +42,7 @@ function Reports() {
                         </div>
                         <h3 className={styles.cardTitle}>{template.name}</h3>
                         <p className={styles.cardDescription}>{template.description}</p>
-                        <button className={styles.generateBtn}>
+                        <button onClick={() => setShowBuilder(true)} className={styles.generateBtn}>
                             <i className="fas fa-file-export"></i> Generate
                         </button>
                     </div>

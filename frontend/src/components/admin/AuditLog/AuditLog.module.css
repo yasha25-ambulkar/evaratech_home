@@ -1,0 +1,147 @@
+.container {
+    padding: 24px;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.titleInfo h2 {
+    margin: 0;
+    font-size: 24px;
+    color: var(--gray-800);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.titleInfo p {
+    margin: 4px 0 0 0;
+    color: var(--gray-500);
+    font-size: 14px;
+}
+
+.exportBtn {
+    padding: 8px 16px;
+    background: white;
+    border: 1px solid var(--gray-300);
+    border-radius: 8px;
+    color: var(--gray-700);
+    cursor: pointer;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+}
+
+.exportBtn:hover {
+    background: var(--gray-50);
+    border-color: var(--gray-400);
+}
+
+.controls {
+    margin-bottom: 24px;
+}
+
+.searchBar {
+    position: relative;
+    width: 300px;
+}
+
+.searchBar i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gray-400);
+}
+
+.searchBar input {
+    width: 100%;
+    padding: 10px 12px 10px 36px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background: white;
+    font-size: 14px;
+}
+
+.tableContainer {
+    flex: 1;
+    overflow-y: auto;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th {
+    text-align: left;
+    padding: 16px 24px;
+    color: var(--gray-500);
+    font-size: 13px;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    background: var(--gray-50);
+}
+
+.table td {
+    padding: 16px 24px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    color: var(--gray-800);
+    font-size: 13px;
+}
+
+.timestamp {
+    font-family: monospace;
+    color: var(--gray-600) !important;
+}
+
+.action {
+    font-weight: 600;
+    color: var(--color-primary-600) !important;
+}
+
+.user {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--gray-700) !important;
+}
+
+.target {
+    font-weight: 500;
+}
+
+.details {
+    color: var(--gray-500) !important;
+}
+
+.statusBadge {
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.success {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.failure {
+    background: #fee2e2;
+    color: #dc2626;
+}

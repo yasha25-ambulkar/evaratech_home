@@ -1,0 +1,68 @@
+.container {
+    position: absolute;
+    bottom: 30px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.group {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.btn {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+    color: var(--gray-900);
+    font-size: 16px;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.btn:hover {
+    color: var(--color-primary-600);
+}
+
+.divider {
+    height: 1px;
+    background: rgba(0, 0, 0, 0.1);
+    margin: 0 8px;
+}
+
+.locateBtn {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+@media (max-width: 768px) {
+    .container {
+        bottom: 150px;
+        /* Move up to clear floating dashboard buttons */
+        right: 16px;
+    }
+
+    .btn {
+        width: 48px;
+        /* Larger touch target */
+        height: 48px;
+        font-size: 18px;
+    }
+}

@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { supabase } from '../services/supabase.service';
 
 interface User {
     id: string;
@@ -23,19 +24,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // TODO: Check for existing session with Supabase
-        // For now, simulate checking session
+        // Check for existing session with Supabase
         const checkSession = async () => {
             try {
-                // Simulate API call
-                await new Promise(resolve => setTimeout(resolve, 500));
-                // Mock user for development
-                setUser({
-                    id: '1',
-                    email: 'admin@evaratech.com',
-                    fullName: 'Admin User',
-                    role: 'admin',
-                });
+                const { data: { session } } = await supabase.auth.getSession();
+
+                if (session?.user) {
+                    setUser({
+                        id: session.user.id,
+                        email: session.user.email || '',
+                        fullName: session.user.user_metadata?.full_name || 'User',
+                        role: session.user.user_metadata?.role || 'viewer',
+                        avatarUrl: session.user.user_metadata?.avatar_url,
+                    });
+                }
             } catch (error) {
                 console.error('Session check failed:', error);
             } finally {
@@ -44,20 +46,46 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         };
 
         checkSession();
+
+        // Listen for auth state changes
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+            if (session?.user) {
+                setUser({
+                    id: session.user.id,
+                    email: session.user.email || '',
+                    fullName: session.user.user_metadata?.full_name || 'User',
+                    role: session.user.user_metadata?.role || 'viewer',
+                    avatarUrl: session.user.user_metadata?.avatar_url,
+                });
+            } else {
+                setUser(null);
+            }
+        });
+
+        return () => {
+            subscription.unsubscribe();
+        };
     }, []);
 
-    const signIn = async (email: string, _password: string) => {
+    const signIn = async (email: string, password: string) => {
         setLoading(true);
         try {
-            // TODO: Implement Supabase signIn with password
-            console.log('Signing in with password');
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            setUser({
-                id: '1',
+            const { data, error } = await supabase.auth.signInWithPassword({
                 email,
-                fullName: 'Admin User',
-                role: 'admin',
+                password,
             });
+
+            if (error) throw error;
+
+            if (data.user) {
+                setUser({
+                    id: data.user.id,
+                    email: data.user.email || '',
+                    fullName: data.user.user_metadata?.full_name || 'User',
+                    role: data.user.user_metadata?.role || 'viewer',
+                    avatarUrl: data.user.user_metadata?.avatar_url,
+                });
+            }
         } catch (error) {
             console.error('Sign in failed:', error);
             throw error;
@@ -69,8 +97,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const signOut = async () => {
         setLoading(true);
         try {
-            // TODO: Implement Supabase signOut
-            await new Promise(resolve => setTimeout(resolve, 500));
+            const { error } = await supabase.auth.signOut();
+            if (error) throw error;
             setUser(null);
         } catch (error) {
             console.error('Sign out failed:', error);
@@ -80,18 +108,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
     };
 
-    const signUp = async (email: string, _password: string, fullName: string) => {
+    const signUp = async (email: string, password: string, fullName: string) => {
         setLoading(true);
         try {
-            // TODO: Implement Supabase signUp with password
-            console.log('Signing up with password');
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            setUser({
-                id: '1',
+            const { data, error } = await supabase.auth.signUp({
                 email,
-                fullName,
-                role: 'viewer',
+                password,
+                options: {
+                    data: {
+                        full_name: fullName,
+                        role: 'viewer',
+                    },
+                },
             });
+
+            if (error) throw error;
+
+            if (data.user) {
+                setUser({
+                    id: data.user.id,
+                    email: data.user.email || '',
+                    fullName,
+                    role: 'viewer',
+                });
+            }
         } catch (error) {
             console.error('Sign up failed:', error);
             throw error;

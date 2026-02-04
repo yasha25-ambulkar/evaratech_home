@@ -1,6 +1,12 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { MapContainer, TileLayer, Marker, GeoJSON, useMap } from 'react-leaflet';
+import { useState, useEffect, useMemo, useCallback } from 'react';
+
+// ... (imports remain same, just update top line)
+
+// ...
+
+// Imports continued...
+import { useNavigate, useLocation } from 'react-router-dom';
+import { MapContainer, TileLayer, Marker, Tooltip, GeoJSON, useMap, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import { assetDatabase } from '@data/assets.data';
 import { pipelineGeoJSON } from '@data/pipelines.data';
@@ -10,8 +16,16 @@ import Sidebar from '@components/layout/Sidebar/Sidebar';
 import LayerControl from '@components/map/LayerControl/LayerControl';
 import SystemDashboard from '@components/dashboard/SystemDashboard/SystemDashboard';
 import StatusNode from '@components/dashboard/StatusNode/StatusNode';
-import type { Asset, AssetType, PipelineFeature } from '../../types';
+import FilterPanel from '@components/filters/FilterPanel/FilterPanel'; // Import FilterPanel
+import type { Asset, AssetType } from '../../types';
 import styles from './AssetMap.module.css';
+
+// Phase 12: Glass Components
+import GlassMapControls from '@components/map/controls/GlassMapControls';
+import GlassSearchBar from '@components/map/controls/GlassSearchBar';
+import GlassPopupCard from '@components/map/GlassPopupCard/GlassPopupCard';
+import NodeDetailModal from '@components/dashboard/NodeDetailModal/NodeDetailModal'; // Import Modal
+import { motion, AnimatePresence } from 'framer-motion';
 
 // Fix Leaflet default icon issue
 import icon from 'leaflet/dist/images/marker-icon.png';
@@ -26,61 +40,6 @@ let DefaultIcon = L.icon({
 
 L.Marker.prototype.options.icon = DefaultIcon;
 
-// Asset marker positions (NO SENSORS - completely removed)
-const assetPositions: Record<string, { position: [number, number]; type: AssetType }> = {
-    'Pump House 1': { position: [17.4456, 78.3516], type: 'pump' },
-    'Pump House 2': { position: [17.44608, 78.34925], type: 'pump' },
-    'Pump House 3': { position: [17.4430, 78.3487], type: 'pump' },
-    'Pump House 4': { position: [17.4481, 78.3489], type: 'pump' },
-
-    'Sump S1': { position: [17.448097, 78.349060], type: 'sump' },
-    'Sump S2': { position: [17.444919, 78.346195], type: 'sump' },
-    'Sump S3': { position: [17.446779, 78.346996], type: 'sump' },
-    'Sump S4 (Main Sump)': { position: [17.445630, 78.351593], type: 'sump' },
-    'Sump S5': { position: [17.444766, 78.350087], type: 'sump' },
-    'Sump S6': { position: [17.445498, 78.350202], type: 'sump' },
-    'Sump S7': { position: [17.44597, 78.34906], type: 'sump' },
-    'Sump S8': { position: [17.446683, 78.348995], type: 'sump' },
-    'Sump S9': { position: [17.446613, 78.346487], type: 'sump' },
-    'Sump S10': { position: [17.443076, 78.348737], type: 'sump' },
-    'Sump S11': { position: [17.444773, 78.347797], type: 'sump' },
-
-    'Bakul OHT': { position: [17.448045, 78.348438], type: 'tank' },
-    'Parijat OHT': { position: [17.447547, 78.347752], type: 'tank' },
-    'Kadamba OHT': { position: [17.446907, 78.347178], type: 'tank' },
-    'NWH Block C OHT': { position: [17.447675, 78.347430], type: 'tank' },
-    'NWH Block B OHT': { position: [17.447391, 78.347172], type: 'tank' },
-    'NWH Block A OHT': { position: [17.447081, 78.346884], type: 'tank' },
-    'Palash Nivas OHT 7': { position: [17.445096, 78.345966], type: 'tank' },
-    'Anand Nivas OHT 8': { position: [17.443976, 78.348432], type: 'tank' },
-    'Budha Nivas OHT 9': { position: [17.443396, 78.348500], type: 'tank' },
-    'C Block OHT 10': { position: [17.443387, 78.347834], type: 'tank' },
-    'D Block OHT 11': { position: [17.443914, 78.347773], type: 'tank' },
-    'E Block OHT 12': { position: [17.444391, 78.347958], type: 'tank' },
-    'Vindhya OHT': { position: [17.44568, 78.34973], type: 'tank' },
-    'Himalaya OHT (KRB)': { position: [17.44525, 78.34966], type: 'tank' },
-
-    'Borewell P1': { position: [17.443394, 78.348117], type: 'bore' },
-    'Borewell P2': { position: [17.443093, 78.348936], type: 'bore' },
-    'Borewell P3': { position: [17.444678, 78.347234], type: 'bore' },
-    'Borewell P4': { position: [17.446649, 78.350578], type: 'bore' },
-    'Borewell P5': { position: [17.447783, 78.349040], type: 'bore' },
-    'Borewell P6': { position: [17.448335, 78.348594], type: 'bore' },
-    'Borewell P7': { position: [17.445847, 78.346416], type: 'bore' },
-    'Borewell P8': { position: [17.445139, 78.345277], type: 'bore' },
-    'Borewell P9': { position: [17.446922, 78.346699], type: 'bore' },
-    'Borewell P10': { position: [17.443947, 78.350139], type: 'bore' },
-    'Borewell P10A': { position: [17.443451, 78.349635], type: 'bore' },
-    'Borewell P11': { position: [17.444431, 78.347649], type: 'bore' },
-
-    'Borewell 1': { position: [17.444601, 78.345459], type: 'govt' },
-    'Borewell 2': { position: [17.445490, 78.346838], type: 'govt' },
-    'Borewell 3': { position: [17.446188, 78.350067], type: 'govt' },
-    'Borewell 4': { position: [17.447111, 78.350151], type: 'govt' },
-    'Borewell 5': { position: [17.446311, 78.351042], type: 'govt' },
-    'Borewell 6': { position: [17.445584, 78.347148], type: 'govt' },
-    'Borewell 7': { position: [17.446115, 78.348536], type: 'govt' },
-};
 
 // Create custom marker icons with letters
 function createCustomIcon(type: AssetType, status: string = 'Normal') {
@@ -115,28 +74,14 @@ function createCustomIcon(type: AssetType, status: string = 'Normal') {
 
     return L.divIcon({
         className: 'custom-marker',
-        html: `<div style="
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 32px;
-      height: 32px;
-      background-color: ${color};
-      border: 2px solid white;
-      border-radius: 50%;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.25);
-      color: white;
-      font-size: 16px;
-      font-weight: 700;
-      font-family: 'Inter', sans-serif;
-      transition: all 0.2s ease;
-    ">
-      ${letter}
-    </div>`,
+        html: `<div class="${styles.glassMarker} ${status === 'Critical' ? styles.critical : ''}" style="--marker-color: ${color}">
+            ${letter}
+        </div>`,
         iconSize: [32, 32],
         iconAnchor: [16, 16],
     });
 }
+
 
 // Component to handle map clicks for closing sidebar
 function MapClickHandler({ onMapClick }: { onMapClick: () => void }) {
@@ -155,177 +100,257 @@ function MapClickHandler({ onMapClick }: { onMapClick: () => void }) {
     return null;
 }
 
-// Dynamic width function for pipelines based on zoom
-function getWeight(zoom: number): number {
-    return Math.max(2, 4 * Math.pow(1.4, zoom - 15));
+// Map Controller for Search Navigation
+function MapController({ selectedAsset }: { selectedAsset: Asset | null | undefined }) {
+    const map = useMap();
+
+    useEffect(() => {
+        if (selectedAsset) {
+            map.flyTo(selectedAsset.position, 18, {
+                duration: 1.5,
+                easeLinearity: 0.25
+            });
+        }
+    }, [selectedAsset, map]);
+
+    return null;
 }
 
-// Component to handle zoom-based pipeline width updates
-// Component to handle zoom-based pipeline width updates
-function PipelineLayer() {
+// Shared styling function
+function getPipelineStyle(type: string, zoom: number, isHovered: boolean = false) {
+    const baseWeight = Math.max(2, 4 * Math.pow(1.4, zoom - 15));
+    const weight = isHovered ? baseWeight + 3 : baseWeight;
+
+    let color = '#0077b6'; // Default Blue
+    if (type === 'Bore Line') color = '#d62828'; // Red
+
+    return {
+        color,
+        weight,
+        opacity: 0.8,
+    };
+}
+
+// ---------------------------------------------------------
+// 💧 WATER SUPPLY LAYER (Blue Lines)
+// ---------------------------------------------------------
+function WaterSupplyLayer({ isVisible }: { isVisible: boolean }) {
     const map = useMap();
     const [zoom, setZoom] = useState(map.getZoom());
-    const { visibleLayers } = useMapLayersStore();
     const navigate = useNavigate();
 
     useEffect(() => {
-        const handleZoom = () => {
-            setZoom(map.getZoom());
-        };
+        const handleZoom = () => setZoom(map.getZoom());
         map.on('zoomend', handleZoom);
-        return () => {
-            map.off('zoomend', handleZoom);
-        };
+        return () => { map.off('zoomend', handleZoom); };
     }, [map]);
 
-    const handlePipelineClick = (feature: PipelineFeature) => {
-        const name = feature.properties.name || feature.properties.id || '';
+    // Show ONLY if enabled
+    if (!isVisible) return null;
 
-        // Check if NWH Block C pipeline was clicked
-        if (name === 'PH4 - NWH Block C') {
-            // Navigate to the integrated Girls Hostel page
-            navigate('/girls-hostel');
-            console.log('Navigating to NWH Block C website:', name);
-        } else {
-            // Basic interactivity for other pipelines
-            console.log('Clicked pipeline:', name);
-        }
-    };
+    const waterFeatures = pipelineGeoJSON.features.filter(f =>
+        f.properties.type === 'Main Line' || f.properties.type === 'Dist Line'
+    );
 
-    // Filter pipelines based on visibility
-    const filteredFeatures = pipelineGeoJSON.features.filter((feature) => {
-        const pipeType = feature.properties?.type || '';
-
-        if (pipeType === 'Main Line') {
-            return visibleLayers.mainPipelines;
-        }
-        if (pipeType === 'Dist Line') {
-            return visibleLayers.distPipelines;
-        }
-        if (pipeType === 'Bore Line') {
-            return visibleLayers.borePipelines;
-        }
-        return false;
-    });
-
-    const filteredGeoJSON = {
-        ...pipelineGeoJSON,
-        features: filteredFeatures,
-    };
-
-    if (filteredFeatures.length === 0) return null;
+    const geoJsonData = { ...pipelineGeoJSON, features: waterFeatures };
 
     return (
         <GeoJSON
-            key={JSON.stringify(visibleLayers)}
-            data={filteredGeoJSON}
-            style={(feature) => {
-                const pipeType = feature?.properties?.type;
-                let color = '#0077b6'; // Default Blue
-
-                // All non-borewell pipelines use the same blue shade
-                if (pipeType === 'Main Line') color = '#0077b6'; // Blue
-                if (pipeType === 'Dist Line') color = '#0077b6'; // Blue (same as Main Line)
-                if (pipeType === 'Bore Line') color = '#d62828'; // Red for Borewell pipelines
-
+            key={`water-${zoom}`}
+            data={geoJsonData}
+            style={(feature: any) => {
+                const isHovered = false; // Initial state
                 return {
-                    color,
-                    weight: getWeight(zoom),
-                    opacity: 0.8,
-                };
+                    ...getPipelineStyle(feature?.properties.type, zoom, isHovered),
+                    className: 'liquid-pipeline-glow', // Add liquid class
+                } as any;
             }}
             onEachFeature={(feature, layer) => {
-                layer.on('click', () => handlePipelineClick(feature as PipelineFeature));
-                layer.on('mouseover', function (this: L.Path) {
-                    this.setStyle({ weight: getWeight(zoom) + 2 });
+                // Click Handler
+                layer.on('click', () => {
+                    const name = feature.properties.name || '';
+                    if (name === 'PH4 - NWH Block C') {
+                        navigate('/girls-hostel');
+                    }
                 });
-                layer.on('mouseout', function (this: L.Path) {
-                    this.setStyle({ weight: getWeight(zoom) });
+
+                // Hover Effects
+                layer.on('mouseover', (e: any) => {
+                    const currentZoom = e.target._map.getZoom();
+                    e.target.setStyle({
+                        ...getPipelineStyle(feature.properties.type, currentZoom, true),
+                        weight: Math.max(2, 4 * Math.pow(1.4, currentZoom - 15)) + 4 // Expand more
+                    });
+                });
+
+                layer.on('mouseout', (e: any) => {
+                    const currentZoom = e.target._map.getZoom();
+                    e.target.setStyle(getPipelineStyle(feature.properties.type, currentZoom, false));
                 });
             }}
         />
     );
 }
 
-function AssetMap() {
-    const { isSidebarOpen, selectedAsset, openSidebar, closeSidebar } = useUIStore();
-    const { visibleLayers } = useMapLayersStore();
-    const [assets, setAssets] = useState<Asset[]>([]);
-
-    // Dashboard States
-    const [showSystemDash, setShowSystemDash] = useState(false);
-    const [showStatusDash, setShowStatusDash] = useState(false);
+// ---------------------------------------------------------
+// 🔴 BORE SUPPLY LAYER (Red Lines)
+// ---------------------------------------------------------
+function BoreSupplyLayer({ isVisible }: { isVisible: boolean }) {
+    const map = useMap();
+    const [zoom, setZoom] = useState(map.getZoom());
 
     useEffect(() => {
-        // Build assets array from database and positions
-        const assetList: Asset[] = Object.entries(assetPositions).map(([name, data]) => {
-            const dbEntry = assetDatabase[name];
-            return {
-                id: dbEntry?.id || 'N/A',
-                name,
-                type: data.type,
-                position: data.position,
-                capacity: dbEntry?.cap || 'N/A',
-                specs: dbEntry?.maint || 'N/A',
-                status: dbEntry?.status || 'Normal',
-                isCritical: dbEntry?.status === 'Critical' || dbEntry?.status === 'Warning',
-            };
-        });
-        setAssets(assetList);
-    }, []);
+        const handleZoom = () => setZoom(map.getZoom());
+        map.on('zoomend', handleZoom);
+        return () => { map.off('zoomend', handleZoom); };
+    }, [map]);
 
-    const handleMarkerClick = (asset: Asset) => {
-        openSidebar(asset);
+    if (!isVisible) return null;
+
+    const boreFeatures = pipelineGeoJSON.features.filter(f =>
+        f.properties.type === 'Bore Line'
+    );
+
+    const geoJsonData = { ...pipelineGeoJSON, features: boreFeatures };
+    return (
+        <GeoJSON
+            key={`bore-${zoom}`}
+            data={geoJsonData}
+            style={(_feature: any) => ({
+                ...getPipelineStyle('Bore Line', zoom, false),
+                className: 'liquid-bore-glow',
+            } as any)}
+            onEachFeature={(_feature, layer) => {
+                layer.on('mouseover', (e: any) => {
+                    const currentZoom = e.target._map.getZoom();
+                    // Enhance hover
+                    const style = getPipelineStyle('Bore Line', currentZoom, true);
+                    e.target.setStyle({ ...style, weight: style.weight + 2 });
+                });
+
+                layer.on('mouseout', (e: any) => {
+                    const currentZoom = e.target._map.getZoom();
+                    e.target.setStyle(getPipelineStyle('Bore Line', currentZoom, false));
+                });
+            }}
+        />
+    );
+}
+
+import { useAssets } from '../../hooks/useAssets';
+
+function AssetMap() {
+    // Global UI State
+    const { activePanel, setActivePanel, selectedAsset, openSidebar, closeAll } = useUIStore();
+    const { assets } = useAssets();
+
+    const showSystemDash = activePanel === 'system';
+    const showStatusDash = activePanel === 'status';
+    const isFilterPanelOpen = activePanel === 'filters';
+    const selectedDetailNode = activePanel === 'nodeDetail' ? selectedAsset : null;
+
+    const { visibleLayers } = useMapLayersStore();
+    const location = useLocation();
+
+    const handleDetailNode = (node: Asset | null) => {
+        if (node) {
+            openSidebar(node);
+            setActivePanel('nodeDetail');
+        } else {
+            setActivePanel('none');
+        }
     };
 
-    // Filter assets based on layer visibility and status
-    const filteredAssets = assets.filter(asset => {
-        if (asset.type === 'pump') return visibleLayers.pumps;
-        if (asset.type === 'sump') return visibleLayers.sumps;
-        if (asset.type === 'tank') return visibleLayers.tanks;
-
-        // For borewells, check both IIIT and Govt layers
-        if (asset.type === 'bore') {
-            // Check if this is a non-working borewell
-            const assetData = assetDatabase[asset.name];
-            const isNotWorking = assetData?.status === 'Not Working';
-
-            // Show if nonWorkingBores is enabled and it's not working
-            if (visibleLayers.nonWorkingBores && isNotWorking) {
-                return true;
-            }
-
-            // Show if iiitBores is enabled and it's working
-            if (visibleLayers.iiitBores && !isNotWorking) {
-                return true;
-            }
-
-            return false;
-        }
-
-        if (asset.type === 'govt') {
-            // Check if this is a non-working govt borewell
-            const assetData = assetDatabase[asset.name];
-            const isNotWorking = assetData?.status === 'Not Working';
-
-            // Show if nonWorkingBores is enabled and it's not working
-            if (visibleLayers.nonWorkingBores && isNotWorking) {
-                return true;
-            }
-
-            // Show if govtBores is enabled and it's working
-            if (visibleLayers.govtBores && !isNotWorking) {
-                return true;
-            }
-
-            return false;
-        }
-
-        return false; // Don't show sensors or unknown types
+    const [filters, setFilters] = useState({
+        types: {
+            tank: true,
+            pump: true,
+            bore: true,
+            govt: true,
+            sump: true,
+        },
+        status: {
+            active: true,
+            inactive: true,
+            critical: true,
+        },
+        showPipelines: true,
     });
+
+
+    // Handle Search Navigation (Phase 24.3)
+    useEffect(() => {
+        if (location.state?.focusAsset) {
+            const asset = assets.find(a => a.id === location.state.focusAsset.id);
+            if (asset) {
+                handleMarkerClick(asset);
+            }
+        }
+    }, [location.state, assets]);
+
+    const handleMarkerClick = useCallback((asset: Asset) => {
+        openSidebar(asset);
+    }, [openSidebar]);
+
+    const handleSearch = useCallback((_query: string) => {
+        // Implement search logic here
+        // Example: filter assets based on query and update map view or highlight
+    }, []);
+
+    // Filter assets based on multiple criteria - MEMOIZED
+    const filteredAssets = useMemo(() => {
+        return assets.filter(asset => {
+            // 1. Check Type Filter
+            if (!filters.types[asset.type as keyof typeof filters.types]) return false;
+
+            // 2. Check Status Filter
+            const status = asset.status.toLowerCase();
+            if (status === 'normal' || status === 'working') {
+                if (!filters.status.active) return false;
+            } else if (status === 'critical' || status === 'warning') {
+                if (!filters.status.critical) return false;
+            } else {
+                if (!filters.status.inactive) return false;
+            }
+
+            // 3. Keep existing logic for specific layer visibility (LayerControl)
+            if (asset.type === 'pump' && !visibleLayers.pumps) return false;
+            if (asset.type === 'sump' && !visibleLayers.sumps) return false;
+            if (asset.type === 'tank' && !visibleLayers.tanks) return false;
+
+            if (asset.type === 'bore') {
+                const isNotWorking = asset.status === 'Not Working';
+                if (isNotWorking && !visibleLayers.nonWorkingBores) return false;
+            }
+
+            return true;
+        });
+    }, [assets, filters, visibleLayers]);
 
     return (
         <div className={styles.container}>
+            {/* SEARCH BAR - Floating Top Left-Center */}
+            <GlassSearchBar onSearch={handleSearch} />
+
+            {/* Filter Toggle Button */}
+            <motion.button
+                className={styles.filterBtn}
+                onClick={() => setActivePanel('filters')}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                title="Advanced Filters"
+            >
+                <i className="fas fa-filter"></i>
+            </motion.button>
+
+            {/* Filter Panel */}
+            <FilterPanel
+                isOpen={isFilterPanelOpen}
+                onClose={() => setActivePanel('none')}
+                filters={filters}
+                onChange={setFilters}
+            />
+
             {/* INDEX Panel (LayerControl) - Top Left Floating */}
             <LayerControl />
 
@@ -335,79 +360,120 @@ function AssetMap() {
                 minZoom={MAP_CONFIG.minZoom}
                 maxZoom={MAP_CONFIG.maxZoom}
                 className={styles.map}
+                zoomControl={false} // Disable default zoom
             >
                 <TileLayer
                     url={MAP_CONFIG.tileLayer}
                     attribution={MAP_CONFIG.attribution}
                 />
 
+                {/* Map Controller for Programmatic Navigation */}
+                <MapController selectedAsset={selectedAsset} />
+
+                {/* Custom Glass Controls */}
+                <GlassMapControls />
+
                 {/* Handle map clicks to close sidebar */}
-                <MapClickHandler onMapClick={closeSidebar} />
+                <MapClickHandler onMapClick={closeAll} />
 
-                {/* Pipeline layers */}
-                <PipelineLayer />
+                {/* Water Supply Layer */}
+                <WaterSupplyLayer isVisible={visibleLayers.mainPipelines && filters.showPipelines} />
 
-                {/* Asset markers */}
+                {/* Bore Supply Layer */}
+                <BoreSupplyLayer isVisible={visibleLayers.borePipelines && filters.showPipelines} />
+
                 {filteredAssets.map((asset) => {
+                    const assetData = assetDatabase[asset.name];
+                    const status = assetData?.status || 'Normal';
                     return (
                         <Marker
                             key={asset.id}
                             position={asset.position}
-                            icon={createCustomIcon(asset.type, asset.status)}
+                            icon={createCustomIcon(asset.type, status)}
                             eventHandlers={{
                                 click: () => handleMarkerClick(asset),
                             }}
-                        />
+                        >
+                            <Tooltip direction="top" offset={[0, -10]} opacity={1} permanent={false}>
+                                {asset.name}
+                            </Tooltip>
+                            <Popup className={styles.glassPopup}>
+                                <GlassPopupCard
+                                    name={asset.name}
+                                    type={asset.type}
+                                    status={asset.status}
+                                    specs={asset.specs}
+                                    onDetails={() => handleDetailNode(asset)}
+                                />
+                            </Popup>
+                        </Marker>
                     );
                 })}
             </MapContainer>
 
-            {/* Dashboard Controls */}
+            {/* Dashboard Controls - Updated Style */}
             <div className={styles.dashboardControls}>
-                <button
+                <motion.button
                     className={styles.dashboardBtn}
-                    onClick={() => setShowSystemDash(true)}
+                    onClick={() => setActivePanel('system')}
                     title="System Overview"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                 >
                     <i className="fas fa-chart-pie"></i>
-                </button>
-                <button
+                </motion.button>
+                <motion.button
                     className={styles.dashboardBtn}
-                    onClick={() => setShowStatusDash(true)}
+                    onClick={() => setActivePanel('status')}
                     title="Status Dashboard"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                 >
                     <i className="fas fa-th-large"></i>
-                </button>
+                </motion.button>
             </div>
 
             {/* Dashboards Overlays */}
-            {showSystemDash && (
-                <div className={`${styles.dashboardOverlay} animate-fade-in`}>
-                    <SystemDashboard onClose={() => setShowSystemDash(false)} />
-                </div>
-            )}
+            <AnimatePresence>
+                {showSystemDash && (
+                    <div className={`${styles.dashboardOverlay} animate-fade-in`}>
+                        <SystemDashboard onClose={() => setActivePanel('none')} />
+                    </div>
+                )}
+            </AnimatePresence>
 
-            {showStatusDash && (
-                <div className={`${styles.dashboardOverlay} animate-fade-in`}>
-                    <StatusNode
-                        onNodeSelect={(node) => {
-                            // Find asset by node ID and select it
-                            const asset = assets.find(a =>
-                                a.name.toLowerCase().replace(/\s+/g, '-') === node.nodeId
-                            );
-                            if (asset) {
-                                setShowStatusDash(false);
-                                handleMarkerClick(asset);
-                            }
-                        }}
-                        onClose={() => setShowStatusDash(false)}
+            <AnimatePresence>
+                {showStatusDash && (
+                    <div className={`${styles.dashboardOverlay} animate-fade-in`}>
+                        <StatusNode
+                            onNodeSelect={(node) => {
+                                // Find asset by node ID and select it
+                                const asset = assets.find(a =>
+                                    a.name.toLowerCase().replace(/\s+/g, '-') === (node as any).nodeId || a.id === node.id
+                                );
+                                if (asset) {
+                                    handleMarkerClick(asset);
+                                }
+                            }}
+                            onClose={() => setActivePanel('none')}
+                        />
+                    </div>
+                )}
+            </AnimatePresence>
+
+            {/* Node Detail Modal */}
+            <AnimatePresence>
+                {selectedDetailNode && (
+                    <NodeDetailModal
+                        node={selectedDetailNode}
+                        onClose={() => setActivePanel('sidebar')}
                     />
-                </div>
-            )}
+                )}
+            </AnimatePresence>
 
             <Sidebar
-                isOpen={isSidebarOpen}
-                onClose={closeSidebar}
+                isOpen={activePanel === 'sidebar' || activePanel === 'nodeDetail'}
+                onClose={closeAll}
                 asset={selectedAsset}
             />
         </div>

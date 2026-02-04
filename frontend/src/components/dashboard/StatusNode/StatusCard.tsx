@@ -1,9 +1,8 @@
-import type { NodeData } from '../../../types/evaratech.types';
-import { getLatestReading } from '../../../utils/mockDataGenerator';
+import type { Asset } from '../../../types';
 import styles from './StatusNode.module.css';
 
 interface StatusCardProps {
-    node: NodeData;
+    node: Asset;
     onClick: () => void;
 }
 
@@ -13,18 +12,16 @@ interface StatusCardProps {
 function StatusCard({ node, onClick }: StatusCardProps) {
     // Get primary metric based on type
     const getPrimaryMetric = () => {
+        // Since Asset type is simplified, we use mock values or capacity for now
         switch (node.type) {
             case 'pump':
-                const flow = getLatestReading(node.flowRate);
-                return { value: flow?.value.toFixed(0), unit: flow?.unit, label: 'Flow Rate' };
+                return { value: '450', unit: 'LPM', label: 'Flow Rate' };
             case 'sump':
             case 'tank':
-                const level = getLatestReading(node.waterLevel);
-                return { value: level?.value.toFixed(1), unit: level?.unit, label: 'Water Level' };
+                return { value: '85', unit: '%', label: 'Water Level' };
             case 'bore':
             case 'govt':
-                const bLevel = getLatestReading(node.waterLevel);
-                return { value: bLevel?.value.toFixed(1), unit: bLevel?.unit, label: 'Water Level' };
+                return { value: '120', unit: 'LPM', label: 'Yield' };
             default:
                 return { value: '-', unit: '', label: '-' };
         }
@@ -34,24 +31,21 @@ function StatusCard({ node, onClick }: StatusCardProps) {
     const getSecondaryDetails = () => {
         switch (node.type) {
             case 'pump':
-                const pressure = getLatestReading(node.pressure);
                 return [
-                    { label: 'Pressure', value: `${pressure?.value.toFixed(1)} ${pressure?.unit}` },
-                    { label: 'Status', value: node.pumpStatus }
+                    { label: 'Pressure', value: '4.2 Bar' },
+                    { label: 'Status', value: node.status }
                 ];
             case 'sump':
             case 'tank':
-                const vol = getLatestReading(node.currentVolume);
                 return [
-                    { label: 'Volume', value: `${(vol?.value ? vol.value / 1000 : 0).toFixed(1)}k L` },
-                    { label: 'Capacity', value: `${(node.capacity / 1000).toFixed(0)}k L` }
+                    { label: 'Capacity', value: node.capacity },
+                    { label: 'Condition', value: 'Excellent' }
                 ];
             case 'bore':
             case 'govt':
-                const flow = getLatestReading(node.flowRate);
                 return [
-                    { label: 'Flow', value: `${flow?.value.toFixed(0)} ${flow?.unit}` },
-                    { label: 'Pump', value: node.pumpStatus }
+                    { label: 'Depth', value: '450 ft' },
+                    { label: 'Status', value: node.status }
                 ];
             default:
                 return [];
@@ -61,9 +55,12 @@ function StatusCard({ node, onClick }: StatusCardProps) {
     const primary = getPrimaryMetric();
     const details = getSecondaryDetails();
 
-    // Status color logic
-    const statusClass = node.isActive
-        ? (node.status === 'active' ? styles.active : styles.warning)
+    // Status color mapping
+    const s = node.status.toLowerCase();
+    const isActive = s === 'running' || s === 'active' || s === 'working' || s === 'flowing' || s === 'normal';
+
+    const statusClass = isActive
+        ? (node.isCritical ? styles.warning : styles.active)
         : styles.inactive;
 
     return (
@@ -92,5 +89,6 @@ function StatusCard({ node, onClick }: StatusCardProps) {
         </div>
     );
 }
+
 
 export default StatusCard;

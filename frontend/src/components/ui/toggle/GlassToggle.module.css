@@ -1,0 +1,46 @@
+.container {
+    width: 50px;
+    height: 30px;
+    background: rgba(120, 120, 128, 0.16);
+    /* iOS off state */
+    backdrop-filter: blur(10px);
+    border-radius: 99px;
+    padding: 2px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border: 0.5px solid rgba(0, 0, 0, 0.04);
+}
+
+.checked {
+    background: var(--color-primary-500);
+    /* Green/Primary on state */
+}
+
+.knob {
+    width: 26px;
+    height: 26px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15), 0 3px 1px rgba(0, 0, 0, 0.06);
+}
+
+.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.checked .knob {
+    float: right;
+    /* Fallback */
+    /* Framer motion handles layout, but css needs to know positioning context */
+}
+
+/* For framer motion layout prop to work effectively withjustify-content */
+.container {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.checked {
+    justify-content: flex-end;
+}

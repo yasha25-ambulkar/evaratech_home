@@ -1,0 +1,25 @@
+{
+    "app": {
+        "title": "EvaraTech Dashboard",
+        "welcome": "Welcome back, {{name}}",
+        "status": "System Status"
+    },
+    "nav": {
+        "home": "Home",
+        "map": "Asset Map",
+        "dashboard": "Dashboard",
+        "reports": "Reports",
+        "settings": "Settings",
+        "admin": "Admin",
+        "allNodes": "All Nodes",
+        "status": "System Status",
+        "about": "About Us",
+        "logout": "Logout"
+    },
+    "dashboard": {
+        "water_level": "Water Level",
+        "flow_rate": "Flow Rate",
+        "pump_status": "Pump Status",
+        "alerts": "Active Alerts"
+    }
+}

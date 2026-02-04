@@ -5,6 +5,8 @@ interface User {
     id: string;
     email: string;
     name?: string;
+    role: 'admin' | 'editor' | 'viewer';
+    avatar?: string;
 }
 
 interface AuthState {
@@ -33,10 +35,12 @@ export const useAuthStore = create<AuthState>((set) => ({
 
         // Dummy credentials check for testing
         if (email === 'user' && password === 'user@123') {
-            const dummyUser = {
+            const dummyUser: User = {
                 id: 'dummy-user-123',
                 email: 'user@test.com',
-                name: 'Test User'
+                name: 'Test User',
+                role: 'admin',
+                avatar: 'https://ui-avatars.com/api/?name=Test+User&background=0ea5e9&color=fff'
             };
 
             // Set dummy session in local storage to persist verify check
@@ -60,11 +64,16 @@ export const useAuthStore = create<AuthState>((set) => ({
             if (error) throw error;
 
             if (data.user) {
+                const user: User = {
+                    id: data.user.id,
+                    email: data.user.email || '',
+                    name: data.user.user_metadata?.full_name,
+                    role: data.user.user_metadata?.role || 'viewer',
+                    avatar: data.user.user_metadata?.avatar_url
+                };
+
                 set({
-                    user: {
-                        id: data.user.id,
-                        email: data.user.email || '',
-                    },
+                    user,
                     session: data.session,
                     isAuthenticated: true,
                     isLoading: false
@@ -126,12 +135,16 @@ export const useAuthStore = create<AuthState>((set) => ({
 
         // Check for dummy auth persistence
         if (localStorage.getItem('evara_dummy_auth')) {
+            const dummyUser: User = {
+                id: 'dummy-user-123',
+                email: 'user@test.com',
+                name: 'Test User',
+                role: 'admin',
+                avatar: 'https://ui-avatars.com/api/?name=Test+User&background=0ea5e9&color=fff'
+            };
+
             set({
-                user: {
-                    id: 'dummy-user-123',
-                    email: 'user@test.com',
-                    name: 'Test User'
-                },
+                user: dummyUser,
                 isAuthenticated: true,
                 isLoading: false,
                 session: { user: { id: 'dummy-user-123' } }
@@ -147,6 +160,9 @@ export const useAuthStore = create<AuthState>((set) => ({
                     user: {
                         id: session.user.id,
                         email: session.user.email || '',
+                        name: session.user.user_metadata?.full_name,
+                        role: session.user.user_metadata?.role || 'viewer',
+                        avatar: session.user.user_metadata?.avatar_url
                     },
                     session: session,
                     isAuthenticated: true,

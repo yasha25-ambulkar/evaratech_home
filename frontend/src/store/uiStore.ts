@@ -2,15 +2,31 @@ import { create } from 'zustand';
 import type { Asset } from '../types';
 
 interface UIStore {
-    isSidebarOpen: boolean;
+    // Shared state
+    activePanel: 'none' | 'sidebar' | 'system' | 'status' | 'filters' | 'notifications' | 'userMenu' | 'nodeDetail' | 'more';
     selectedAsset: Asset | null;
+
+    // Actions
+    setActivePanel: (panel: UIStore['activePanel']) => void;
     openSidebar: (asset: Asset) => void;
-    closeSidebar: () => void;
+    closeAll: () => void;
 }
 
 export const useUIStore = create<UIStore>((set) => ({
-    isSidebarOpen: false,
+    activePanel: 'none',
     selectedAsset: null,
-    openSidebar: (asset) => set({ isSidebarOpen: true, selectedAsset: asset }),
-    closeSidebar: () => set({ isSidebarOpen: false, selectedAsset: null }),
+
+    setActivePanel: (panel) => set((state) => ({
+        activePanel: state.activePanel === panel ? 'none' : panel
+    })),
+
+    openSidebar: (asset) => set({
+        activePanel: 'sidebar',
+        selectedAsset: asset
+    }),
+
+    closeAll: () => set({
+        activePanel: 'none',
+        selectedAsset: null
+    }),
 }));

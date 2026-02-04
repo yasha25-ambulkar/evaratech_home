@@ -51,8 +51,8 @@ export function usePipelines(): UsePipelinesReturn {
         fetchPipelines();
 
         // Set up real-time subscription
-        const subscription = supabaseService.subscribeToPipelines((payload) => {
-            console.log('Pipeline update received:', payload);
+        const subscription = supabaseService.subscribeToPipelines((_payload) => {
+
             fetchPipelines(); // Refetch on any change
         });
 
