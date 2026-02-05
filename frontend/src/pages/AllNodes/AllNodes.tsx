@@ -1,79 +1,22 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './AllNodes.module.css';
-
-interface Node {
-    id: string;
-    name: string;
-    type: 'pump' | 'sump' | 'tank' | 'bore' | 'govt';
-    status: 'Normal' | 'Warning' | 'Critical';
-    location: string;
-    lastUpdate: string;
-}
-
-const mockNodes: Node[] = [
-    { id: 'PH1', name: 'Pump House 1', type: 'pump', status: 'Normal', location: 'Main Campus', lastUpdate: '2 mins ago' },
-    { id: 'PH2', name: 'Pump House 2', type: 'pump', status: 'Normal', location: 'Main Campus', lastUpdate: '2 mins ago' },
-    { id: 'PH3', name: 'Pump House 3', type: 'pump', status: 'Warning', location: 'Main Campus', lastUpdate: '5 mins ago' },
-    { id: 'PH4', name: 'Pump House 4', type: 'pump', status: 'Normal', location: 'Main Campus', lastUpdate: '1 min ago' },
-    { id: 'S1', name: 'Sump S1', type: 'sump', status: 'Normal', location: 'Main Campus', lastUpdate: '3 mins ago' },
-    { id: 'S2', name: 'Sump S2', type: 'sump', status: 'Normal', location: 'Main Campus', lastUpdate: '2 mins ago' },
-    { id: 'S3', name: 'Sump S3', type: 'sump', status: 'Normal', location: 'Main Campus', lastUpdate: '4 mins ago' },
-    { id: 'S4', name: 'Sump S4 (Main Sump)', type: 'sump', status: 'Normal', location: 'Main Campus', lastUpdate: '1 min ago' },
-    { id: 'OHT1', name: 'Bakul OHT', type: 'tank', status: 'Normal', location: 'Bakul Block', lastUpdate: '2 mins ago' },
-    { id: 'OHT2', name: 'Parijat OHT', type: 'tank', status: 'Normal', location: 'Parijat Block', lastUpdate: '3 mins ago' },
-    { id: 'OHT3', name: 'Kadamba OHT', type: 'tank', status: 'Normal', location: 'Kadamba Block', lastUpdate: '2 mins ago' },
-    { id: 'B1', name: 'Borewell P1', type: 'bore', status: 'Normal', location: 'Campus Area', lastUpdate: '5 mins ago' },
-    { id: 'B2', name: 'Borewell P2', type: 'bore', status: 'Normal', location: 'Campus Area', lastUpdate: '4 mins ago' },
-    { id: 'GB1', name: 'Govt Borewell 1', type: 'govt', status: 'Normal', location: 'External', lastUpdate: '10 mins ago' },
-];
+import NodeFactory from '../../services/NodeFactory';
+import { NodeEntity } from '../../models/NodeEntity';
+import { useNodeFiltering } from '../../hooks/useNodeFiltering';
+import { NodeViewStrategy, GridViewStrategy, VirtualListViewStrategy } from '../../strategies/NodeViewStrategy';
+import StatCard from '../../components/ui/StatCard/StatCard';
 
 function AllNodes() {
-    const [nodes] = useState<Node[]>(mockNodes);
-    const [filter, setFilter] = useState<string>('all');
+    const [nodes] = useState<NodeEntity[]>(NodeFactory.getAllNodes());
+    const { filter, setFilter, filteredNodes, statusCounts } = useNodeFiltering(nodes);
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
-    const getStatusColor = (status: string) => {
-        switch (status) {
-            case 'Normal': return '#06d6a0';
-            case 'Warning': return '#ffd60a';
-            case 'Critical': return '#d62828';
-            default: return '#6c757d';
-        }
+    const strategies: Record<string, NodeViewStrategy> = {
+        grid: new GridViewStrategy(),
+        list: new VirtualListViewStrategy() // Replacing standard list with virtual list as per task
     };
 
-    const getTypeIcon = (type: string) => {
-        switch (type) {
-            case 'pump': return 'fa-water';
-            case 'sump': return 'fa-tint';
-            case 'tank': return 'fa-database';
-            case 'bore': return 'fa-circle';
-            case 'govt': return 'fa-circle';
-            default: return 'fa-question';
-        }
-    };
-
-    const getTypeColor = (type: string) => {
-        switch (type) {
-            case 'pump': return '#6f42c1';
-            case 'sump': return '#20c997';
-            case 'tank': return '#0dcaf0';
-            case 'bore': return '#fd7e14';
-            case 'govt': return '#212529';
-            default: return '#6c757d';
-        }
-    };
-
-    const filteredNodes = nodes.filter(node => {
-        return filter === 'all' || node.type === filter;
-    });
-
-    const statusCounts = {
-        total: nodes.length,
-        normal: nodes.filter(n => n.status === 'Normal').length,
-        warning: nodes.filter(n => n.status === 'Warning').length,
-        critical: nodes.filter(n => n.status === 'Critical').length,
-    };
 
     return (
         <div className={styles.container}>
@@ -90,34 +33,34 @@ function AllNodes() {
 
                 {/* Stats */}
                 <div className={styles.stats}>
-                    <div className={styles.statCard}>
-                        <i className="fas fa-circle-nodes"></i>
-                        <div>
-                            <p className={styles.statValue}>{statusCounts.total}</p>
-                            <p className={styles.statLabel}>Total Nodes</p>
-                        </div>
-                    </div>
-                    <div className={styles.statCard} style={{ borderLeft: `4px solid ${getStatusColor('Normal')}` }}>
-                        <i className="fas fa-check-circle" style={{ color: getStatusColor('Normal') }}></i>
-                        <div>
-                            <p className={styles.statValue}>{statusCounts.normal}</p>
-                            <p className={styles.statLabel}>Normal</p>
-                        </div>
-                    </div>
-                    <div className={styles.statCard} style={{ borderLeft: `4px solid ${getStatusColor('Warning')}` }}>
-                        <i className="fas fa-exclamation-triangle" style={{ color: getStatusColor('Warning') }}></i>
-                        <div>
-                            <p className={styles.statValue}>{statusCounts.warning}</p>
-                            <p className={styles.statLabel}>Warning</p>
-                        </div>
-                    </div>
-                    <div className={styles.statCard} style={{ borderLeft: `4px solid ${getStatusColor('Critical')}` }}>
-                        <i className="fas fa-times-circle" style={{ color: getStatusColor('Critical') }}></i>
-                        <div>
-                            <p className={styles.statValue}>{statusCounts.critical}</p>
-                            <p className={styles.statLabel}>Critical</p>
-                        </div>
-                    </div>
+                    <StatCard
+                        icon="fas fa-circle-nodes"
+                        label="Total Nodes"
+                        value={statusCounts.total}
+                        trend="neutral"
+                        color="blue"
+                    />
+                    <StatCard
+                        icon="fas fa-check-circle"
+                        label="Normal"
+                        value={statusCounts.normal}
+                        trend="neutral"
+                        color="green"
+                    />
+                    <StatCard
+                        icon="fas fa-exclamation-triangle"
+                        label="Warning"
+                        value={statusCounts.warning}
+                        trend="down" // assuming warning is bad if present? or just neutral.
+                        color="orange"
+                    />
+                    <StatCard
+                        icon="fas fa-times-circle"
+                        label="Critical"
+                        value={statusCounts.critical}
+                        trend="down"
+                        color="red"
+                    />
                 </div>
 
                 <div className={styles.controls}>
@@ -155,61 +98,21 @@ function AllNodes() {
                     </div>
 
                     <div className={styles.viewToggle}>
-                        <button
-                            className={viewMode === 'grid' ? styles.viewActive : styles.viewBtn}
-                            onClick={() => setViewMode('grid')}
-                            title="Grid view"
-                        >
-                            <i className="fas fa-th"></i>
-                        </button>
-                        <button
-                            className={viewMode === 'list' ? styles.viewActive : styles.viewBtn}
-                            onClick={() => setViewMode('list')}
-                            title="List view"
-                        >
-                            <i className="fas fa-list"></i>
-                        </button>
+                        {Object.values(strategies).map(strategy => (
+                            <button
+                                key={strategy.id}
+                                className={viewMode === strategy.id ? styles.viewActive : styles.viewBtn}
+                                onClick={() => setViewMode(strategy.id as 'grid' | 'list')}
+                                title={strategy.label}
+                            >
+                                <i className={strategy.icon}></i>
+                            </button>
+                        ))}
                     </div>
                 </div>
 
-                {/* Nodes Grid/List */}
-                <div className={viewMode === 'grid' ? styles.grid : styles.list}>
-                    {filteredNodes.map((node) => (
-                        <div key={node.id} className={styles.nodeCard}>
-                            <div className={styles.nodeHeader}>
-                                <div
-                                    className={styles.nodeIcon}
-                                    style={{ background: getTypeColor(node.type) }}
-                                >
-                                    <i className={`fas ${getTypeIcon(node.type)}`}></i>
-                                </div>
-                                <div
-                                    className={styles.statusBadge}
-                                    style={{ background: getStatusColor(node.status) }}
-                                >
-                                    {node.status}
-                                </div>
-                            </div>
-
-                            <h3 className={styles.nodeName}>{node.name}</h3>
-                            <p className={styles.nodeLocation}>
-                                <i className="fas fa-map-marker-alt"></i> {node.location}
-                            </p>
-                            <p className={styles.nodeUpdate}>
-                                <i className="fas fa-clock"></i> {node.lastUpdate}
-                            </p>
-
-                            <div className={styles.nodeActions}>
-                                <Link to={`/details?node=${node.id}`} className={styles.detailsBtn}>
-                                    <i className="fas fa-info-circle"></i> Details
-                                </Link>
-                                <Link to={`/map?node=${node.id}`} className={styles.mapLinkBtn}>
-                                    <i className="fas fa-map"></i> Map
-                                </Link>
-                            </div>
-                        </div>
-                    ))}
-                </div>
+                {/* Nodes Grid/List Rendered by Strategy */}
+                {strategies[viewMode].render(filteredNodes)}
 
                 {filteredNodes.length === 0 && (
                     <div className={styles.empty}>

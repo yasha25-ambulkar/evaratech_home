@@ -1,9 +1,12 @@
 import { useState } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import TDSChart from '@components/charts/TDSChart/TDSChart';
 import FlowRateChart from '@components/charts/FlowRateChart/FlowRateChart';
+import AssetStatusPieChart from '@components/charts/AssetStatusPieChart/AssetStatusPieChart';
+import AssetTypeBarChart from '@components/charts/AssetTypeBarChart/AssetTypeBarChart';
 import WaterFlowCanvas from '@components/3d/WaterFlowVisualization/WaterFlowCanvas';
 import Footer from '@components/layout/Footer/Footer';
+import StatCard from '@components/ui/StatCard/StatCard';
+import { CircularBuffer } from '../../models/dsa/CircularBuffer';
 import styles from './Dashboard.module.css';
 
 // Sample data for charts
@@ -22,18 +25,40 @@ const assetTypeData = [
     { type: 'Sensors', count: 2 },
 ];
 
-const tdsHistoricalData = Array.from({ length: 24 }, (_, i) => ({
-    timestamp: new Date(Date.now() - (23 - i) * 3600000).toISOString(),
-    tds: 120 + Math.random() * 50,
-}));
+interface TDSDataPoint { timestamp: string; tds: number; }
+interface FlowDataPoint { timestamp: string; flowRate: number; }
 
-const flowRateHistoricalData = Array.from({ length: 24 }, (_, i) => ({
-    timestamp: new Date(Date.now() - (23 - i) * 3600000).toISOString(),
-    flowRate: 10 + Math.random() * 5,
-}));
+function generateInitialTDSData(capacity: number): CircularBuffer<TDSDataPoint> {
+    const buffer = new CircularBuffer<TDSDataPoint>(capacity);
+    for (let i = 0; i < capacity; i++) {
+        buffer.push({
+            timestamp: new Date(Date.now() - (capacity - 1 - i) * 3600000).toISOString(),
+            tds: 120 + Math.random() * 50,
+        });
+    }
+    return buffer;
+}
+
+function generateInitialFlowData(capacity: number): CircularBuffer<FlowDataPoint> {
+    const buffer = new CircularBuffer<FlowDataPoint>(capacity);
+    for (let i = 0; i < capacity; i++) {
+        buffer.push({
+            timestamp: new Date(Date.now() - (capacity - 1 - i) * 3600000).toISOString(),
+            flowRate: 10 + Math.random() * 5,
+        });
+    }
+    return buffer;
+}
 
 function Dashboard() {
     const [selectedView, setSelectedView] = useState<'overview' | '3d'>('overview');
+
+    // Initialize buffers (using useState to keep instance)
+    const [tdsBuffer] = useState(() => generateInitialTDSData(24));
+    const [flowBuffer] = useState(() => generateInitialFlowData(24));
+
+    const tdsHistoricalData = tdsBuffer.toArray();
+    const flowRateHistoricalData = flowBuffer.toArray();
 
     return (
         <div className={styles.container}>
@@ -60,77 +85,50 @@ function Dashboard() {
                     <>
                         {/* Stats Cards */}
                         <div className={styles.statsGrid}>
-                            <div className={styles.statCard}>
-                                <div className={styles.statIcon}>🏭</div>
-                                <div className={styles.statInfo}>
-                                    <h3>Total Assets</h3>
-                                    <p className={styles.statValue}>70</p>
-                                    <span className={styles.statChange}>+2 this month</span>
-                                </div>
-                            </div>
-                            <div className={styles.statCard}>
-                                <div className={styles.statIcon}>✅</div>
-                                <div className={styles.statInfo}>
-                                    <h3>Active Assets</h3>
-                                    <p className={styles.statValue}>60</p>
-                                    <span className={styles.statChange}>85.7%</span>
-                                </div>
-                            </div>
-                            <div className={styles.statCard}>
-                                <div className={styles.statIcon}>⚠️</div>
-                                <div className={styles.statInfo}>
-                                    <h3>Warnings</h3>
-                                    <p className={styles.statValue}>5</p>
-                                    <span className={styles.statChange}>-1 from last week</span>
-                                </div>
-                            </div>
-                            <div className={styles.statCard}>
-                                <div className={styles.statIcon}>💧</div>
-                                <div className={styles.statInfo}>
-                                    <h3>Avg TDS</h3>
-                                    <p className={styles.statValue}>142 ppm</p>
-                                    <span className={styles.statChange}>Normal</span>
-                                </div>
-                            </div>
+                            <StatCard
+                                icon="🏭"
+                                label="Total Assets"
+                                value={70}
+                                trendText="+2 this month"
+                                trend="up"
+                                color="blue"
+                            />
+                            <StatCard
+                                icon="✅"
+                                label="Active Assets"
+                                value={60}
+                                percentage={85.7}
+                                trend="neutral"
+                                color="green"
+                            />
+                            <StatCard
+                                icon="⚠️"
+                                label="Warnings"
+                                value={5}
+                                trendText="-1 from last week"
+                                trend="down"
+                                color="orange"
+                            />
+                            <StatCard
+                                icon="💧"
+                                label="Avg TDS"
+                                value="142 ppm"
+                                trendText="Normal"
+                                trend="neutral"
+                                color="blue"
+                            />
                         </div>
 
                         {/* Charts Grid */}
                         <div className={styles.chartsGrid}>
                             <div className={styles.chartCard}>
                                 <h2>Asset Status Distribution</h2>
-                                <ResponsiveContainer width="100%" height={300}>
-                                    <PieChart>
-                                        <Pie
-                                            data={assetStatusData}
-                                            cx="50%"
-                                            cy="50%"
-                                            labelLine={false}
-                                            label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                                            outerRadius={100}
-                                            fill="#8884d8"
-                                            dataKey="value"
-                                        >
-                                            {assetStatusData.map((entry, index) => (
-                                                <Cell key={`cell-${index}`} fill={entry.color} />
-                                            ))}
-                                        </Pie>
-                                        <Tooltip />
-                                    </PieChart>
-                                </ResponsiveContainer>
+                                <AssetStatusPieChart data={assetStatusData} />
                             </div>
 
                             <div className={styles.chartCard}>
                                 <h2>Assets by Type</h2>
-                                <ResponsiveContainer width="100%" height={300}>
-                                    <BarChart data={assetTypeData}>
-                                        <CartesianGrid strokeDasharray="3 3" />
-                                        <XAxis dataKey="type" />
-                                        <YAxis />
-                                        <Tooltip />
-                                        <Legend />
-                                        <Bar dataKey="count" fill="#0077b6" />
-                                    </BarChart>
-                                </ResponsiveContainer>
+                                <AssetTypeBarChart data={assetTypeData} />
                             </div>
 
                             <div className={styles.chartCard}>

@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { notificationService } from '../services/notification.service';
+import { alertService } from '../services/AlertService';
 
 export type AlertSeverity = 'info' | 'warning' | 'critical' | 'success';
 
@@ -72,3 +73,11 @@ export const useAlertStore = create<AlertStore>((set) => ({
         set({ alerts: [], unreadCount: 0 });
     },
 }));
+
+// Subscribe to AlertService
+
+alertService.subscribe({
+    update: (data) => {
+        useAlertStore.getState().addAlert(data);
+    }
+});

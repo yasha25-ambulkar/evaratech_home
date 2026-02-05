@@ -17,7 +17,7 @@ const GirlsHostel = lazy(() => import('@pages/GirlsHostel/GirlsHostel'));
 const UserManagement = lazy(() => import('@pages/UserManagement/UserManagement'));
 const AuditLog = lazy(() => import('@components/admin/AuditLog/AuditLog'));
 
-import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from './components/common/ErrorBoundary';
 import Header from './components/layout/Header/Header';
 import LoadingScreen from './components/ui/LoadingScreen/LoadingScreen';
 import { ToastProvider } from './context/ToastContext'; // Added import

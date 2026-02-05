@@ -5,11 +5,12 @@ interface StatCardProps {
     value: string | number;
     label: string;
     percentage?: number;
+    trendText?: string;
     trend?: 'up' | 'down' | 'neutral';
     color?: 'blue' | 'green' | 'orange' | 'red';
 }
 
-function StatCard({ icon, value, label, percentage, trend = 'neutral', color = 'blue' }: StatCardProps) {
+function StatCard({ icon, value, label, percentage, trendText, trend = 'neutral', color = 'blue' }: StatCardProps) {
     const getTrendIcon = () => {
         if (trend === 'up') return '↑';
         if (trend === 'down') return '↓';
@@ -28,11 +29,17 @@ function StatCard({ icon, value, label, percentage, trend = 'neutral', color = '
             <div className={styles.content}>
                 <div className={styles.value}>{value}</div>
                 <div className={styles.label}>{label}</div>
-                {percentage !== undefined && (
+                {percentage !== undefined ? (
                     <div className={`${styles.percentage} ${getTrendClass()}`}>
                         <span className={styles.trendIcon}>{getTrendIcon()}</span>
                         {percentage}%
                     </div>
+                ) : (
+                    trendText && (
+                        <div className={`${styles.percentage} ${getTrendClass()}`}>
+                            {trendText}
+                        </div>
+                    )
                 )}
             </div>
         </div>
