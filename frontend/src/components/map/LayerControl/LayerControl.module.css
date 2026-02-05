@@ -7,9 +7,12 @@
     /* Initial state */
     height: 60px;
     /* Initial state */
-    background: #ffffff;
+    background: var(--glass-base-light);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border-radius: 50%;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
     z-index: 1000;
     overflow: hidden;
     /* Hide content when collapsed */
@@ -34,7 +37,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: #4A90E2;
+    color: var(--color-primary-500);
     z-index: 2;
 }
 
@@ -68,13 +71,13 @@
     align-items: center;
     margin-bottom: 16px;
     padding-bottom: 8px;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .title {
     font-size: 16px;
     font-weight: 700;
-    color: #333;
+    color: var(--text-primary);
     margin: 0;
 }
 
@@ -102,7 +105,7 @@
 .sectionTitle {
     font-size: 11px;
     font-weight: 700;
-    color: #4A90E2;
+    color: var(--color-primary-500);
     text-transform: uppercase;
     margin: 0 0 4px 0;
     letter-spacing: 0.5px;
@@ -110,7 +113,7 @@
 
 .divider {
     height: 1px;
-    background-color: #f0f0f0;
+    background-color: var(--border-color);
     width: 100%;
     margin: 12px 0;
 }
@@ -133,7 +136,7 @@
 }
 
 .layerItem:hover {
-    background-color: #f8f9fa;
+    background-color: var(--bg-hover);
 }
 
 .layerItem.active {
@@ -182,7 +185,7 @@
 /* Labels */
 .layerLabel {
     font-size: 13px;
-    color: #333333;
+    color: var(--text-primary);
     font-weight: 500;
 }
 

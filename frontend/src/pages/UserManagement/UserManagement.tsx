@@ -75,83 +75,85 @@ export default function UserManagement() {
 
     return (
         <div className={styles.container}>
-            <div className={styles.header}>
-                <div className={styles.titleInfo}>
-                    <h2><i className="fas fa-users-cog"></i> User Management</h2>
-                    <p>Manage system access and permissions</p>
+            <div className={styles.content}>
+                <div className={styles.header}>
+                    <div className={styles.titleInfo}>
+                        <h2><i className="fas fa-users-cog"></i> User Management</h2>
+                        <p>Manage system access and permissions</p>
+                    </div>
+                    <button className={styles.addBtn} onClick={() => alert('Add User feature would open a form here')}>
+                        <i className="fas fa-plus"></i> Add User
+                    </button>
                 </div>
-                <button className={styles.addBtn} onClick={() => alert('Add User feature would open a form here')}>
-                    <i className="fas fa-plus"></i> Add User
-                </button>
-            </div>
 
-            <div className={styles.controls}>
-                <div className={styles.searchBar}>
-                    <i className="fas fa-search"></i>
-                    <input
-                        type="text"
-                        placeholder="Search users..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                    />
+                <div className={styles.controls}>
+                    <div className={styles.searchBar}>
+                        <i className="fas fa-search"></i>
+                        <input
+                            type="text"
+                            placeholder="Search users..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                    </div>
                 </div>
-            </div>
 
-            <div className={styles.tableContainer}>
-                <table className={styles.table}>
-                    <thead>
-                        <tr>
-                            <th>User</th>
-                            <th>Role</th>
-                            <th>Status</th>
-                            <th>Last Active</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <AnimatePresence>
-                            {filteredUsers.map((user) => (
-                                <motion.tr
-                                    key={user.id}
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    exit={{ opacity: 0 }}
-                                    layout
-                                >
-                                    <td>
-                                        <div className={styles.userInfo}>
-                                            <img src={user.avatar} alt={user.name} className={styles.avatar} />
-                                            <div>
-                                                <div className={styles.userName}>{user.name}</div>
-                                                <div className={styles.userEmail}>{user.email}</div>
+                <div className={styles.tableContainer}>
+                    <table className={styles.table}>
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Last Active</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <AnimatePresence>
+                                {filteredUsers.map((user) => (
+                                    <motion.tr
+                                        key={user.id}
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        exit={{ opacity: 0 }}
+                                        layout
+                                    >
+                                        <td>
+                                            <div className={styles.userInfo}>
+                                                <img src={user.avatar} alt={user.name} className={styles.avatar} />
+                                                <div>
+                                                    <div className={styles.userName}>{user.name}</div>
+                                                    <div className={styles.userEmail}>{user.email}</div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <span className={`${styles.badge} ${getRoleBadgeClass(user.role)}`}>
-                                            {user.role}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <span className={`${styles.statusDot} ${user.status === 'active' ? styles.active : styles.inactive}`}></span>
-                                        {user.status}
-                                    </td>
-                                    <td>{user.lastActive}</td>
-                                    <td>
-                                        <div className={styles.actions}>
-                                            <button className={styles.iconBtn} onClick={() => handleEdit(user)} title="Edit">
-                                                <i className="fas fa-pen"></i>
-                                            </button>
-                                            <button className={`${styles.iconBtn} ${styles.danger}`} onClick={() => handleDelete(user.id)} title="Delete">
-                                                <i className="fas fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </motion.tr>
-                            ))}
-                        </AnimatePresence>
-                    </tbody>
-                </table>
+                                        </td>
+                                        <td>
+                                            <span className={`${styles.badge} ${getRoleBadgeClass(user.role)}`}>
+                                                {user.role}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span className={`${styles.statusDot} ${user.status === 'active' ? styles.active : styles.inactive}`}></span>
+                                            {user.status}
+                                        </td>
+                                        <td>{user.lastActive}</td>
+                                        <td>
+                                            <div className={styles.actions}>
+                                                <button className={styles.iconBtn} onClick={() => handleEdit(user)} title="Edit">
+                                                    <i className="fas fa-pen"></i>
+                                                </button>
+                                                <button className={`${styles.iconBtn} ${styles.danger}`} onClick={() => handleDelete(user.id)} title="Delete">
+                                                    <i className="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </motion.tr>
+                                ))}
+                            </AnimatePresence>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             {/* Edit Modal (Simplified) */}

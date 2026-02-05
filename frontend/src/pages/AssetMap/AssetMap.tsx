@@ -10,9 +10,10 @@ import { MapContainer, TileLayer, Marker, Tooltip, GeoJSON, useMap, Popup } from
 import L from 'leaflet';
 import { assetDatabase } from '@data/assets.data';
 import { pipelineGeoJSON } from '@data/pipelines.data';
+import { iiitBoundaryGeoJSON } from '@data/iiit_boundary.data';
 import { MAP_CONFIG, COLORS } from '@data/constants';
 import { useUIStore, useMapLayersStore } from '../../store';
-import Sidebar from '@components/layout/Sidebar/Sidebar';
+import AssetDetailModal from '@components/layout/AssetDetailModal/AssetDetailModal';
 import LayerControl from '@components/map/LayerControl/LayerControl';
 import SystemDashboard from '@components/dashboard/SystemDashboard/SystemDashboard';
 import StatusNode from '@components/dashboard/StatusNode/StatusNode';
@@ -22,9 +23,7 @@ import styles from './AssetMap.module.css';
 
 // Phase 12: Glass Components
 import GlassMapControls from '@components/map/controls/GlassMapControls';
-import GlassSearchBar from '@components/map/controls/GlassSearchBar';
 import GlassPopupCard from '@components/map/GlassPopupCard/GlassPopupCard';
-import NodeDetailModal from '@components/dashboard/NodeDetailModal/NodeDetailModal'; // Import Modal
 import { motion, AnimatePresence } from 'framer-motion';
 
 // Fix Leaflet default icon issue
@@ -75,10 +74,10 @@ function createCustomIcon(type: AssetType, status: string = 'Normal') {
     return L.divIcon({
         className: 'custom-marker',
         html: `<div class="${styles.glassMarker} ${status === 'Critical' ? styles.critical : ''}" style="--marker-color: ${color}">
-            ${letter}
+            <span>${letter}</span>
         </div>`,
         iconSize: [32, 32],
-        iconAnchor: [16, 16],
+        iconAnchor: [16, 32],
     });
 }
 
@@ -237,6 +236,25 @@ function BoreSupplyLayer({ isVisible }: { isVisible: boolean }) {
     );
 }
 
+// ---------------------------------------------------------
+// 🏢 CAMPUS BOUNDARY LAYER (Black Line)
+// ---------------------------------------------------------
+function CampusBoundaryLayer() {
+    return (
+        <GeoJSON
+            data={iiitBoundaryGeoJSON as any}
+            style={() => ({
+                color: '#000000',
+                weight: 3,
+                dashArray: '5, 10', // Dashed line for boundary feel
+                fillColor: 'transparent',
+                fillOpacity: 0
+            })}
+            interactive={false}
+        />
+    );
+}
+
 import { useAssets } from '../../hooks/useAssets';
 
 function AssetMap() {
@@ -247,7 +265,6 @@ function AssetMap() {
     const showSystemDash = activePanel === 'system';
     const showStatusDash = activePanel === 'status';
     const isFilterPanelOpen = activePanel === 'filters';
-    const selectedDetailNode = activePanel === 'nodeDetail' ? selectedAsset : null;
 
     const { visibleLayers } = useMapLayersStore();
     const location = useLocation();
@@ -255,9 +272,8 @@ function AssetMap() {
     const handleDetailNode = (node: Asset | null) => {
         if (node) {
             openSidebar(node);
-            setActivePanel('nodeDetail');
         } else {
-            setActivePanel('none');
+            closeAll();
         }
     };
 
@@ -292,10 +308,6 @@ function AssetMap() {
         openSidebar(asset);
     }, [openSidebar]);
 
-    const handleSearch = useCallback((_query: string) => {
-        // Implement search logic here
-        // Example: filter assets based on query and update map view or highlight
-    }, []);
 
     // Filter assets based on multiple criteria - MEMOIZED
     const filteredAssets = useMemo(() => {
@@ -329,8 +341,6 @@ function AssetMap() {
 
     return (
         <div className={styles.container}>
-            {/* SEARCH BAR - Floating Top Left-Center */}
-            <GlassSearchBar onSearch={handleSearch} />
 
             {/* Filter Toggle Button */}
             <motion.button
@@ -381,6 +391,9 @@ function AssetMap() {
 
                 {/* Bore Supply Layer */}
                 <BoreSupplyLayer isVisible={visibleLayers.borePipelines && filters.showPipelines} />
+
+                {/* IIIT Campus Boundary */}
+                <CampusBoundaryLayer />
 
                 {filteredAssets.map((asset) => {
                     const assetData = assetDatabase[asset.name];
@@ -461,18 +474,9 @@ function AssetMap() {
                 )}
             </AnimatePresence>
 
-            {/* Node Detail Modal */}
-            <AnimatePresence>
-                {selectedDetailNode && (
-                    <NodeDetailModal
-                        node={selectedDetailNode}
-                        onClose={() => setActivePanel('sidebar')}
-                    />
-                )}
-            </AnimatePresence>
-
-            <Sidebar
-                isOpen={activePanel === 'sidebar' || activePanel === 'nodeDetail'}
+            {/* Asset Detail Modal (Pop-up Style) */}
+            <AssetDetailModal
+                isOpen={activePanel === 'sidebar' || activePanel === 'nodeDetail' || !!selectedAsset}
                 onClose={closeAll}
                 asset={selectedAsset}
             />

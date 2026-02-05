@@ -154,21 +154,38 @@
 @import '../../../styles/animations.css';
 
 .card {
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
+    background: var(--glass-base-light);
+    backdrop-filter: blur(32px) saturate(210%);
+    -webkit-backdrop-filter: blur(32px) saturate(210%);
+    border: 1px solid var(--glass-border);
     border-radius: var(--radius-lg);
     padding: var(--space-4);
     cursor: pointer;
-    transition: all var(--transition-base);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
     overflow: hidden;
     animation: fadeIn 0.5s ease-out;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.25) 0%,
+            transparent 40%,
+            rgba(255, 255, 255, 0.05) 100%);
+    pointer-events: none;
+    z-index: 1;
 }
 
 .card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-lg);
-    border-color: var(--accent-blue);
+    transform: translateY(-8px) scale(1.02);
+    box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.1),
+        0 0 0 1px var(--accent-blue);
+    background: var(--glass-base-heavy);
 }
 
 .cardHeader {

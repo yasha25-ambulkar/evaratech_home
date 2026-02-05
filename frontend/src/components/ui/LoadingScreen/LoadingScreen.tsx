@@ -29,19 +29,33 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
             {/* Animated Background Elements */}
             <motion.div
                 className={styles.bgCircle}
-                style={{ width: 500, height: 500, background: '#e0f2fe', top: '-10%', right: '-10%' }}
+                style={{
+                    width: 500,
+                    height: 500,
+                    background: 'var(--color-primary-500)',
+                    opacity: 0.15,
+                    top: '-10%',
+                    right: '-10%'
+                }}
                 animate={{
                     scale: [1, 1.2, 1],
-                    opacity: [0.5, 0.8, 0.5],
+                    opacity: [0.1, 0.2, 0.1],
                 }}
                 transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
             />
             <motion.div
                 className={styles.bgCircle}
-                style={{ width: 400, height: 400, background: '#f0fdf4', bottom: '-5%', left: '-5%' }}
+                style={{
+                    width: 400,
+                    height: 400,
+                    background: 'var(--status-success)',
+                    opacity: 0.1,
+                    bottom: '-5%',
+                    left: '-5%'
+                }}
                 animate={{
                     scale: [1, 1.3, 1],
-                    opacity: [0.3, 0.6, 0.3],
+                    opacity: [0.05, 0.15, 0.05],
                 }}
                 transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
             />
@@ -67,7 +81,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
                     }}
                 >
                     <img
-                        src="/evaratech-logo-new.png"
+                        src="/evaratech-logo-light.png"
                         alt="EvaraTech"
                         className={styles.logo}
                     />

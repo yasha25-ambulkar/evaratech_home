@@ -30,10 +30,10 @@
 
 .exportBtn {
     padding: 8px 16px;
-    background: white;
-    border: 1px solid var(--gray-300);
+    background: var(--gray-100);
+    border: 1px solid var(--border-color);
     border-radius: 8px;
-    color: var(--gray-700);
+    color: var(--text-primary);
     cursor: pointer;
     font-weight: 500;
     display: flex;
@@ -43,8 +43,8 @@
 }
 
 .exportBtn:hover {
-    background: var(--gray-50);
-    border-color: var(--gray-400);
+    background: var(--gray-200);
+    border-color: var(--border-hover);
 }
 
 .controls {
@@ -76,10 +76,10 @@
 .tableContainer {
     flex: 1;
     overflow-y: auto;
-    background: white;
+    background: var(--gray-50);
     border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-color);
 }
 
 .table {
@@ -99,8 +99,8 @@
 
 .table td {
     padding: 16px 24px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    color: var(--gray-800);
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-primary);
     font-size: 13px;
 }
 

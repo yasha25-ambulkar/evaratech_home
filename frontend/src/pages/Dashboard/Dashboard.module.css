@@ -3,7 +3,7 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    padding: var(--space-8);
+    padding: 150px var(--space-8) var(--space-8) var(--space-8);
 }
 
 .content {
@@ -57,7 +57,7 @@
 }
 
 .viewToggle button.active {
-    background: white;
+    background: var(--gray-200);
     color: var(--accent-blue);
     box-shadow: var(--shadow-sm);
     font-weight: 600;
@@ -98,7 +98,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.05);
     border-radius: var(--radius-lg);
     flex-shrink: 0;
 }
@@ -191,7 +191,7 @@
 .controls {
     margin-top: var(--space-6);
     padding: var(--space-5);
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
     border-radius: var(--radius-md);
     border: 1px solid var(--border-color);
 }

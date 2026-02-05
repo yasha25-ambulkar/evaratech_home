@@ -18,25 +18,84 @@
   --color-primary-700: #075985;
 
   /* ========================================= */
-  /* 2. Neutral Scale (Slate - Professional)   */
+  /* 2. Theme Specific Variables               */
   /* ========================================= */
-  --gray-50: #f8fafc;
+  --color-background: var(--bg-card, #ffffff);
+  --color-text: var(--text-primary, #1c1c1e);
+  --status-success: var(--success-text, #166534);
+  --bg-gradient: radial-gradient(at 50% 0%, #f8fafc 0, transparent 50%);
   --gray-100: #f1f5f9;
-  /* App Background */
-  --gray-200: #e2e8f0;
-  /* Borders */
-  --gray-300: #cbd5e1;
-  /* Disabled/Subtle */
-  --gray-400: #94a3b8;
-  /* Icons */
-  --gray-500: #64748b;
-  /* Text Secondary */
-  --gray-600: #475569;
-  /* Text Primary */
-  --gray-700: #334155;
-  /* Headings */
-  --gray-800: #1e293b;
-  --gray-900: #0f172a;
+}
+
+:root[data-theme='light'] {
+  --gray-50: #fafafa;
+  --gray-100: #f5f5f7;
+  --gray-200: #eeeeef;
+  --gray-300: #e5e5ea;
+  --gray-400: #d1d1d6;
+  --gray-500: #8e8e93;
+  --gray-600: #636366;
+  --gray-700: #3a3a3c;
+  --gray-800: #1c1c1e;
+  --gray-900: #000000;
+
+  --text-primary: var(--gray-800);
+  --text-secondary: var(--gray-600);
+  --text-muted: var(--gray-500);
+  --bg-card: rgba(255, 255, 255, 0.7);
+  --bg-hover: var(--gray-100);
+  --border-color: rgba(0, 0, 0, 0.08);
+  --border-hover: rgba(0, 0, 0, 0.15);
+  --glass-white: rgba(255, 255, 255, 0.4);
+
+  --glass-base-light: rgba(0, 0, 0, 0.03);
+  --glass-base-heavy: rgba(0, 0, 0, 0.05);
+  /* Gray glass in light mode */
+  --glass-border: rgba(0, 0, 0, 0.1);
+  --glass-shine: rgba(255, 255, 255, 0.8);
+  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+
+  --bg-gradient:
+    radial-gradient(at 0% 0%, hsla(210, 100%, 98%, 1) 0, transparent 50%),
+    radial-gradient(at 50% 0%, hsla(220, 100%, 99%, 1) 0, transparent 50%),
+    radial-gradient(at 100% 0%, hsla(215, 100%, 97%, 1) 0, transparent 50%);
+}
+
+:root[data-theme='dark'] {
+  --gray-50: #0f172a;
+  --gray-100: #1e293b;
+  --gray-200: #334155;
+  --gray-300: #475569;
+  --gray-400: #64748b;
+  --gray-500: #94a3b8;
+  --gray-600: #cbd5e1;
+  --gray-700: #e2e8f0;
+  --gray-800: #f1f5f9;
+  --gray-900: #ffffff;
+
+  --text-primary: var(--gray-800);
+  --text-secondary: var(--gray-600);
+  --text-muted: var(--gray-500);
+  --bg-card: rgba(30, 41, 59, 0.7);
+  --bg-hover: var(--gray-100);
+  --border-color: rgba(255, 255, 255, 0.1);
+  --border-hover: rgba(255, 255, 255, 0.2);
+  --glass-white: rgba(0, 0, 0, 0.4);
+
+  --glass-base-light: rgba(15, 23, 42, 0.6);
+  --glass-base-heavy: rgba(7, 10, 15, 0.9);
+  /* More dark in dark mode */
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-shine: rgba(255, 255, 255, 0.05);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+
+  --bg-gradient:
+    radial-gradient(at 0% 0%, hsla(222, 47%, 11%, 1) 0, transparent 50%),
+    radial-gradient(at 50% 0%, hsla(217, 33%, 17%, 1) 0, transparent 50%),
+    radial-gradient(at 100% 0%, hsla(215, 25%, 27%, 0.5) 0, transparent 50%);
+}
+
+:root {
 
   /* ========================================= */
   /* 3. Semantic Colors (Status)               */
@@ -60,17 +119,7 @@
   --asset-sump: #10b981;
   /* Emerald */
 
-  /* ========================================= */
-  /* 4. Glass System (RGBA)                    */
-  /* ========================================= */
-  /* Base layers for backdrop-filter contexts */
-  --glass-base-light: rgba(255, 255, 255, 0.75);
-  --glass-base-heavy: rgba(255, 255, 255, 0.85);
-  --glass-border: rgba(255, 255, 255, 0.6);
-  --glass-shine: rgba(255, 255, 255, 0.4);
-
-  /* Decoration */
-  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+  /* Removed global glass overrides to favor theme-specific variables */
 
   /* ========================================= */
   /* 5. Typography                             */

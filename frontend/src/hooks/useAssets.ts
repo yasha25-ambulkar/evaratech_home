@@ -64,7 +64,14 @@ export function useAssets(): UseAssetsReturn {
                 }
             });
 
-            setAssets(combined);
+            // Phase 38: Filter out explicitly removed assets (Supabase & Mock)
+            const EXCLUDED_ASSETS = ['pipe-p10-s5', 'pipe-p9-s3', 'Borewell P8', 'PIPE-P10-S5', 'PIPE-P9-S3', 'BW-P8'];
+            const filtered = combined.filter(asset =>
+                !EXCLUDED_ASSETS.includes(asset.id) &&
+                !EXCLUDED_ASSETS.includes(asset.name)
+            );
+
+            setAssets(filtered);
         } catch (err) {
             console.error('Error fetching assets:', err);
             setError('Failed to load assets. Please try again.');

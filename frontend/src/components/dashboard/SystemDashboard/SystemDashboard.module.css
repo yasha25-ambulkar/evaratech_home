@@ -40,9 +40,9 @@
     width: 44px;
     height: 44px;
     border-radius: 50%;
-    border: 1px solid var(--gray-200);
-    background: white;
-    color: var(--gray-500);
+    border: 1px solid var(--border-color);
+    background: var(--bg-hover);
+    color: var(--text-secondary);
     font-size: 20px;
     cursor: pointer;
     display: flex;
@@ -60,7 +60,7 @@
 
 .actionBtn {
     background: var(--glass-base-light);
-    border: 1px solid white;
+    border: 1px solid var(--glass-border);
     padding: 8px 16px 8px 8px;
     border-radius: var(--radius-full);
     display: flex;
@@ -72,7 +72,7 @@
 }
 
 .actionBtn:hover {
-    background: white;
+    background: var(--bg-card);
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
 }
@@ -359,7 +359,7 @@
 
 .cardHeader {
     padding: 16px 20px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid var(--border-color);
     display: flex;
     justify-content: space-between;
     align-items: center;

@@ -17,8 +17,8 @@ class NotificationService {
     public showNotification(title: string, options?: NotificationOptions) {
         if (Notification.permission === 'granted') {
             const notification = new Notification(title, {
-                icon: '/evaratech-logo-new.png',
-                badge: '/evaratech-logo-new.png',
+                icon: '/evaratech-logo-light.png',
+                badge: '/evaratech-logo-light.png',
                 ...options
             });
 

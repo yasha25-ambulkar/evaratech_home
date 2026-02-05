@@ -15,16 +15,24 @@ interface ThemeProviderProps {
 }
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
-    const [theme] = useState<Theme>('light');
+    const [theme, setThemeState] = useState<Theme>(() => {
+        const saved = localStorage.getItem('theme');
+        if (saved === 'light' || saved === 'dark') return saved as Theme;
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    });
 
     useEffect(() => {
-        // Enforce light theme
-        localStorage.setItem('theme', 'light');
-        document.documentElement.setAttribute('data-theme', 'light');
-    }, []);
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+    }, [theme]);
 
-    const setTheme = () => { }; // No-op
-    const toggleTheme = () => { }; // No-op
+    const toggleTheme = () => {
+        setThemeState(prev => prev === 'light' ? 'dark' : 'light');
+    };
+
+    const setTheme = (newTheme: Theme) => {
+        setThemeState(newTheme);
+    };
 
     return (
         <ThemeContext.Provider value={{ theme, toggleTheme, setTheme }}>

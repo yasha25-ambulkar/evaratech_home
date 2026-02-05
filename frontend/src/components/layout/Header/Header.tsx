@@ -5,12 +5,14 @@ import { useTranslation } from 'react-i18next'; // Import useTranslation
 import { useAuthStore } from '../../../store/authStore';
 import { useAlertStore } from '../../../store/alertStore';
 // import GlobalSearch from '../../search/GlobalSearch/GlobalSearch';
+import { useTheme } from '../../../contexts/ThemeContext';
 import styles from './Header.module.css';
 
 import { useUIStore } from '../../../store/uiStore';
 
 function Header() {
-    const { t, i18n } = useTranslation();
+    const { theme, toggleTheme } = useTheme();
+    const { t } = useTranslation();
     const location = useLocation();
     const { logout, user } = useAuthStore();
     const { alerts, unreadCount, markAsRead } = useAlertStore();
@@ -20,8 +22,13 @@ function Header() {
     const showNotifications = activePanel === 'notifications';
     const showUserMenu = activePanel === 'userMenu';
 
-    const changeLanguage = (lng: string) => {
-        i18n.changeLanguage(lng);
+    // Mouse Tracking for Liquid Glass Effect
+    const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        e.currentTarget.style.setProperty('--mouse-x', `${x}px`);
+        e.currentTarget.style.setProperty('--mouse-y', `${y}px`);
     };
 
     const isActive = (path: string) => {
@@ -44,14 +51,15 @@ function Header() {
         <motion.header
             className={styles.header}
             initial={{ y: -100, x: '-50%', opacity: 0 }}
-            animate={{ y: 12, x: '-50%', opacity: 1 }}
+            animate={{ y: 10, x: '-50%', opacity: 1 }}
             transition={{ type: "spring", stiffness: 120, damping: 20, delay: 0.5 }}
+            onMouseMove={handleMouseMove}
         >
             <div className={styles.container}>
                 {/* Logo */}
                 <Link to="/" className={styles.brand}>
                     <img
-                        src="/evaratech-logo-new.png"
+                        src="/evaratech-logo-v2.png"
                         alt="EvaraTech Logo"
                         className={styles.logoImg}
                     />
@@ -79,6 +87,15 @@ function Header() {
 
                 {/* Right Side Actions */}
                 <div className={styles.actions}>
+                    <motion.button
+                        className={styles.iconBtn}
+                        onClick={toggleTheme}
+                        title={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                    >
+                        <i className={theme === 'light' ? 'fas fa-moon' : 'fas fa-sun'}></i>
+                    </motion.button>
 
                     {/* Notifications */}
                     <div className={styles.iconWrapper}>
@@ -191,11 +208,6 @@ function Header() {
                                         <i className="fas fa-cog"></i> {t('nav.settings')}
                                     </Link>
                                     <div className={styles.divider}></div>
-                                    <div className={styles.langSwitch}>
-                                        <button onClick={() => changeLanguage('en')} className={`${styles.langBtn} ${i18n.language === 'en' ? styles.activeLang : ''}`}>English</button>
-                                        <button onClick={() => changeLanguage('hi')} className={`${styles.langBtn} ${i18n.language === 'hi' ? styles.activeLang : ''}`}>हिंदी</button>
-                                    </div>
-                                    <div className={styles.divider}></div>
                                     <button className={styles.menuItem} onClick={() => {
                                         logout();
                                         setActivePanel('none');
@@ -206,49 +218,49 @@ function Header() {
                             )}
                         </AnimatePresence>
                     </div>
-                </div>
 
-                {/* More Menu */}
-                <div className={styles.iconWrapper}>
-                    <motion.button
-                        className={styles.mobileMenuBtn}
-                        onClick={() => setActivePanel('more')}
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        title="More"
-                    >
-                        <i className="fas fa-bars"></i>
-                    </motion.button>
+                    {/* More Menu (3-dots) - Grouped Inside Actions */}
+                    <div className={styles.iconWrapper}>
+                        <motion.button
+                            className={styles.mobileMenuBtn}
+                            onClick={() => setActivePanel('more')}
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            title="More"
+                        >
+                            <i className="fas fa-bars"></i>
+                        </motion.button>
 
-                    <AnimatePresence>
-                        {activePanel === 'more' && (
-                            <motion.div
-                                className={styles.dropdown}
-                                initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                                animate={{ opacity: 1, y: 0, scale: 1 }}
-                                exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                                transition={{ duration: 0.2 }}
-                            >
-                                <div className={styles.dropdownHeader}>
-                                    <h3>Quick Access</h3>
-                                    <button className={styles.closeBtn} onClick={() => setActivePanel('none')}>×</button>
-                                </div>
-                                <Link to="/status" className={styles.menuItem} onClick={() => setActivePanel('none')}>
-                                    <i className="fas fa-signal"></i> {t('nav.status')}
-                                </Link>
-                                <Link to="/reports" className={styles.menuItem} onClick={() => setActivePanel('none')}>
-                                    <i className="fas fa-file-alt"></i> {t('nav.reports')}
-                                </Link>
-                                <div className={styles.divider}></div>
-                                <Link to="/about" className={styles.menuItem} onClick={() => setActivePanel('none')}>
-                                    <i className="fas fa-info-circle"></i> {t('nav.about')}
-                                </Link>
-                                <Link to="/audit" className={styles.menuItem} onClick={() => setActivePanel('none')}>
-                                    <i className="fas fa-history"></i> Audit Logs
-                                </Link>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
+                        <AnimatePresence>
+                            {activePanel === 'more' && (
+                                <motion.div
+                                    className={styles.dropdown}
+                                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                                    transition={{ duration: 0.2 }}
+                                >
+                                    <div className={styles.dropdownHeader}>
+                                        <h3>Quick Access</h3>
+                                        <button className={styles.closeBtn} onClick={() => setActivePanel('none')}>×</button>
+                                    </div>
+                                    <Link to="/status" className={styles.menuItem} onClick={() => setActivePanel('none')}>
+                                        <i className="fas fa-signal"></i> {t('nav.status')}
+                                    </Link>
+                                    <Link to="/reports" className={styles.menuItem} onClick={() => setActivePanel('none')}>
+                                        <i className="fas fa-file-alt"></i> {t('nav.reports')}
+                                    </Link>
+                                    <div className={styles.divider}></div>
+                                    <Link to="/about" className={styles.menuItem} onClick={() => setActivePanel('none')}>
+                                        <i className="fas fa-info-circle"></i> {t('nav.about')}
+                                    </Link>
+                                    <Link to="/audit" className={styles.menuItem} onClick={() => setActivePanel('none')}>
+                                        <i className="fas fa-history"></i> Audit Logs
+                                    </Link>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </div>
                 </div>
             </div>
         </motion.header>

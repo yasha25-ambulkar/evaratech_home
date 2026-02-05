@@ -1,13 +1,18 @@
-/* iOS/macOS Glassmorphic All Nodes */
 .container {
     min-height: calc(100vh - 64px);
-    padding: var(--space-8);
-    background: var(--bg-primary);
+    padding: 150px var(--space-8) var(--space-8) var(--space-8);
+    background: var(--gray-50);
+}
+
+.content {
+    flex: 1;
+    max-width: 1600px;
+    margin: 0 auto;
+    width: 100%;
 }
 
 .header {
-    max-width: 1400px;
-    margin: 0 auto var(--space-8);
+    margin: 0 auto var(--space-10, 2.5rem);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -49,11 +54,10 @@
 
 /* Stats Grid */
 .stats {
-    max-width: 1400px;
-    margin: 0 auto var(--space-8);
+    margin: 0 auto var(--space-10, 2.5rem);
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: var(--space-5);
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--space-6);
 }
 
 .statCard {
@@ -78,6 +82,7 @@
 .statCard i {
     font-size: 2rem;
     color: #667eea;
+    margin-left: var(--space-3);
 }
 
 .statValue {
@@ -96,47 +101,12 @@
 
 /* Controls */
 .controls {
-    max-width: 1400px;
-    margin: 0 auto var(--space-6);
+    margin: 0 auto var(--space-8);
     display: flex;
-    gap: var(--space-4);
+    gap: var(--space-6);
     flex-wrap: wrap;
     align-items: center;
-}
-
-.searchBox {
-    flex: 1;
-    min-width: 250px;
-    position: relative;
-}
-
-.searchBox i {
-    position: absolute;
-    left: var(--space-4);
-    top: 50%;
-    transform: translateY(-50%);
-    color: rgba(0, 0, 0, 0.4);
-}
-
-.searchBox input {
-    width: 100%;
-    padding: var(--space-3) var(--space-4) var(--space-3) var(--space-10);
-    background: var(--glass-white-light);
-    backdrop-filter: blur(var(--blur-sm));
-    -webkit-backdrop-filter: blur(var(--blur-sm));
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: var(--radius-md);
-    font-size: 15px;
-    font-family: var(--font-display);
-    transition: all var(--transition-base);
-    outline: none;
-}
-
-.searchBox input:focus {
-    background: var(--glass-white);
-    border-color: #667eea;
-    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
-    transform: translateY(-1px);
+    justify-content: center;
 }
 
 .filters {
@@ -205,15 +175,13 @@
 
 /* Node Cards Grid */
 .grid {
-    max-width: 1400px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: var(--space-5);
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: var(--space-8);
 }
 
 .list {
-    max-width: 1400px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -221,15 +189,13 @@
 }
 
 .nodeCard {
-    background: linear-gradient(135deg,
-            rgba(255, 255, 255, 0.9),
-            rgba(255, 255, 255, 0.7));
+    background: var(--glass-base-light);
     backdrop-filter: blur(var(--blur-md)) saturate(180%);
     -webkit-backdrop-filter: blur(var(--blur-md)) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.4);
+    border: 1px solid var(--glass-border);
     border-radius: var(--radius-xl);
-    padding: var(--space-5);
-    box-shadow: var(--shadow-md);
+    padding: var(--space-8);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     transition: all var(--transition-spring);
     position: relative;
     overflow: hidden;
@@ -264,7 +230,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: var(--space-4);
+    margin-bottom: var(--space-6);
 }
 
 .nodeIcon {
@@ -292,29 +258,29 @@
 }
 
 .nodeName {
-    font-size: 18px;
-    color: var(--text-primary);
-    margin: 0 0 var(--space-3) 0;
-    font-weight: 600;
-    letter-spacing: -0.005em;
+    font-size: 20px;
+    color: var(--gray-800);
+    margin: 0 0 var(--space-4) 0;
+    font-weight: 700;
+    letter-spacing: -0.01em;
 }
 
 .nodeLocation,
 .nodeUpdate {
     font-size: 14px;
-    color: var(--text-secondary);
-    margin: 0 0 var(--space-2) 0;
+    color: var(--gray-500);
+    margin: 0 0 var(--space-3) 0;
     display: flex;
     align-items: center;
-    gap: var(--space-2);
+    gap: var(--space-3);
 }
 
 .nodeActions {
     display: flex;
-    gap: var(--space-3);
-    margin-top: var(--space-4);
-    padding-top: var(--space-4);
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    gap: var(--space-4);
+    margin-top: var(--space-6);
+    padding-top: var(--space-6);
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .detailsBtn,
@@ -345,10 +311,10 @@
 }
 
 .mapLinkBtn {
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(var(--blur-sm));
-    color: rgba(0, 0, 0, 0.7);
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
 }
 
 .mapLinkBtn:hover {
@@ -358,7 +324,6 @@
 }
 
 .empty {
-    max-width: 1400px;
     margin: var(--space-16) auto;
     text-align: center;
     color: rgba(0, 0, 0, 0.5);

@@ -40,7 +40,6 @@ export const assetPositions: Record<string, { position: [number, number]; type: 
     'Borewell P5': { position: [17.447783, 78.349040], type: 'bore' },
     'Borewell P6': { position: [17.448335, 78.348594], type: 'bore' },
     'Borewell P7': { position: [17.445847, 78.346416], type: 'bore' },
-    'Borewell P8': { position: [17.445139, 78.345277], type: 'bore' },
     'Borewell P9': { position: [17.446922, 78.346699], type: 'bore' },
     'Borewell P10': { position: [17.443947, 78.350139], type: 'bore' },
     'Borewell P10A': { position: [17.443451, 78.349635], type: 'bore' },
@@ -96,7 +95,6 @@ export const assetDatabase: AssetDatabase = {
     'Borewell P5': { id: 'BW-P5', type: 'IIIT Bore', cap: '5 HP', maint: 'Nilgiri', status: 'Working' },
     'Borewell P6': { id: 'BW-P6', type: 'IIIT Bore', cap: '5/7.5 HP', maint: 'Bakul', status: 'Not Working' },
     'Borewell P7': { id: 'BW-P7', type: 'IIIT Bore', cap: 'N/A', maint: 'Volleyball', status: 'Not Working' },
-    'Borewell P8': { id: 'BW-P8', type: 'IIIT Bore', cap: '7.5 HP', maint: 'Palash', status: 'Working' },
     'Borewell P9': { id: 'BW-P9', type: 'IIIT Bore', cap: '7.5 HP', maint: 'Girls Blk A', status: 'Working' },
     'Borewell P10': { id: 'BW-P10', type: 'IIIT Bore', cap: '5 HP', maint: 'Parking NW', status: 'Working' },
     'Borewell P10A': { id: 'BW-P10A', type: 'IIIT Bore', cap: '--', maint: 'Agri Farm', status: 'Not Working' },
@@ -131,6 +129,4 @@ export const assetDatabase: AssetDatabase = {
     'pipe-p5-s1': { id: 'PIPE-P5-S1', type: 'Bore Line', cap: '2" Dia G.I.', maint: 'P5 to S1', status: 'Active' },
     'pipe-p5-s7': { id: 'PIPE-P5-S7', type: 'Bore Line', cap: '2" Dia G.I.', maint: 'P5 to S7', status: 'Active' },
     'pipe-p8-s2': { id: 'PIPE-P8-S2', type: 'Bore Line', cap: '2" Dia G.I.', maint: 'P8 to S2', status: 'Active' },
-    'pipe-p9-s3': { id: 'PIPE-P9-S3', type: 'Bore Line', cap: 'Bore Water', maint: 'P9 to S3', status: 'Active' },
-    'pipe-p10-s5': { id: 'PIPE-P10-S5', type: 'Bore Line', cap: 'Bore Water', maint: 'P10 to S5', status: 'Active' },
 };

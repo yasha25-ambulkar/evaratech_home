@@ -12,7 +12,7 @@ import { registerSW } from './pwa';
 import './i18n';
 
 // Initialize accessibility testing in dev mode
-if (process.env.NODE_ENV !== 'production') {
+if (import.meta.env.DEV) {
     import('@axe-core/react').then((axe) => {
         axe.default(React, ReactDOM, 1000);
     });

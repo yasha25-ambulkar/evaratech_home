@@ -203,30 +203,6 @@ export const pipelineGeoJSON: PipelineGeoJSON = {
                 ],
             },
         },
-        {
-            type: 'Feature',
-            properties: { id: 'pipe-p9-s3', color: '#d62828', type: 'Bore Line' },
-            geometry: {
-                type: 'LineString',
-                coordinates: [
-                    [78.346714, 17.446868],
-                    [78.346915, 17.446715],
-                    [78.346984, 17.446784],
-                ],
-            },
-        },
-        {
-            type: 'Feature',
-            properties: { id: 'pipe-p10-s5', color: '#d62828', type: 'Bore Line' },
-            geometry: {
-                type: 'LineString',
-                coordinates: [
-                    [78.350157, 17.443927],
-                    [78.349693, 17.444322],
-                    [78.350068, 17.444701],
-                ],
-            },
-        },
         // PH1 - PH2 Main Line
         {
             type: 'Feature',

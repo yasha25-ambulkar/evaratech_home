@@ -38,7 +38,13 @@ export function usePipelines(): UsePipelinesReturn {
                 },
             }));
 
-            setPipelines(transformedPipelines);
+            const EXCLUDED_PIPELINES = ['pipe-p10-s5', 'pipe-p9-s3', 'PIPE-P10-S5', 'PIPE-P9-S3'];
+            const filteredPipelines = transformedPipelines.filter(p =>
+                !EXCLUDED_PIPELINES.includes(p.properties.id as string) &&
+                !EXCLUDED_PIPELINES.includes(p.properties.name as string)
+            );
+
+            setPipelines(filteredPipelines);
         } catch (err) {
             console.error('Error fetching pipelines:', err);
             setError('Failed to load pipelines. Please try again.');
