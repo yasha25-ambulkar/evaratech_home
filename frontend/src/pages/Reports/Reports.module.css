@@ -60,18 +60,26 @@
 }
 
 .card {
-    background: white;
+    /* 1. Translucent Base */
+    background: rgba(255, 255, 255, 0.4);
+    /* 2. Frosting */
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    /* 3. Etched White Border */
+    border: 1px solid rgba(255, 255, 255, 0.5);
+
+    border-radius: var(--radius-lg);
     padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     text-align: center;
 }
 
 .card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 15px 45px rgba(31, 38, 135, 0.1);
 }
 
 .cardIcon {
@@ -123,10 +131,18 @@
 .section {
     max-width: 1400px;
     margin: 0 auto;
-    background: white;
+
+    /* 1. Translucent Base */
+    background: rgba(255, 255, 255, 0.35);
+    /* 2. Frosting */
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    /* 3. Etched White Border */
+    border: 1px solid rgba(255, 255, 255, 0.5);
+
     padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: var(--radius-xl);
+    box-shadow: 0 12px 40px rgba(31, 38, 135, 0.05);
 }
 
 .sectionTitle {
@@ -149,13 +165,18 @@
     align-items: center;
     gap: 20px;
     padding: 20px;
-    background: #f8f9fa;
-    border-radius: 8px;
-    transition: background 0.2s;
+
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+
+    border-radius: var(--radius-md);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .reportItem:hover {
-    background: #e9ecef;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateX(8px);
+    box-shadow: 0 4px 12px rgba(31, 38, 135, 0.05);
 }
 
 .reportIcon {

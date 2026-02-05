@@ -201,9 +201,9 @@ function Header() {
                                     <Link to="/reports" className={styles.menuItem} onClick={() => setActivePanel('none')}>
                                         <i className="fas fa-file-alt"></i> {t('nav.reports')}
                                     </Link>
-                                    <Link to="/about" className={styles.menuItem} onClick={() => setActivePanel('none')}>
+                                    <a href="http://evaratech.com" target="_blank" rel="noopener noreferrer" className={styles.menuItem} onClick={() => setActivePanel('none')}>
                                         <i className="fas fa-info-circle"></i> {t('nav.about')}
-                                    </Link>
+                                    </a>
                                     <Link to="/settings" className={styles.menuItem} onClick={() => setActivePanel('none')}>
                                         <i className="fas fa-cog"></i> {t('nav.settings')}
                                     </Link>
@@ -251,9 +251,9 @@ function Header() {
                                         <i className="fas fa-file-alt"></i> {t('nav.reports')}
                                     </Link>
                                     <div className={styles.divider}></div>
-                                    <Link to="/about" className={styles.menuItem} onClick={() => setActivePanel('none')}>
+                                    <a href="http://evaratech.com" target="_blank" rel="noopener noreferrer" className={styles.menuItem} onClick={() => setActivePanel('none')}>
                                         <i className="fas fa-info-circle"></i> {t('nav.about')}
-                                    </Link>
+                                    </a>
                                     <Link to="/audit" className={styles.menuItem} onClick={() => setActivePanel('none')}>
                                         <i className="fas fa-history"></i> Audit Logs
                                     </Link>

@@ -46,14 +46,14 @@
   --bg-hover: var(--gray-100);
   --border-color: rgba(0, 0, 0, 0.08);
   --border-hover: rgba(0, 0, 0, 0.15);
-  --glass-white: rgba(255, 255, 255, 0.4);
 
-  --glass-base-light: rgba(0, 0, 0, 0.03);
-  --glass-base-heavy: rgba(0, 0, 0, 0.05);
-  /* Gray glass in light mode */
-  --glass-border: rgba(0, 0, 0, 0.1);
-  --glass-shine: rgba(255, 255, 255, 0.8);
-  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+  /* Robust Glass - Light Mode (Enhanced Visibility) */
+  --glass-bg: rgba(255, 255, 255, 0.4);
+  --glass-blur: 20px;
+  --glass-saturate: 180%;
+  --glass-border-color: rgba(255, 255, 255, 0.65);
+  --glass-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.1);
+  --glass-inset-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.4), inset 0 2px 4px rgba(0, 0, 0, 0.04);
 
   --bg-gradient:
     radial-gradient(at 0% 0%, hsla(210, 100%, 98%, 1) 0, transparent 50%),
@@ -80,14 +80,14 @@
   --bg-hover: var(--gray-100);
   --border-color: rgba(255, 255, 255, 0.1);
   --border-hover: rgba(255, 255, 255, 0.2);
-  --glass-white: rgba(0, 0, 0, 0.4);
 
-  --glass-base-light: rgba(15, 23, 42, 0.6);
-  --glass-base-heavy: rgba(7, 10, 15, 0.9);
-  /* More dark in dark mode */
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-shine: rgba(255, 255, 255, 0.05);
-  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  /* Robust Glass - Dark Mode (Enhanced Visibility) */
+  --glass-bg: rgba(15, 23, 42, 0.6);
+  --glass-blur: 24px;
+  --glass-saturate: 210%;
+  --glass-border-color: rgba(255, 255, 255, 0.15);
+  --glass-shadow: 0 16px 64px rgba(0, 0, 0, 0.5);
+  --glass-inset-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
 
   --bg-gradient:
     radial-gradient(at 0% 0%, hsla(222, 47%, 11%, 1) 0, transparent 50%),

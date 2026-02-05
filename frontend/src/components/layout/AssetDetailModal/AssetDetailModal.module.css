@@ -19,14 +19,22 @@
     width: 94vw;
     max-width: 1400px;
     height: 72vh;
-    background: rgba(255, 255, 255, 0.8);
+
+    /* 1. Translucent Base (Match Map Layers) */
+    background: rgba(255, 255, 255, 0.4);
+
+    /* 2. Heavy Frosting (Modal Depth) */
     backdrop-filter: blur(24px) saturate(180%);
     -webkit-backdrop-filter: blur(24px) saturate(180%);
-    box-shadow:
-        0 24px 64px rgba(0, 0, 0, 0.2),
-        0 0 0 1px rgba(255, 255, 255, 0.5) inset;
-    border: 1px solid rgba(255, 255, 255, 0.8);
-    border-radius: 40px;
+
+    /* 3. Sharp Edge */
+    border: 1px solid rgba(255, 255, 255, 0.5);
+
+    /* 4. Floating Shadow (Soft blue depth) */
+    box-shadow: 0 24px 64px rgba(31, 38, 135, 0.15);
+
+    border-radius: var(--radius-xl);
+
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -86,11 +94,12 @@
 }
 
 .infoCard {
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.25);
     padding: 32px;
-    border-radius: 32px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: var(--radius-xl);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 4px 12px rgba(31, 38, 135, 0.05);
 }
 
 .infoCard h3 {
@@ -158,8 +167,10 @@
     justify-content: space-between;
     align-items: center;
     padding: 16px 20px;
-    background: rgba(0, 0, 0, 0.03);
-    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-md);
+    backdrop-filter: blur(5px);
 }
 
 .controlLabel {

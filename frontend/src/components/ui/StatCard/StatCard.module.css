@@ -1,10 +1,14 @@
 .card {
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
+    /* Consume Robust Global Glass tokens */
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    border: 1px solid var(--glass-border-color);
+    box-shadow: var(--glass-shadow);
     border-radius: var(--radius-lg);
+
     padding: var(--space-5);
-    box-shadow: var(--shadow-sm);
-    transition: all var(--transition-base);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
     overflow: hidden;
     display: flex;
@@ -13,9 +17,10 @@
 }
 
 .card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-md);
-    border-color: var(--border-hover);
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 15px 45px rgba(31, 38, 135, 0.12);
+    border-color: rgba(255, 255, 255, 0.8);
 }
 
 .icon {
@@ -27,8 +32,10 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    background: var(--bg-elevated);
-    transition: transform var(--transition-base);
+    transition: transform 0.4s var(--ease-ios);
+
+    /* Precision 3D Depth: White Inner Shadow */
+    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.4), 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .card:hover .icon {

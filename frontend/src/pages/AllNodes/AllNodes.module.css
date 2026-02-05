@@ -61,22 +61,28 @@
 }
 
 .statCard {
-    background: var(--glass-white);
-    backdrop-filter: blur(var(--blur-md)) saturate(180%);
-    -webkit-backdrop-filter: blur(var(--blur-md)) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: var(--radius-lg);
+    /* 1. Translucent Base */
+    background: rgba(255, 255, 255, 0.4);
+    /* 2. High Vibrancy Frosting */
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    /* 3. Sharp Edge */
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    /* 4. Soft Blue Depth */
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+
+    border-radius: 20px;
     padding: var(--space-5);
-    box-shadow: var(--shadow-sm);
     display: flex;
     align-items: center;
     gap: var(--space-4);
-    transition: all var(--transition-base);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .statCard:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 15px 45px rgba(31, 38, 135, 0.1);
 }
 
 .statCard i {
@@ -115,40 +121,51 @@
     flex-wrap: wrap;
 }
 
-.filterBtn,
-.filterActive {
+.filterBtn {
     padding: var(--space-2) var(--space-4);
     border-radius: var(--radius-md);
-    background: var(--glass-white);
-    backdrop-filter: blur(var(--blur-sm));
-    border: 1px solid rgba(102, 126, 234, 0.3);
-    color: #667eea;
+
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(12px) saturate(160%);
+    -webkit-backdrop-filter: blur(12px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+
+    color: var(--color-primary-600);
     font-weight: 500;
     font-size: 14px;
     cursor: pointer;
-    transition: all var(--transition-fast);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .filterBtn:hover {
     background: rgba(255, 255, 255, 0.7);
-    transform: translateY(-1px);
+    transform: translateY(-2px);
 }
 
 .filterActive {
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-md);
+    background: var(--color-primary-500);
     color: white;
-    border-color: transparent;
-    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    border: 1px solid var(--color-primary-400);
+    box-shadow: 0 4px 15px rgba(2, 132, 199, 0.3);
 }
 
 .viewToggle {
     display: flex;
     gap: var(--space-1);
-    background: var(--glass-white);
-    backdrop-filter: blur(var(--blur-sm));
+
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(12px) saturate(160%);
+    -webkit-backdrop-filter: blur(12px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 4px 12px rgba(31, 38, 135, 0.05);
+
     padding: var(--space-1);
     border-radius: var(--radius-md);
-    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .viewBtn,
@@ -189,41 +206,28 @@
 }
 
 .nodeCard {
-    background: var(--glass-base-light);
-    backdrop-filter: blur(var(--blur-md)) saturate(180%);
-    -webkit-backdrop-filter: blur(var(--blur-md)) saturate(180%);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--radius-xl);
+    /* 1. Translucent Base */
+    background: rgba(255, 255, 255, 0.45);
+    /* 2. High Vibrancy Frosting */
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    /* 3. Sharp Edge */
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    /* 4. Soft Blue Depth */
+    box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.08);
+
+    border-radius: 24px;
     padding: var(--space-8);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    transition: all var(--transition-spring);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
     overflow: hidden;
 }
 
-.nodeCard::after {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(45deg,
-            transparent 30%,
-            rgba(255, 255, 255, 0.3) 50%,
-            transparent 70%);
-    transform: translateX(-100%);
-    transition: transform var(--transition-slow);
-}
-
-.nodeCard:hover::after {
-    transform: translateX(100%);
-}
-
 .nodeCard:hover {
-    transform: translateY(-4px) scale(1.01);
-    box-shadow: var(--shadow-xl);
-    border-color: rgba(255, 255, 255, 0.6);
+    transform: translateY(-8px) scale(1.015);
+    background: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 24px 80px rgba(31, 38, 135, 0.15);
+    border-color: rgba(255, 255, 255, 0.8);
 }
 
 .nodeHeader {

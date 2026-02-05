@@ -1,15 +1,18 @@
 .container {
     width: 100%;
     height: 100%;
-    /* display: flex;  Flex causes layout issues if parent isn't flex, safer to use standard flow */
-    flex-direction: column;
+    /* Layer 1: Translucent Base */
     background: rgba(255, 255, 255, 0.4);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: 20px;
+    /* Layer 2: Frosting */
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    /* Layer 3: Sharp Edge */
     border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 20px;
     overflow: hidden;
     position: relative;
+    /* Layer 4: Soft Blue Depth */
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
 }
 
 .header {
@@ -51,23 +54,26 @@
 
 .actionBtn {
     padding: 8px 16px;
-    border: none;
-    background: rgba(255, 255, 255, 0.6);
-    border-radius: 8px;
+
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(8px);
+
+    border-radius: var(--radius-md);
     cursor: pointer;
     font-size: 13px;
-    font-weight: 500;
-    color: var(--gray-700);
+    font-weight: 600;
+    color: var(--gray-800);
     display: flex;
     align-items: center;
     gap: 6px;
-    transition: all 0.2s;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .actionBtn:hover {
     background: white;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(31, 38, 135, 0.1);
 }
 
 .actionBtn.danger {
@@ -122,20 +128,22 @@
     display: flex;
     gap: 16px;
     padding: 16px;
-    background: rgba(255, 255, 255, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.8);
-    border-radius: 12px;
+
+    background: rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+
+    border-radius: var(--radius-lg);
     margin-bottom: 12px;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
     overflow: hidden;
 }
 
 .alertItem:hover {
-    background: rgba(255, 255, 255, 0.9);
-    transform: translateX(4px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    background: rgba(255, 255, 255, 0.4);
+    transform: translateX(8px);
+    box-shadow: 0 8px 24px rgba(31, 38, 135, 0.08);
 }
 
 .alertItem.read {
