@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EvaraTank Analytics</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --purple: #6366f1;
+            --blue-accent: #3B82F6;
+            --bg: #F8FAFC;
+            --card: #FFFFFF;
+            --text-main: #1E293B;
+            --text-muted: #64748B;
+            --success: #22C55E;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+        }
+
+        .sidebar {
+            width: 100px;
+            background: var(--card);
+            height: 100vh;
+            border-right: 1px solid #E2E8F0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+            position: fixed;
+            z-index: 10;
+        }
+
+        .main-content {
+            margin-left: 100px;
+            padding: 20px 40px;
+            width: calc(100% - 200px);
+            max-width: 1400px;
+        }
+
+        header {
+            margin-bottom: 30px;
+        }
+
+        .header-title h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .header-title p {
+            margin: 5px 0 0;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .kpi-value {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 10px 0 5px;
+            color: var(--primary);
+        }
+
+        .kpi-label {
+            color: var(--text-muted);
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .kpi-sub {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .span-2 {
+            grid-column: span 2;
+        }
+
+        .span-3 {
+            grid-column: span 3;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 250px;
+            width: 100%;
+        }
+
+        .doughnut-container {
+            position: relative;
+            height: 160px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .ring-container {
+            position: relative;
+            height: 140px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .ring-center-text {
+            position: absolute;
+            text-align: center;
+        }
+
+        .tank-display {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .tank-tube {
+            width: 60px;
+            height: 120px;
+            background: #F1F5F9;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid #E2E8F0;
+        }
+
+        .water-fill {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: linear-gradient(to top, var(--primary), #0EA5E9);
+            height: 0%;
+            transition: height 1s ease-in-out;
+        }
+
+        .percent-large {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--purple);
+            margin: 5px 0;
+        }
+
+        .meter-subtext {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--success);
+        }
+
+        .sub-warning {
+            color: var(--warning);
+            font-weight: 500;
+        }
+
+        .sub-blue {
+            color: var(--blue-accent);
+            font-weight: 500;
+        }
+
+        .chart-legend {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 10px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        /* --- LIST STYLES --- */
+        .list-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #F1F5F9;
+        }
+
+        .list-item:last-child {
+            border-bottom: none;
+        }
+
+        .alert-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .alert-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: var(--text-muted);
+        }
+
+        .list-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .list-value-bold {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .alert-right {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .status-green {
+            color: var(--success);
+        }
+
+        .status-orange {
+            color: var(--warning);
+        }
+
+        .status-red {
+            color: var(--danger);
+        }
+
+        .bg-green {
+            background-color: var(--success);
+            box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.2);
+        }
+
+        .bg-orange {
+            background-color: var(--warning);
+            box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.2);
+        }
+
+        .bg-red {
+            background-color: var(--danger);
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.2);
+        }
+
+        /* --- FILTER BUTTONS --- */
+        .filter-group {
+            background: #F1F5F9;
+            padding: 4px;
+            border-radius: 8px;
+            display: flex;
+            gap: 4px;
+        }
+
+        .filter-btn {
+            border: none;
+            background: transparent;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-btn:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .filter-btn.active {
+            background: #FFFFFF;
+            color: var(--primary);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="sidebar">
+        <div style="width: 40px; height: 40px; background: var(--primary); border-radius: 12px; margin-bottom: 25px;">
+        </div>
+
+        <div style="width: 32px; height: 32px; background: #E2E8F0; border-radius: 10px; margin-bottom: 25px;"></div>
+
+        <div style="width: 32px; height: 32px; background: #E2E8F0; border-radius: 10px; margin-bottom: 25px;"></div>
+    </nav>
+
+    <main class="main-content">
+        <header>
+            <div class="header-title">
+                <h1>EvaraTank Analytics</h1>
+                <p>Real-Time Water Monitoring System</p>
+            </div>
+        </header>
+
+        <div class="dashboard-grid">
+
+            <div class="card">
+                <div class="tank-display">
+                    <div class="tank-tube">
+                        <div id="visual-fill" class="water-fill"></div>
+                    </div>
+                    <div>
+                        <div class="kpi-label">Current Level</div>
+                        <div id="val-percent-large" class="percent-large">--%</div>
+                        <div id="val-meters-fraction" class="meter-subtext">Total: 0.85m</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="kpi-label">Total Tank Volume</div>
+                <div class="kpi-value">500 L</div>
+                <div class="kpi-sub">Max Capacity</div>
+            </div>
+
+            <div class="card">
+                <div class="kpi-label">Available Volume</div>
+                <div id="val-volume" class="kpi-value">-- L</div>
+                <div class="kpi-sub">Calculated Real-Time</div>
+            </div>
+
+            <div class="card">
+                <div class="kpi-label">Est. Consumption</div>
+                <div class="kpi-value">750 L</div>
+                <div class="kpi-sub">Daily Calculation (1.5 Cycles)</div>
+            </div>
+
+            <div class="card span-3">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3 style="margin: 0; font-size: 16px;">Real-Time Water Level</h3>
+                    <div class="filter-group">
+                        <button class="filter-btn active" onclick="setFilter('live', this)">Live</button>
+                        <button class="filter-btn" onclick="setFilter('1h', this)">1h</button>
+                        <button class="filter-btn" onclick="setFilter('6h', this)">6h</button>
+                        <button class="filter-btn" onclick="setFilter('24h', this)">24h</button>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="levelChart"></canvas>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 style="margin: 0 0 15px; font-size: 14px;">Abnormal Usage</h3>
+                <div class="doughnut-container">
+                    <canvas id="usageChart"></canvas>
+                </div>
+                <div class="chart-legend">
+                    <div class="legend-item"><span class="dot" style="background: #4F46E5;"></span> Normal</div>
+                    <div class="legend-item"><span class="dot" style="background: #EF4444;"></span> Abnormal</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 style="margin: 0 0 10px; font-size: 14px; color: var(--text-muted); text-transform: uppercase;">
+                    Refill Cycles</h3>
+                <div class="ring-container">
+                    <canvas id="refillChart"></canvas>
+                    <div class="ring-center-text">
+                        <div class="kpi-value" style="color: var(--blue-accent); margin: 0;">2.4</div>
+                        <div class="sub-blue" style="font-size: 11px;">Avg/Day</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 style="margin: 0 0 15px; font-size: 14px;">Consumption Trends</h3>
+                <div class="list-container">
+                    <div class="list-item">
+                        <span class="list-label" style="color: var(--text-muted);">Last 24 Hours</span>
+                        <span class="list-value-bold">750 L</span>
+                    </div>
+                    <div class="list-item">
+                        <span class="list-label" style="color: var(--text-muted);">Last 3 Days</span>
+                        <span class="list-value-bold">2,250 L</span>
+                    </div>
+                    <div class="list-item">
+                        <span class="list-label" style="color: var(--text-muted);">Last 7 Days</span>
+                        <span class="list-value-bold">5,250 L</span>
+                    </div>
+                    <div class="list-item">
+                        <span class="list-label" style="color: var(--text-muted);">Last 30 Days</span>
+                        <span class="list-value-bold">22,500 L</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card span-2">
+                <h3 style="margin: 0 0 20px; font-size: 16px;">System Alerts</h3>
+                <div class="list-container">
+
+                    <div class="list-item">
+                        <div class="alert-left">
+                            <div id="dot-low" class="alert-dot bg-green"></div>
+                            <span class="list-label">Low Water Level</span>
+                        </div>
+                        <div id="txt-low" class="alert-right status-green">NORMAL</div>
+                    </div>
+
+                    <div class="list-item">
+                        <div class="alert-left">
+                            <div id="dot-over" class="alert-dot bg-green"></div>
+                            <span class="list-label">Overflow Risk</span>
+                        </div>
+                        <div id="txt-over" class="alert-right status-green">MINIMAL</div>
+                    </div>
+
+                    <div class="list-item">
+                        <div class="alert-left">
+                            <div id="dot-rapid" class="alert-dot bg-green"></div>
+                            <span class="list-label">Rapid Depletion</span>
+                        </div>
+                        <div id="txt-rapid" class="alert-right status-green">NORMAL</div>
+                    </div>
+
+                    <div class="list-item">
+                        <div class="alert-left">
+                            <div id="dot-sensor" class="alert-dot bg-green"></div>
+                            <span class="list-label">Sensor/Device Offline</span>
+                        </div>
+                        <div id="txt-sensor" class="alert-right status-green">CONNECTED</div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        const CHANNEL_ID = '3212670';
+        const READ_API_KEY = 'UXORK5OUGJ2VK5PX';
+        const TOTAL_HEIGHT_CM = 85;
+        const TOTAL_HEIGHT_M = 0.85;
+        const MAX_CAPACITY = 500;
+        const TARGET_SENSOR_VAL = 40;
+        let currentFilter = 'live';
+
+        // 1. Water Level Chart
+        const ctxLevel = document.getElementById('levelChart').getContext('2d');
+        let levelChart = new Chart(ctxLevel, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Level (cm)',
+                    data: [],
+                    borderColor: '#4F46E5',
+                    backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 85 } }, plugins: { legend: { display: false } } }
+        });
+
+        // 2. Abnormal Usage Chart
+        const ctxUsage = document.getElementById('usageChart').getContext('2d');
+        new Chart(ctxUsage, {
+            type: 'doughnut',
+            data: { labels: ['Normal', 'Abnormal'], datasets: [{ data: [95, 5], backgroundColor: ['#4F46E5', '#EF4444'], borderWidth: 0 }] },
+            options: { responsive: true, maintainAspectRatio: false, cutout: '80%', plugins: { legend: { display: false } } }
+        });
+
+        // 3. Refill Cycles Ring Chart (BLUE)
+        const ctxRefill = document.getElementById('refillChart').getContext('2d');
+        new Chart(ctxRefill, {
+            type: 'doughnut',
+            data: {
+                labels: ['Cycles', 'Remaining'],
+                datasets: [{
+                    data: [2.4, 1.6],
+                    backgroundColor: ['#3B82F6', '#F1F5F9'],
+                    borderWidth: 0,
+                    borderRadius: 20
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '85%',
+                plugins: { legend: { display: false }, tooltip: { enabled: false } },
+                animation: { animateScale: true, animateRotate: true }
+            }
+        });
+
+        function setAlertState(id, state) {
+            const dot = document.getElementById(`dot-${id}`);
+            const txt = document.getElementById(`txt-${id}`);
+            dot.className = 'alert-dot';
+            txt.className = 'alert-right';
+            if (state === 'green') { dot.classList.add('bg-green'); txt.classList.add('status-green'); }
+            else if (state === 'orange') { dot.classList.add('bg-orange'); txt.classList.add('status-orange'); }
+            else if (state === 'red') { dot.classList.add('bg-red'); txt.classList.add('status-red'); }
+        }
+
+        function setFilter(filter, btn) {
+            currentFilter = filter;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            fetchData();
+        }
+
+        async function fetchData() {
+            let apiParams = '&results=15';
+            if (currentFilter === '1h') apiParams = '&minutes=60';
+            if (currentFilter === '6h') apiParams = '&minutes=360';
+            if (currentFilter === '24h') apiParams = '&minutes=1440';
+
+            const url = `https://api.thingspeak.com/channels/${CHANNEL_ID}/feeds.json?api_key=${READ_API_KEY}${apiParams}`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                const feeds = data.feeds;
+
+                const sensorReading = TARGET_SENSOR_VAL;
+                const currentLevel = TOTAL_HEIGHT_CM - sensorReading;
+                const percentage = (currentLevel / TOTAL_HEIGHT_CM) * 100;
+                const meters = currentLevel / 100;
+                const volume = (percentage / 100) * MAX_CAPACITY;
+
+                // KPI Updates
+                document.getElementById('val-percent-large').innerText = percentage.toFixed(1) + '%';
+                // UPDATED: Removed current meters from subtext
+                document.getElementById('val-meters-fraction').innerText = `Total: ${TOTAL_HEIGHT_M}m`;
+                document.getElementById('val-volume').innerText = volume.toFixed(1) + ' L';
+                document.getElementById('visual-fill').style.height = percentage + '%';
+
+                // Alert Logic
+                if (percentage < 20) { setAlertState('low', 'orange'); document.getElementById('txt-low').innerText = "ATTENTION REQUIRED"; }
+                else { setAlertState('low', 'green'); document.getElementById('txt-low').innerText = "NORMAL"; }
+
+                if (percentage > 90) { setAlertState('over', 'red'); document.getElementById('txt-over').innerText = "CRITICAL"; }
+                else { setAlertState('over', 'green'); document.getElementById('txt-over').innerText = "MINIMAL"; }
+
+                setAlertState('rapid', 'green');
+                setAlertState('sensor', 'green');
+                document.getElementById('txt-sensor').innerText = "CONNECTED";
+
+                // --- CHART COLOR LOGIC ---
+                let borderColor, bgColor;
+
+                if (percentage > 70) {
+                    borderColor = '#1e40af'; // Deep Blue
+                    bgColor = 'rgba(30, 64, 175, 0.2)';
+                } else if (percentage < 30) {
+                    borderColor = '#38bdf8'; // Sky Blue
+                    bgColor = 'rgba(56, 189, 248, 0.2)';
+                } else {
+                    borderColor = '#4F46E5'; // Indigo/Primary
+                    bgColor = 'rgba(79, 70, 229, 0.1)';
+                }
+
+                // Apply Colors
+                levelChart.data.datasets[0].borderColor = borderColor;
+                levelChart.data.datasets[0].backgroundColor = bgColor;
+
+                // Data Update
+                const labels = feeds.map(f => {
+                    let d = new Date(f.created_at);
+                    return d.getHours() + ":" + (d.getMinutes() < 10 ? '0' : '') + d.getMinutes();
+                });
+                const points = feeds.map(() => currentLevel);
+
+                levelChart.data.labels = labels;
+                levelChart.data.datasets[0].data = points;
+                levelChart.update();
+
+            } catch (error) {
+                console.error("Error:", error);
+                setAlertState('sensor', 'red');
+                document.getElementById('txt-sensor').innerText = "DISCONNECTED";
+            }
+        }
+
+        fetchData();
+        setInterval(fetchData, 15000);
+    </script>
+</body>
+
+</html>

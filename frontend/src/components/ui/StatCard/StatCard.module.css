@@ -1,18 +1,17 @@
 .card {
     /* Consume Robust Global Glass tokens */
-    background: var(--glass-bg);
-    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    background: #ffffff;
+    /* backdrop-filter: blur(var(--glass-blur)); */
     border: 1px solid var(--glass-border-color);
     box-shadow: var(--glass-shadow);
     border-radius: var(--radius-lg);
 
-    padding: var(--space-5);
+    padding: 32px;
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
     overflow: hidden;
     display: flex;
-    gap: var(--space-4);
+    gap: 24px;
     align-items: flex-start;
 }
 
@@ -48,18 +47,22 @@
 }
 
 .value {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    margin-bottom: var(--space-1);
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--gray-900);
+    margin-bottom: 4px;
     letter-spacing: -0.02em;
+    line-height: 1.1;
+    white-space: nowrap;
 }
 
 .label {
-    font-size: 0.875rem;
+    font-size: 0.75rem;
     color: var(--text-secondary);
-    margin-bottom: var(--space-2);
-    font-weight: 500;
+    margin-bottom: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .percentage {
@@ -92,24 +95,28 @@
 }
 
 /* Color Variants */
-.blue .icon {
-    color: var(--accent-blue);
-    background: rgba(74, 144, 226, 0.1);
+.blue .icon,
+.blue .icon i {
+    color: #2563EB;
+    background: rgba(37, 99, 235, 0.1);
 }
 
-.green .icon {
-    color: var(--accent-green);
-    background: rgba(76, 175, 80, 0.1);
+.green .icon,
+.green .icon i {
+    color: #16A34A;
+    background: rgba(22, 163, 74, 0.1);
 }
 
-.orange .icon {
-    color: var(--accent-orange);
-    background: rgba(255, 152, 0, 0.1);
+.orange .icon,
+.orange .icon i {
+    color: #EA580C;
+    background: rgba(234, 88, 12, 0.1);
 }
 
-.red .icon {
-    color: var(--accent-red);
-    background: rgba(255, 82, 82, 0.1);
+.red .icon,
+.red .icon i {
+    color: #DC2626;
+    background: rgba(220, 38, 38, 0.1);
 }
 
 @media (max-width: 640px) {

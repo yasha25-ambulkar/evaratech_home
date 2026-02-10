@@ -53,7 +53,7 @@ import { useAssets } from '../../../hooks/useAssets';
 
 // ... imports
 
-function SystemDashboard({ onClose }: { onClose: () => void }) {
+function SystemDashboard() {
     const { assets: nodes } = useAssets();
     const [timeRange, setTimeRange] = useState<'24h' | '7d' | '30d'>('24h');
     const { user } = useAuth();
@@ -107,14 +107,6 @@ function SystemDashboard({ onClose }: { onClose: () => void }) {
                     <h2 className={styles.welcomeTitle}>System Overview</h2>
                     <p className={styles.welcomeSubtitle}>Live monitoring across {nodes.length} active nodes</p>
                 </div>
-                <motion.button
-                    whileHover={{ scale: 1.05, rotate: 90 }}
-                    whileTap={{ scale: 0.9 }}
-                    className={styles.closeBtn}
-                    onClick={onClose}
-                >
-                    <i className="fas fa-times"></i>
-                </motion.button>
             </div>
 
             {/* Quick Actions */}

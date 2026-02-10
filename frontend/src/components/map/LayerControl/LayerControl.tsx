@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useMapLayersStore, type LayerType } from '../../../store/mapLayersStore';
+import { GlassMenu, GlassMenuItem, GlassMenuSection } from '../../ui/GlassMenu/GlassMenu';
 import styles from './LayerControl.module.css';
 
 interface LayerConfig {
@@ -30,120 +31,107 @@ function LayerControl() {
     const { visibleLayers, toggleLayer } = useMapLayersStore();
     const [isOpen, setIsOpen] = useState(false);
 
-    const containerVariants = {
-        closed: {
-            width: '60px',
-            height: '60px',
-            borderRadius: '50%',
-            transition: { type: 'spring', stiffness: 300, damping: 30 }
-        },
-        open: {
-            width: '260px',
-            height: 'auto',
-            minHeight: '400px',
-            borderRadius: '16px',
-            transition: { type: 'spring', stiffness: 300, damping: 30 }
-        }
-    };
-
-    const contentVariants = {
-        closed: { opacity: 0, y: 20, display: 'none' },
-        open: {
-            opacity: 1,
-            y: 0,
-            display: 'flex',
-            transition: { delay: 0.2, duration: 0.4 }
-        }
-    };
-
-    const buttonVariants = {
-        closed: { opacity: 1, scale: 1, transition: { delay: 0.2 } },
-        open: { opacity: 0, scale: 0, transition: { duration: 0.2 } }
-    };
-
-    const renderLayerItem = (layer: LayerConfig) => {
-        const isVisible = visibleLayers[layer.id];
-
-        return (
-            <div
-                key={layer.id}
-                className={`${styles.layerItem} ${isVisible ? styles.active : ''}`}
-                onClick={() => toggleLayer(layer.id)}
-            >
-                <div className={styles.indicatorWrapper}>
-                    {layer.type === 'point' ? (
-                        <div className={styles.pointIndicator} style={{ backgroundColor: layer.color }}>
-                            {layer.iconType === 'icon' ? (
-                                <i className={`fas ${layer.icon}`}></i>
-                            ) : (
-                                <span className={styles.textIcon}>{layer.icon}</span>
-                            )}
-                        </div>
-                    ) : (
-                        <div className={styles.lineIndicator} style={{ backgroundColor: layer.color }} />
-                    )}
-                </div>
-                <span className={styles.layerLabel}>{layer.label}</span>
-                <input
-                    type="checkbox"
-                    checked={isVisible}
-                    onChange={() => { }}
-                    className={styles.hiddenCheckbox}
-                />
-            </div>
-        );
-    };
-
     return (
-        <motion.div
-            className={styles.container}
-            initial="closed"
-            animate={isOpen ? "open" : "closed"}
-            variants={containerVariants}
-        >
+        <div className={styles.container}>
+            {/* Circular Trigger Button */}
             {/* Circular Trigger Button */}
             <motion.button
                 className={styles.triggerBtn}
-                onClick={() => setIsOpen(true)}
-                variants={buttonVariants}
-                style={{ position: 'absolute', inset: 0, margin: 'auto' }}
+                onClick={(e) => { e.stopPropagation(); setIsOpen(!isOpen); }}
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
             >
-                <i className="fas fa-layer-group"></i>
-                <span className={styles.triggerText}>INDEX</span>
+                <img
+                    src="/assets/index-pin.png"
+                    alt="Index"
+                    style={{
+                        width: '24px',
+                        height: '24px',
+                        objectFit: 'contain',
+                        // Filter for drop shadow optional, maybe keep subtle
+                    }}
+                />
+                <span className={styles.triggerText}>
+                    Index
+                </span>
             </motion.button>
 
-            {/* Expandable Content */}
-            <motion.div
-                className={styles.contentContainer}
-                variants={contentVariants}
-            >
-                <div className={styles.header}>
-                    <h3 className={styles.title}>Map Layers</h3>
-                    <button
-                        className={styles.closeBtn}
-                        onClick={(e) => { e.stopPropagation(); setIsOpen(false); }}
-                    >
-                        <i className="fas fa-times"></i>
-                    </button>
-                </div>
+            <AnimatePresence>
+                {isOpen && (
+                    <div onClick={(e) => e.stopPropagation()}>
+                        <GlassMenu
+                            title="LAYERS"
+                            style={{
+                                position: 'absolute',
+                                top: 'auto', // Override CSS default
+                                right: 'auto', // Override CSS default
+                                bottom: '80px', // Correct position above button
+                                left: '0',
+                                width: '270px', // Increased by 5%
+                                transformOrigin: 'bottom left',
+                                zIndex: 1000,
+                                padding: '8px',
+                                fontSize: '0.600rem' // ~10px font
+                            }}
+                            contentStyle={{
+                                maxHeight: 'none',
+                                overflow: 'visible',
+                                padding: '0'
+                            }}
+                            initial={{ opacity: 0, scale: 0.2, y: 50 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.2, y: 50 }}
+                        >
+                            {/* Two Column Grid for Assets */}
+                            <div style={{ marginBottom: '12px' }}>
+                                <GlassMenuSection title="ASSETS" />
+                                <div style={{
+                                    display: 'grid',
+                                    gridTemplateColumns: '1fr 1fr',
+                                    gap: '8px'
+                                }}>
+                                    {assetLayers.map(layer => (
+                                        <GlassMenuItem
+                                            key={layer.id}
+                                            text={layer.label}
+                                            badgeColor={layer.color}
+                                            badgeText={layer.type === 'point' ? layer.icon : undefined}
+                                            icon={layer.type === 'line' ? 'fas fa-minus' : undefined}
+                                            isActive={visibleLayers[layer.id]}
+                                            onClick={() => toggleLayer(layer.id)}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
 
-                <div className={styles.section}>
-                    <h4 className={styles.sectionTitle}>ASSETS</h4>
-                    <div className={styles.layerList}>
-                        {assetLayers.map(renderLayerItem)}
+                            {/* Pipelines Pipeline (Full width or Grid?) -> Grid looks cleaner */}
+                            <div>
+                                <GlassMenuSection title="PIPELINES" />
+                                <div style={{
+                                    display: 'grid',
+                                    gridTemplateColumns: '1fr 1fr',
+                                    gap: '8px'
+                                }}>
+                                    {pipelineLayers.map(layer => (
+                                        <GlassMenuItem
+                                            key={layer.id}
+                                            text={layer.label}
+                                            badgeColor={layer.color}
+                                            icon="fas fa-minus"
+                                            isActive={visibleLayers[layer.id]}
+                                            onClick={() => toggleLayer(layer.id)}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                        </GlassMenu>
                     </div>
-                </div>
-
-                <div className={styles.divider} />
-
-                <div className={styles.section}>
-                    <h4 className={styles.sectionTitle}>PIPELINES</h4>
-                    <div className={styles.layerList}>
-                        {pipelineLayers.map(renderLayerItem)}
-                    </div>
-                </div>
-            </motion.div>
-        </motion.div>
+                )}
+            </AnimatePresence>
+        </div>
     );
 }
 

@@ -1,19 +1,34 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTranslation } from 'react-i18next'; // Import useTranslation
+import { useTranslation } from 'react-i18next';
+import {
+    Home,
+    LayoutDashboard,
+    Cpu,
+    ShieldCheck,
+    Bell,
+    UserCircle,
+    Menu,
+    Activity,
+    FileText,
+    Settings,
+    LogOut,
+    Info,
+    History,
+    ArrowRight
+} from 'lucide-react';
 
 import { useAuthStore } from '../../../store/authStore';
 import { useAlertStore } from '../../../store/alertStore';
-// import GlobalSearch from '../../search/GlobalSearch/GlobalSearch';
-import { useTheme } from '../../../contexts/ThemeContext';
 import styles from './Header.module.css';
 
 import { useUIStore } from '../../../store/uiStore';
+import { GlassMenu, GlassMenuItem, GlassMenuSection } from '../../ui/GlassMenu/GlassMenu';
 
 function Header() {
-    const { theme, toggleTheme } = useTheme();
     const { t } = useTranslation();
     const location = useLocation();
+    const navigate = useNavigate();
     const { logout, user } = useAuthStore();
     const { alerts, unreadCount, markAsRead } = useAlertStore();
 
@@ -40,19 +55,19 @@ function Header() {
 
     const getSeverityIcon = (severity: string) => {
         switch (severity) {
-            case 'critical': return { icon: 'fa-exclamation-circle', color: '#dc2626' };
-            case 'warning': return { icon: 'fa-exclamation-triangle', color: '#d97706' };
-            case 'success': return { icon: 'fa-check-circle', color: '#16a34a' };
-            default: return { icon: 'fa-info-circle', color: '#0284c7' };
+            case 'critical': return { icon: <Info size={16} color="#dc2626" />, color: '#dc2626' };
+            case 'warning': return { icon: <Info size={16} color="#d97706" />, color: '#d97706' };
+            case 'success': return { icon: <Info size={16} color="#16a34a" />, color: '#16a34a' };
+            default: return { icon: <Info size={16} color="#0284c7" />, color: '#0284c7' };
         }
     };
 
     return (
         <motion.header
             className={styles.header}
-            initial={{ y: -100, x: '-50%', opacity: 0 }}
-            animate={{ y: 10, x: '-50%', opacity: 1 }}
-            transition={{ type: "spring", stiffness: 120, damping: 20, delay: 0.5 }}
+            initial={{ y: -100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ type: "spring", stiffness: 120, damping: 20, delay: 0.2 }}
             onMouseMove={handleMouseMove}
         >
             <div className={styles.container}>
@@ -63,40 +78,35 @@ function Header() {
                         alt="EvaraTech Logo"
                         className={styles.logoImg}
                     />
+                    <img
+                        src="/evaratech-text-logo.png"
+                        alt="EvaraTech Name"
+                        className={styles.textLogo}
+                    />
                 </Link>
 
                 {/* Navigation Menu */}
                 <nav className={styles.nav}>
                     <Link to="/" className={`${styles.navLink} ${isActive('/')}`}>
-                        <i className="fas fa-home"></i>
+                        <Home size={18} strokeWidth={2} />
                         {t('nav.home')}
                     </Link>
                     <Link to="/dashboard" className={`${styles.navLink} ${isActive('/dashboard')}`}>
-                        <i className="fas fa-chart-pie"></i>
+                        <LayoutDashboard size={18} strokeWidth={2} />
                         {t('nav.dashboard')}
                     </Link>
                     <Link to="/nodes" className={`${styles.navLink} ${isActive('/nodes')}`}>
-                        <i className="fas fa-microchip"></i>
+                        <Cpu size={18} strokeWidth={2} />
                         {t('nav.allNodes') || 'All Nodes'}
                     </Link>
                     <Link to="/users" className={`${styles.navLink} ${isActive('/users')}`}>
-                        <i className="fas fa-user-shield"></i>
+                        <ShieldCheck size={18} strokeWidth={2} />
                         {t('nav.admin')}
                     </Link>
                 </nav>
 
                 {/* Right Side Actions */}
                 <div className={styles.actions}>
-                    <motion.button
-                        className={styles.iconBtn}
-                        onClick={toggleTheme}
-                        title={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                    >
-                        <i className={theme === 'light' ? 'fas fa-moon' : 'fas fa-sun'}></i>
-                    </motion.button>
-
                     {/* Notifications */}
                     <div className={styles.iconWrapper}>
                         <motion.button
@@ -106,57 +116,53 @@ function Header() {
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                         >
-                            <i className="fas fa-bell"></i>
+                            <Bell size={20} />
                             {unreadCount > 0 && <span className={styles.badge}>{unreadCount}</span>}
                         </motion.button>
 
                         <AnimatePresence>
                             {showNotifications && (
-                                <motion.div
+                                <GlassMenu
+                                    title="Notifications"
+                                    onClose={() => setActivePanel('none')}
                                     className={styles.dropdown}
-                                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                                    transition={{ duration: 0.2 }}
                                 >
-                                    <div className={styles.dropdownHeader}>
-                                        <h3>Notifications</h3>
-                                        <button className={styles.closeBtn} onClick={() => setActivePanel('none')}>×</button>
-                                    </div>
-                                    <div className={styles.notificationList}>
+                                    <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
                                         {alerts.slice(0, 5).map(alert => {
                                             const { icon, color } = getSeverityIcon(alert.severity);
                                             return (
-                                                <Link
+                                                <GlassMenuItem
                                                     key={alert.id}
-                                                    to="/notifications"
-                                                    className={styles.notificationItem}
+                                                    icon={undefined} // handled by custom element in text if needed, or update GlassMenu to accept nodes
+                                                    // Since GlassMenu expects string icon, we might need to adjust it later.
+                                                    // For now, passing null/undefined to avoid FA string errors.
+                                                    // Ideally GlassMenu should accept ReactNode for icon.
+                                                    badgeColor={color}
+                                                    text={alert.message}
+                                                    description={new Date(alert.timestamp).toLocaleTimeString()}
                                                     onClick={() => {
                                                         markAsRead(alert.id);
+                                                        navigate('/notifications');
                                                         setActivePanel('none');
                                                     }}
-                                                    style={{ opacity: alert.isRead ? 0.6 : 1 }}
-                                                >
-                                                    <i className={`fas ${icon}`} style={{ color }}></i>
-                                                    <div>
-                                                        <p className={styles.notificationTitle}>{alert.message}</p>
-                                                        <p className={styles.notificationTime}>
-                                                            {new Date(alert.timestamp).toLocaleTimeString()}
-                                                        </p>
-                                                    </div>
-                                                </Link>
+                                                />
                                             );
                                         })}
                                         {alerts.length === 0 && (
-                                            <div className={styles.emptyNav}>
+                                            <div style={{ padding: '20px', textAlign: 'center', opacity: 0.7 }}>
                                                 No notifications
                                             </div>
                                         )}
                                     </div>
-                                    <Link to="/notifications" className={styles.viewAll} onClick={() => setActivePanel('none')}>
-                                        View All Notifications
-                                    </Link>
-                                </motion.div>
+                                    <GlassMenuItem
+                                        text="View All Notifications"
+                                        icon="fas fa-arrow-right" // Keeping FA here for now if GlassMenuItem strictly needs string
+                                        onClick={() => {
+                                            navigate('/notifications');
+                                            setActivePanel('none');
+                                        }}
+                                    />
+                                </GlassMenu>
                             )}
                         </AnimatePresence>
                     </div>
@@ -170,56 +176,47 @@ function Header() {
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                         >
-                            <i className="fas fa-user-circle"></i>
+                            <UserCircle size={22} />
                         </motion.button>
 
                         <AnimatePresence>
                             {showUserMenu && (
-                                <motion.div
-                                    className={styles.dropdown}
-                                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                                    transition={{ duration: 0.2 }}
+                                <GlassMenu
+                                    title="User Menu"
+                                    onClose={() => setActivePanel('none')}
                                 >
-                                    <div className={styles.userInfo}>
-                                        <div className={styles.avatar}>
-                                            <i className="fas fa-user"></i>
-                                        </div>
-                                        <div>
-                                            <p className={styles.userName}>{user?.name || 'Admin User'}</p>
-                                            <p className={styles.userEmail}>{user?.email || 'admin@evaratech.com'}</p>
-                                        </div>
-                                    </div>
-                                    <div className={styles.divider}></div>
-                                    <Link to="/profile" className={styles.menuItem} onClick={() => setActivePanel('none')}>
-                                        <i className="fas fa-user-circle"></i> Profile
-                                    </Link>
-                                    <Link to="/status" className={styles.menuItem} onClick={() => setActivePanel('none')}>
-                                        <i className="fas fa-signal"></i> {t('nav.status')}
-                                    </Link>
-                                    <Link to="/reports" className={styles.menuItem} onClick={() => setActivePanel('none')}>
-                                        <i className="fas fa-file-alt"></i> {t('nav.reports')}
-                                    </Link>
-                                    <a href="http://evaratech.com" target="_blank" rel="noopener noreferrer" className={styles.menuItem} onClick={() => setActivePanel('none')}>
-                                        <i className="fas fa-info-circle"></i> {t('nav.about')}
-                                    </a>
-                                    <Link to="/settings" className={styles.menuItem} onClick={() => setActivePanel('none')}>
-                                        <i className="fas fa-cog"></i> {t('nav.settings')}
-                                    </Link>
-                                    <div className={styles.divider}></div>
-                                    <button className={styles.menuItem} onClick={() => {
-                                        logout();
-                                        setActivePanel('none');
-                                    }}>
-                                        <i className="fas fa-sign-out-alt"></i> Logout
-                                    </button>
-                                </motion.div>
+                                    <GlassMenuSection title="Account" />
+                                    <GlassMenuItem
+                                        text={user?.name || 'Admin User'}
+                                        description={user?.email || 'admin@evaratech.com'}
+                                        badgeColor="#4f46e5"
+                                        badgeText={user?.name?.[0] || 'A'}
+                                        onClick={() => { }}
+                                    />
+
+                                    <GlassMenuSection title="Navigation" />
+                                    <GlassMenuItem icon="fas fa-user-circle" text="Profile" onClick={() => { navigate('/profile'); setActivePanel('none'); }} />
+                                    <GlassMenuItem icon="fas fa-signal" text={t('nav.status')} onClick={() => { navigate('/status'); setActivePanel('none'); }} />
+                                    <GlassMenuItem icon="fas fa-file-alt" text={t('nav.reports')} onClick={() => { navigate('/reports'); setActivePanel('none'); }} />
+                                    <GlassMenuItem icon="fas fa-cog" text={t('nav.settings')} onClick={() => { navigate('/settings'); setActivePanel('none'); }} />
+
+                                    <GlassMenuSection title="System" />
+                                    <GlassMenuItem icon="fas fa-info-circle" text={t('nav.about')} onClick={() => { window.open('http://evaratech.com', '_blank'); setActivePanel('none'); }} />
+                                    <GlassMenuItem
+                                        icon="fas fa-sign-out-alt"
+                                        text="Logout"
+                                        onClick={() => {
+                                            logout();
+                                            setActivePanel('none');
+                                        }}
+                                        badgeColor="#ef4444"
+                                    />
+                                </GlassMenu>
                             )}
                         </AnimatePresence>
                     </div>
 
-                    {/* More Menu (3-dots) - Grouped Inside Actions */}
+                    {/* More Menu (3-dots) */}
                     <div className={styles.iconWrapper}>
                         <motion.button
                             className={styles.mobileMenuBtn}
@@ -228,36 +225,21 @@ function Header() {
                             whileTap={{ scale: 0.9 }}
                             title="More"
                         >
-                            <i className="fas fa-bars"></i>
+                            <Menu size={20} />
                         </motion.button>
 
                         <AnimatePresence>
                             {activePanel === 'more' && (
-                                <motion.div
-                                    className={styles.dropdown}
-                                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                                    transition={{ duration: 0.2 }}
+                                <GlassMenu
+                                    title="Quick Access"
+                                    onClose={() => setActivePanel('none')}
                                 >
-                                    <div className={styles.dropdownHeader}>
-                                        <h3>Quick Access</h3>
-                                        <button className={styles.closeBtn} onClick={() => setActivePanel('none')}>×</button>
-                                    </div>
-                                    <Link to="/status" className={styles.menuItem} onClick={() => setActivePanel('none')}>
-                                        <i className="fas fa-signal"></i> {t('nav.status')}
-                                    </Link>
-                                    <Link to="/reports" className={styles.menuItem} onClick={() => setActivePanel('none')}>
-                                        <i className="fas fa-file-alt"></i> {t('nav.reports')}
-                                    </Link>
-                                    <div className={styles.divider}></div>
-                                    <a href="http://evaratech.com" target="_blank" rel="noopener noreferrer" className={styles.menuItem} onClick={() => setActivePanel('none')}>
-                                        <i className="fas fa-info-circle"></i> {t('nav.about')}
-                                    </a>
-                                    <Link to="/audit" className={styles.menuItem} onClick={() => setActivePanel('none')}>
-                                        <i className="fas fa-history"></i> Audit Logs
-                                    </Link>
-                                </motion.div>
+                                    <GlassMenuSection title="Shortcuts" />
+                                    <GlassMenuItem icon="fas fa-signal" text={t('nav.status')} onClick={() => { navigate('/status'); setActivePanel('none'); }} />
+                                    <GlassMenuItem icon="fas fa-file-alt" text={t('nav.reports')} onClick={() => { navigate('/reports'); setActivePanel('none'); }} />
+                                    <GlassMenuItem icon="fas fa-history" text="Audit Logs" onClick={() => { navigate('/audit'); setActivePanel('none'); }} />
+                                    <GlassMenuItem icon="fas fa-info-circle" text={t('nav.about')} onClick={() => { window.open('http://evaratech.com', '_blank'); setActivePanel('none'); }} />
+                                </GlassMenu>
                             )}
                         </AnimatePresence>
                     </div>

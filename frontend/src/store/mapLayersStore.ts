@@ -26,9 +26,9 @@ const defaultVisibility: Record<LayerType, boolean> = {
     iiitBores: true,
     govtBores: true,
     nonWorkingBores: true,
-    mainPipelines: true,
-    distPipelines: true,
-    borePipelines: true,
+    mainPipelines: false,
+    distPipelines: false,
+    borePipelines: false,
 };
 
 export const useMapLayersStore = create<MapLayersStore>((set) => ({

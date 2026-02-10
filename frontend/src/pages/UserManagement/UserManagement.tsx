@@ -6,39 +6,43 @@ interface UserData {
     id: string;
     name: string;
     email: string;
-    role: 'admin' | 'editor' | 'viewer';
+    role: 'command' | 'admin_distributor' | 'customer_user';
     status: 'active' | 'inactive';
     lastActive: string;
     avatar: string;
+    description?: string;
 }
 
 const MOCK_USERS: UserData[] = [
     {
         id: '1',
-        name: 'Test User',
-        email: 'user@test.com',
-        role: 'admin',
+        name: 'Command (Super Admin)',
+        email: 'command@evaratech.com',
+        role: 'command',
         status: 'active',
         lastActive: 'Just now',
-        avatar: 'https://ui-avatars.com/api/?name=Test+User&background=0ea5e9&color=fff'
+        avatar: 'https://ui-avatars.com/api/?name=Command&background=0ea5e9&color=fff',
+        description: "Evaratech internal command authority - Full system access."
     },
     {
         id: '2',
-        name: 'Sarah Engineer',
-        email: 'sarah@evaratech.com',
-        role: 'editor',
+        name: 'Admin/Distributor',
+        email: 'admin@evaratech.com',
+        role: 'admin_distributor',
         status: 'active',
         lastActive: '2 hours ago',
-        avatar: 'https://ui-avatars.com/api/?name=Sarah+Engineer&background=8b5cf6&color=fff'
+        avatar: 'https://ui-avatars.com/api/?name=Admin&background=8b5cf6&color=fff',
+        description: "Product distributor & deployment partners - Limited operational access."
     },
     {
         id: '3',
-        name: 'John Operator',
-        email: 'john@evaratech.com',
-        role: 'viewer',
+        name: 'Customer/End User',
+        email: 'customer@evaratech.com',
+        role: 'customer_user',
         status: 'inactive',
         lastActive: '2 days ago',
-        avatar: 'https://ui-avatars.com/api/?name=John+Operator&background=10b981&color=fff'
+        avatar: 'https://ui-avatars.com/api/?name=Customer&background=10b981&color=fff',
+        description: "End consumer or organization - Device-specific access."
     }
 ];
 
@@ -67,9 +71,19 @@ export default function UserManagement() {
 
     const getRoleBadgeClass = (role: string) => {
         switch (role) {
-            case 'admin': return styles.adminBadge;
-            case 'editor': return styles.editorBadge;
-            default: return styles.viewerBadge;
+            case 'command': return styles.commandBadge;
+            case 'admin_distributor': return styles.distributorBadge;
+            case 'customer_user': return styles.customerBadge;
+            default: return styles.customerBadge;
+        }
+    };
+
+    const getRoleLabel = (role: string) => {
+        switch (role) {
+            case 'command': return 'COMMAND (SUPER ADMIN)';
+            case 'admin_distributor': return 'ADMIN/DISTRIBUTOR';
+            case 'customer_user': return 'CUSTOMER/END USER';
+            default: return role;
         }
     };
 
@@ -104,6 +118,7 @@ export default function UserManagement() {
                             <tr>
                                 <th>User</th>
                                 <th>Role</th>
+                                <th>Access Scope</th>
                                 <th>Status</th>
                                 <th>Last Active</th>
                                 <th>Actions</th>
@@ -129,9 +144,22 @@ export default function UserManagement() {
                                             </div>
                                         </td>
                                         <td>
-                                            <span className={`${styles.badge} ${getRoleBadgeClass(user.role)}`}>
-                                                {user.role}
-                                            </span>
+                                            <div className={styles.roleContainer}>
+                                                <span className={`${styles.badge} ${getRoleBadgeClass(user.role)}`}>
+                                                    {getRoleLabel(user.role)}
+                                                </span>
+                                                {user.role === 'command' && (
+                                                    <span className={styles.systemAuthorityBadge} title="Full Internal Command Authority">
+                                                        <i className="fas fa-crown"></i>
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div className={styles.accessScope}>
+                                                {user.role === 'command' ? 'Full Authority' :
+                                                    user.role === 'admin_distributor' ? 'Limited Operational' : 'Device-Specific'}
+                                            </div>
                                         </td>
                                         <td>
                                             <span className={`${styles.statusDot} ${user.status === 'active' ? styles.active : styles.inactive}`}></span>
@@ -179,10 +207,127 @@ export default function UserManagement() {
                             <div className={styles.formGroup}>
                                 <label>Role</label>
                                 <select defaultValue={selectedUser.role}>
-                                    <option value="admin">Admin</option>
-                                    <option value="editor">Editor</option>
-                                    <option value="viewer">Viewer</option>
+                                    <option value="command">Command (Super Admin)</option>
+                                    <option value="admin_distributor">Admin/Distributor</option>
+                                    <option value="customer_user">Customer/End User</option>
                                 </select>
+                            </div>
+
+                            <div className={styles.authorityNotice}>
+                                <div className={styles.authorityLabel}>Governance & System Authority</div>
+                                <p className={styles.authorityDescription}>
+                                    {selectedUser.role === 'command'
+                                        ? "Evaratech internal command authority - Full system access across all users, devices, and deployments."
+                                        : (selectedUser.role === 'admin_distributor')
+                                            ? "Product distributor & deployment partners - Limited operational access."
+                                            : "End consumer or organization - Device-specific access."
+                                    }
+                                </p>
+
+                                {selectedUser.role === 'command' && (
+                                    <div className={styles.capabilitiesGrid}>
+                                        <div className={styles.capabilitySection}>
+                                            <div className={styles.sectionTitle}>Global Management</div>
+                                            <ul>
+                                                <li>Create/Suspend Distributors & Customers</li>
+                                                <li>Device Provisioning & Lifecycle Management</li>
+                                                <li>Cross-City Resource Allocation</li>
+                                            </ul>
+                                        </div>
+                                        <div className={styles.capabilitySection}>
+                                            <div className={styles.sectionTitle}>System Configuration</div>
+                                            <ul>
+                                                <li>Alert Thresholds & Sampling Intervals</li>
+                                                <li>Firmware Update Policies & Control</li>
+                                                <li>System-Wide Health Analytics</li>
+                                            </ul>
+                                        </div>
+                                        <div className={styles.capabilitySection}>
+                                            <div className={styles.sectionTitle}>Command Visibility</div>
+                                            <ul>
+                                                <li>Full Login & Connectivity Logs</li>
+                                                <li>Deployment-Wise Statistics</li>
+                                                <li>Audit History Across All Locations</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {selectedUser.role === 'admin_distributor' && (
+                                    <div className={styles.capabilitiesGrid}>
+                                        <div className={styles.capabilitySection}>
+                                            <div className={styles.sectionTitle}>Partner Operations</div>
+                                            <ul>
+                                                <li>Add/Manage Customers & Techs</li>
+                                                <li>Manage Deployment Locations</li>
+                                                <li>Track Installation Status</li>
+                                            </ul>
+                                        </div>
+                                        <div className={styles.capabilitySection}>
+                                            <div className={styles.sectionTitle}>Device Management</div>
+                                            <ul>
+                                                <li>QR/ID Device Registration</li>
+                                                <li>Assign Devices to Customers</li>
+                                                <li>Real-time Abnormal Alerts</li>
+                                            </ul>
+                                        </div>
+                                        <div className={styles.capabilitySection}>
+                                            <div className={styles.sectionTitle}>Analytics & Reporting</div>
+                                            <ul>
+                                                <li>Performance Tracking (Fleet)</li>
+                                                <li>Generate Client Export Reports</li>
+                                                <li>Operational Alert Governance</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {selectedUser.role === 'customer_user' && (
+                                    <div className={styles.capabilitiesGrid}>
+                                        <div className={styles.capabilitySection}>
+                                            <div className={styles.sectionTitle}>My Monitoring</div>
+                                            <ul>
+                                                <li>Real-time Water Levels</li>
+                                                <li>View All Registered Devices</li>
+                                                <li>Historical Usage Trends</li>
+                                            </ul>
+                                        </div>
+                                        <div className={styles.capabilitySection}>
+                                            <div className={styles.sectionTitle}>Alerts & Notifications</div>
+                                            <ul>
+                                                <li>Leakage Detection Alerts</li>
+                                                <li>Low Water Level Warnings</li>
+                                                <li>Abnormal Consumption Notices</li>
+                                            </ul>
+                                        </div>
+                                        <div className={styles.capabilitySection}>
+                                            <div className={styles.sectionTitle}>Account Access</div>
+                                            <ul>
+                                                <li>Mobile/Email Login Support</li>
+                                                <li>Download PDF/Excel Reports</li>
+                                                <li>Personal Consumption Analytics</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {selectedUser.role === 'command' && (
+                                    <div className={styles.fullAccessBadge}>
+                                        <i className="fas fa-shield-alt"></i> UNRESTRICTED COMMAND AUTHORITY
+                                    </div>
+                                )}
+
+                                {selectedUser.role === 'admin_distributor' && (
+                                    <div className={styles.partnerAccessBadge}>
+                                        <i className="fas fa-handshake"></i> LIMITED OPERATIONAL ACCESS
+                                    </div>
+                                )}
+
+                                {selectedUser.role === 'customer_user' && (
+                                    <div className={styles.customerAccessBadge}>
+                                        <i className="fas fa-house-user"></i> DEVICE-SPECIFIC ACCESS
+                                    </div>
+                                )}
                             </div>
                             <div className={styles.modalActions}>
                                 <button className={styles.cancelBtn} onClick={() => setIsEditModalOpen(false)}>Cancel</button>

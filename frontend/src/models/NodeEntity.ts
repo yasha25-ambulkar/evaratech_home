@@ -1,5 +1,4 @@
-export type NodeType = 'pump' | 'sump' | 'tank' | 'bore' | 'govt';
-export type NodeStatus = 'Normal' | 'Warning' | 'Critical';
+import { NodeType, NodeStatus, ProductType } from './enums';
 
 export interface INodeData {
     id: string;
@@ -8,6 +7,19 @@ export interface INodeData {
     status: NodeStatus;
     location: string;
     lastUpdate: string;
+    // Metrics
+    pressure?: number; // bar
+    flowRate?: number; // m3/h
+    level?: number; // percentage
+    voltage?: number; // V
+    product?: ProductType;
+    // EvaraTank Specifics
+    tankDepth?: number; // meters
+    tankCapacityLitres?: number;
+    currentLevelMeters?: number;
+    dailyUsage?: number; // Litres today
+    refillCycles?: number;
+    consumptionHistory?: { date: string; value: number }[];
 }
 
 export abstract class NodeEntity {
@@ -20,15 +32,38 @@ export abstract class NodeEntity {
     get location() { return this.data.location; }
     get lastUpdate() { return this.data.lastUpdate; }
 
+    // Metrics getters
+    get pressure() { return this.data.pressure; }
+    get flowRate() { return this.data.flowRate; }
+    get level() { return this.data.level; }
+    get voltage() { return this.data.voltage; }
+    get product() { return this.data.product || ProductType.None; }
+
+    // EvaraTank Getters
+    get tankDepth() { return this.data.tankDepth; }
+    get tankCapacityLitres() { return this.data.tankCapacityLitres; }
+    get currentLevelMeters() { return this.data.currentLevelMeters; }
+    get dailyUsage() { return this.data.dailyUsage; }
+    get refillCycles() { return this.data.refillCycles; }
+
     abstract getTypeIcon(): string;
     abstract getTypeColor(): string;
 
     getStatusColor(): string {
         switch (this.data.status) {
-            case 'Normal': return '#06d6a0';
-            case 'Warning': return '#ffd60a';
-            case 'Critical': return '#d62828';
+            case NodeStatus.Normal: return '#06d6a0';
+            case NodeStatus.Warning: return '#ffd60a';
+            case NodeStatus.Critical: return '#d62828';
             default: return '#6c757d';
+        }
+    }
+
+    getProductBrand(): string {
+        switch (this.product) {
+            case ProductType.EvaraTank: return 'EvaraTank';
+            case ProductType.EvaraFlow: return 'EvaraFlow';
+            case ProductType.EvaraDeep: return 'EvaraDeep';
+            default: return '';
         }
     }
 }

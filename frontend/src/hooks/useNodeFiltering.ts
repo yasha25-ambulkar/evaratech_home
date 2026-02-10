@@ -1,20 +1,24 @@
 import { useState, useMemo } from 'react';
 import { NodeEntity } from '../models/NodeEntity';
+import { NodeStatus } from '../models/enums';
 
 export function useNodeFiltering(nodes: NodeEntity[]) {
-    const [filter, setFilter] = useState<string>('all');
+    const [filters, setFilters] = useState<string[]>(['all']);
 
     const filteredNodes = useMemo(() => {
-        if (filter === 'all') return nodes;
-        return nodes.filter(node => node.type === filter);
-    }, [nodes, filter]);
+        if (filters.includes('all') || filters.length === 0) return nodes;
+        return nodes.filter(node =>
+            filters.includes(node.type) ||
+            filters.includes(node.product)
+        );
+    }, [nodes, filters]);
 
     const statusCounts = useMemo(() => ({
         total: nodes.length,
-        normal: nodes.filter(n => n.status === 'Normal').length,
-        warning: nodes.filter(n => n.status === 'Warning').length,
-        critical: nodes.filter(n => n.status === 'Critical').length,
+        normal: nodes.filter(n => n.status === NodeStatus.Normal).length,
+        warning: nodes.filter(n => n.status === NodeStatus.Warning).length,
+        critical: nodes.filter(n => n.status === NodeStatus.Critical).length,
     }), [nodes]);
 
-    return { filter, setFilter, filteredNodes, statusCounts };
+    return { filters, setFilters, filteredNodes, statusCounts };
 }

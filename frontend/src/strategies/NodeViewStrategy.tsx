@@ -1,16 +1,16 @@
 import React from 'react';
 import { NodeEntity } from '../models/NodeEntity';
 import NodeCard from '../components/ui/NodeCard/NodeCard';
-// We'll import specific styles or use inline/utility if generic, 
-// strictly reusing NodeCard which has its own styles.
-// But we need the layout styles (grid vs list).
-// For now let's assume we pass a className or style object, or import a shared CSS module for views.
-// To avoid importing AllNodes.module.css (circular/messy), let's create NodeViews.module.css or similar? 
-// Or just accept that these strategies are tightly coupled to the AllNodes page for now. 
-// For "Architecture Upgrade", I should decouple. 
-// I will create `NodeViews.module.css` for the grid/list layouts.
-
 import styles from './NodeViews.module.css';
+
+// Fix imports for Vite/CJS compatibility with robust fallbacks
+import * as ReactWindow from 'react-window';
+// @ts-ignore
+const FixedSizeList = ReactWindow.FixedSizeList || ReactWindow.default?.FixedSizeList || ReactWindow.default || ReactWindow;
+
+import * as AutoSizerPkg from 'react-virtualized-auto-sizer';
+// @ts-ignore
+const AutoSizer = AutoSizerPkg.AutoSizer || AutoSizerPkg.default?.AutoSizer || AutoSizerPkg.default || AutoSizerPkg;
 
 export interface NodeViewStrategy {
     id: 'grid' | 'list';
@@ -39,6 +39,10 @@ export class GridViewStrategy implements NodeViewStrategy {
                         typeColor={node.getTypeColor()}
                         typeIcon={node.getTypeIcon()}
                         statusColor={node.getStatusColor()}
+                        productBrand={node.getProductBrand()}
+                        tankCapacityLitres={node.tankCapacityLitres}
+                        currentLevelMeters={node.currentLevelMeters}
+                        dailyUsage={node.dailyUsage}
                     />
                 ))}
             </div>
@@ -46,8 +50,32 @@ export class GridViewStrategy implements NodeViewStrategy {
     }
 }
 
-import { FixedSizeList } from 'react-window';
-import { AutoSizer } from 'react-virtualized-auto-sizer';
+// Extract Row component to avoid re-definition on every render
+const NodeRow = ({ index, style, data }: { index: number; style: React.CSSProperties; data: NodeEntity[] }) => {
+    const node = data[index];
+    if (!node) return null;
+    return (
+        <div style={{ ...style, paddingBottom: '10px' }}>
+            <div style={{ height: '100%' }}>
+                <NodeCard
+                    id={node.id}
+                    name={node.name}
+                    type={node.type}
+                    status={node.status}
+                    location={node.location}
+                    lastUpdate={node.lastUpdate}
+                    typeColor={node.getTypeColor()}
+                    typeIcon={node.getTypeIcon()}
+                    statusColor={node.getStatusColor()}
+                    productBrand={node.getProductBrand()}
+                    tankCapacityLitres={node.tankCapacityLitres}
+                    currentLevelMeters={node.currentLevelMeters}
+                    dailyUsage={node.dailyUsage}
+                />
+            </div>
+        </div>
+    );
+};
 
 export class VirtualListViewStrategy implements NodeViewStrategy {
     id: 'list' = 'list';
@@ -55,27 +83,6 @@ export class VirtualListViewStrategy implements NodeViewStrategy {
     icon = 'fas fa-stream';
 
     render(nodes: NodeEntity[]): React.ReactNode {
-        const Row = ({ index, style }: { index: number; style: React.CSSProperties }) => {
-            const node = nodes[index];
-            return (
-                <div style={{ ...style, paddingBottom: '10px' }}> {/* Add padding inside the row item for spacing */}
-                    <div style={{ height: '100%' }}>
-                        <NodeCard
-                            id={node.id}
-                            name={node.name}
-                            type={node.type}
-                            status={node.status}
-                            location={node.location}
-                            lastUpdate={node.lastUpdate}
-                            typeColor={node.getTypeColor()}
-                            typeIcon={node.getTypeIcon()}
-                            statusColor={node.getStatusColor()}
-                        />
-                    </div>
-                </div>
-            );
-        };
-
         return (
             <div style={{ height: '600px', width: '100%' }}>
                 <AutoSizer>
@@ -83,10 +90,11 @@ export class VirtualListViewStrategy implements NodeViewStrategy {
                         <FixedSizeList
                             height={height}
                             itemCount={nodes.length}
-                            itemSize={220} // Approximate height of NodeCard
+                            itemSize={220}
                             width={width}
+                            itemData={nodes} // Pass data to Row
                         >
-                            {Row}
+                            {NodeRow}
                         </FixedSizeList>
                     )}
                 </AutoSizer>

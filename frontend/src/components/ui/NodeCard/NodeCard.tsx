@@ -12,18 +12,26 @@ interface NodeCardProps {
     typeColor: string;
     typeIcon: string;
     statusColor: string;
+    productBrand?: string;
+    // EvaraTank Specifics
+    tankCapacityLitres?: number;
+    currentLevelMeters?: number;
+    dailyUsage?: number;
 }
 
 function NodeCard({
     id,
     name,
-    type,
     status,
     location,
     lastUpdate,
     typeColor,
     typeIcon,
-    statusColor
+    statusColor,
+    productBrand,
+    tankCapacityLitres,
+    currentLevelMeters,
+    dailyUsage
 }: NodeCardProps) {
     return (
         <div className={styles.nodeCard}>
@@ -42,13 +50,36 @@ function NodeCard({
                 </div>
             </div>
 
-            <h3 className={styles.nodeName}>{name}</h3>
+            <div className={styles.nodeMeta}>
+                <h3 className={styles.nodeName}>{name}</h3>
+                {productBrand && (
+                    <span className={styles.productBadge}>{productBrand}</span>
+                )}
+            </div>
             <p className={styles.nodeLocation}>
                 <i className="fas fa-map-marker-alt"></i> {location}
             </p>
             <p className={styles.nodeUpdate}>
                 <i className="fas fa-clock"></i> {lastUpdate}
             </p>
+
+            {/* EvaraTank Specific Metrics */}
+            {productBrand === 'EvaraTank' && tankCapacityLitres && (
+                <div className={styles.tankMetrics}>
+                    <div className={styles.metricRow}>
+                        <span className={styles.metricLabel}>Level:</span>
+                        <span className={styles.metricValue}>{currentLevelMeters}m</span>
+                    </div>
+                    <div className={styles.metricRow}>
+                        <span className={styles.metricLabel}>Volume:</span>
+                        <span className={styles.metricValue}>{tankCapacityLitres.toLocaleString()} L</span>
+                    </div>
+                    <div className={styles.metricRow}>
+                        <span className={styles.metricLabel}>Usage (Today):</span>
+                        <span className={styles.metricValue}>{dailyUsage?.toLocaleString()} L</span>
+                    </div>
+                </div>
+            )}
 
             <div className={styles.nodeActions}>
                 <Link to={`/details?node=${id}`} className={styles.detailsBtn}>

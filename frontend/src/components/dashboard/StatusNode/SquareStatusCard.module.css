@@ -1,0 +1,140 @@
+.card {
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(12px) saturate(160%);
+    -webkit-backdrop-filter: blur(12px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 12px;
+    padding: 16px;
+    /* RECTANGLE Dimensions - Fixed height to prevent collapse/overlap */
+    height: 110px;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    position: relative;
+    overflow: hidden;
+    transition: all 0.2s ease-out;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    background: rgba(255, 255, 255, 0.65);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    /* Subtle shadow for lift */
+    border-color: rgba(255, 255, 255, 0.8);
+    z-index: 2;
+    /* Ensure hover pops over neighbors */
+}
+
+/* Header: Icon + Status Dot */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: white;
+    /* Soft shadow for icon depth */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Color Variants (Deep, readable gradients) */
+.blue .icon {
+    background: linear-gradient(135deg, #2563EB, #1D4ED8);
+}
+
+.purple .icon {
+    background: linear-gradient(135deg, #7C3AED, #6D28D9);
+}
+
+.cyan .icon {
+    background: linear-gradient(135deg, #0891B2, #0E7490);
+}
+
+.orange .icon {
+    background: linear-gradient(135deg, #EA580C, #C2410C);
+}
+
+.gray .icon {
+    background: linear-gradient(135deg, #6B7280, #4B5563);
+}
+
+.statusDot {
+    width: 10px;
+    /* Slightly larger visibility */
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    /* White ring for contrast */
+}
+
+.statusDot.green {
+    background: #16A34A;
+    box-shadow: 0 0 8px rgba(22, 163, 74, 0.5);
+}
+
+.statusDot.red {
+    background: #DC2626;
+    box-shadow: 0 0 8px rgba(220, 38, 38, 0.5);
+}
+
+.statusDot.gray {
+    background: #9CA3AF;
+}
+
+/* Info Section */
+.info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.name {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--gray-900);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2;
+}
+
+.meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.type {
+    font-size: 10px;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--gray-500);
+    background: rgba(255, 255, 255, 0.5);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.location {
+    font-size: 11px;
+    color: var(--gray-600);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.footer {
+    display: none;
+}

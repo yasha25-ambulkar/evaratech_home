@@ -80,10 +80,7 @@
     }
 }
 
-/* Dark mode support (future enhancement) */
-@media (prefers-color-scheme: dark) {
-    /* Dark mode styles can be added here */
-}
+
 
 /* High contrast mode */
 @media (prefers-contrast: high) {

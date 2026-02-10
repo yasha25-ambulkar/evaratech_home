@@ -25,15 +25,19 @@ const assetTypeData = [
     { type: 'Sensors', count: 2 },
 ];
 
+import { SimulationService } from '../../services/SimulationService';
+
 interface TDSDataPoint { timestamp: string; tds: number; }
 interface FlowDataPoint { timestamp: string; flowRate: number; }
 
 function generateInitialTDSData(capacity: number): CircularBuffer<TDSDataPoint> {
     const buffer = new CircularBuffer<TDSDataPoint>(capacity);
+    const now = Date.now();
     for (let i = 0; i < capacity; i++) {
+        const time = now - (capacity - 1 - i) * 3600000;
         buffer.push({
-            timestamp: new Date(Date.now() - (capacity - 1 - i) * 3600000).toISOString(),
-            tds: 120 + Math.random() * 50,
+            timestamp: new Date(time).toISOString(),
+            tds: Math.round(SimulationService.generateTDS(time)),
         });
     }
     return buffer;
@@ -41,17 +45,19 @@ function generateInitialTDSData(capacity: number): CircularBuffer<TDSDataPoint> 
 
 function generateInitialFlowData(capacity: number): CircularBuffer<FlowDataPoint> {
     const buffer = new CircularBuffer<FlowDataPoint>(capacity);
+    const now = Date.now();
     for (let i = 0; i < capacity; i++) {
+        const time = now - (capacity - 1 - i) * 3600000;
         buffer.push({
-            timestamp: new Date(Date.now() - (capacity - 1 - i) * 3600000).toISOString(),
-            flowRate: 10 + Math.random() * 5,
+            timestamp: new Date(time).toISOString(),
+            flowRate: Number(SimulationService.generateFlowRate(time).toFixed(1)),
         });
     }
     return buffer;
 }
 
 function Dashboard() {
-    const [selectedView, setSelectedView] = useState<'overview' | '3d'>('overview');
+    const [selectedView] = useState<'overview' | '3d'>('overview');
 
     // Initialize buffers (using useState to keep instance)
     const [tdsBuffer] = useState(() => generateInitialTDSData(24));
@@ -65,20 +71,7 @@ function Dashboard() {
             <div className={styles.content}>
                 <div className={styles.header}>
                     <h1>Dashboard Analytics</h1>
-                    <div className={styles.viewToggle}>
-                        <button
-                            className={selectedView === 'overview' ? styles.active : ''}
-                            onClick={() => setSelectedView('overview')}
-                        >
-                            Overview
-                        </button>
-                        <button
-                            className={selectedView === '3d' ? styles.active : ''}
-                            onClick={() => setSelectedView('3d')}
-                        >
-                            3D Visualization
-                        </button>
-                    </div>
+
                 </div>
 
                 {selectedView === 'overview' ? (

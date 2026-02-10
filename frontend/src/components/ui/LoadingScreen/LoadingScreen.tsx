@@ -63,36 +63,46 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
             <div className={styles.contentWrapper}>
                 <motion.div
                     className={styles.logoWrapper}
-                    initial={{ scale: 0.8, opacity: 0, y: 20 }}
+                    initial={{ scale: 0.7, opacity: 0, y: 30, rotate: -5 }}
                     animate={{
                         scale: 1,
                         opacity: 1,
                         y: 0,
+                        rotate: 0,
                         transition: {
-                            duration: 1.2,
-                            ease: [0.22, 1, 0.36, 1] // Custom easeOutQuint
+                            duration: 1.4,
+                            ease: [0.16, 1, 0.3, 1] // Apple-style ease-out
                         }
                     }}
                     exit={{
-                        scale: 1.5,
+                        scale: 1.2,
                         opacity: 0,
-                        filter: 'blur(20px)',
+                        filter: 'blur(30px)',
                         transition: { duration: 0.8, ease: "easeIn" }
                     }}
                 >
-                    <img
-                        src="/evaratech-logo-light.png"
+                    <motion.img
+                        src="/evaratech-logo-new.png"
                         alt="EvaraTech"
                         className={styles.logo}
+                        animate={{
+                            filter: [
+                                'drop-shadow(0 4px 12px rgba(0,0,0,0.15))',
+                                'drop-shadow(0 8px 24px rgba(0,0,0,0.25))',
+                                'drop-shadow(0 4px 12px rgba(0,0,0,0.15))'
+                            ]
+                        }}
+                        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                     />
                 </motion.div>
 
                 <motion.div
                     className={styles.textWrapper}
-                    initial={{ opacity: 0 }}
+                    initial={{ opacity: 0, y: 10 }}
                     animate={{
                         opacity: 1,
-                        transition: { delay: 0.6, duration: 0.8 }
+                        y: 0,
+                        transition: { delay: 0.8, duration: 1 }
                     }}
                     exit={{
                         opacity: 0,
@@ -103,17 +113,17 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
                     <motion.div
                         className={styles.loaderLine}
                         initial={{ width: 0 }}
-                        animate={{ width: 80 }}
-                        transition={{ duration: 1, delay: 0.8, ease: "easeOut" }}
+                        animate={{ width: 120 }}
+                        transition={{ duration: 1.2, delay: 1, ease: "easeInOut" }}
                     />
 
                     <motion.p
                         className={styles.subtitle}
-                        initial={{ opacity: 0, letterSpacing: '0.5em' }}
-                        animate={{ opacity: 1, letterSpacing: '0.15em' }}
-                        transition={{ duration: 1.5, delay: 0.4, ease: "easeOut" }}
+                        initial={{ opacity: 0, letterSpacing: '0.6em' }}
+                        animate={{ opacity: 1, letterSpacing: '0.2em' }}
+                        transition={{ duration: 1.8, delay: 0.6, ease: "easeOut" }}
                     >
-                        Intelligent Water Management
+                        INTELLIGENT WATER MANAGEMENT
                     </motion.p>
                 </motion.div>
             </div>

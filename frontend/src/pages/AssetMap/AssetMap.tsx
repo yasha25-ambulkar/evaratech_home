@@ -24,6 +24,7 @@ import styles from './AssetMap.module.css';
 // Phase 12: Glass Components
 import GlassMapControls from '@components/map/controls/GlassMapControls';
 import GlassPopupCard from '@components/map/GlassPopupCard/GlassPopupCard';
+import Compass from '@components/map/Compass/Compass';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // Fix Leaflet default icon issue
@@ -40,6 +41,7 @@ let DefaultIcon = L.icon({
 L.Marker.prototype.options.icon = DefaultIcon;
 
 
+// Create custom marker icons with letters
 // Create custom marker icons with letters
 function createCustomIcon(type: AssetType, status: string = 'Normal') {
     const colorMap: Record<AssetType, string> = {
@@ -330,7 +332,15 @@ function AssetMap() {
             if (asset.type === 'sump' && !visibleLayers.sumps) return false;
             if (asset.type === 'tank' && !visibleLayers.tanks) return false;
 
+            // Fixed: Check both iiitBores and govtBores visibility
             if (asset.type === 'bore') {
+                if (!visibleLayers.iiitBores) return false;
+                const isNotWorking = asset.status === 'Not Working';
+                if (isNotWorking && !visibleLayers.nonWorkingBores) return false;
+            }
+
+            if (asset.type === 'govt') {
+                if (!visibleLayers.govtBores) return false;
                 const isNotWorking = asset.status === 'Not Working';
                 if (isNotWorking && !visibleLayers.nonWorkingBores) return false;
             }
@@ -342,16 +352,7 @@ function AssetMap() {
     return (
         <div className={styles.container}>
 
-            {/* Filter Toggle Button */}
-            <motion.button
-                className={styles.filterBtn}
-                onClick={() => setActivePanel('filters')}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                title="Advanced Filters"
-            >
-                <i className="fas fa-filter"></i>
-            </motion.button>
+
 
             {/* Filter Panel */}
             <FilterPanel
@@ -382,6 +383,9 @@ function AssetMap() {
 
                 {/* Custom Glass Controls */}
                 <GlassMapControls />
+
+                {/* Compass Control */}
+                <Compass />
 
                 {/* Handle map clicks to close sidebar */}
                 <MapClickHandler onMapClick={closeAll} />
@@ -450,7 +454,7 @@ function AssetMap() {
             <AnimatePresence>
                 {showSystemDash && (
                     <div className={`${styles.dashboardOverlay} animate-fade-in`}>
-                        <SystemDashboard onClose={() => setActivePanel('none')} />
+                        <SystemDashboard />
                     </div>
                 )}
             </AnimatePresence>
@@ -468,7 +472,6 @@ function AssetMap() {
                                     handleMarkerClick(asset);
                                 }
                             }}
-                            onClose={() => setActivePanel('none')}
                         />
                     </div>
                 )}

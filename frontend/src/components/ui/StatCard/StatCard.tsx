@@ -1,7 +1,7 @@
 import styles from './StatCard.module.css';
 
 interface StatCardProps {
-    icon: string;
+    icon: React.ReactNode;
     value: string | number;
     label: string;
     percentage?: number;
@@ -27,8 +27,8 @@ function StatCard({ icon, value, label, percentage, trendText, trend = 'neutral'
         <div className={`${styles.card} ${styles[color]}`}>
             <div className={styles.icon}>{icon}</div>
             <div className={styles.content}>
-                <div className={styles.value}>{value}</div>
                 <div className={styles.label}>{label}</div>
+                <div className={styles.value}>{value}</div>
                 {percentage !== undefined ? (
                     <div className={`${styles.percentage} ${getTrendClass()}`}>
                         <span className={styles.trendIcon}>{getTrendIcon()}</span>

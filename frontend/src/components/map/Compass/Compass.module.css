@@ -1,0 +1,136 @@
+.compassContainer {
+    position: absolute;
+    top: 110px;
+    left: 20px;
+    width: 80px;
+    height: 80px;
+    z-index: 1000;
+    pointer-events: auto;
+}
+
+.compassBody {
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.1),
+        inset 0 0 15px rgba(255, 255, 255, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.compassBody:hover {
+    transform: scale(1.05);
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow:
+        0 12px 40px rgba(0, 0, 0, 0.15),
+        inset 0 0 20px rgba(255, 255, 255, 0.6);
+}
+
+.ring {
+    position: absolute;
+    width: 90%;
+    height: 90%;
+    border: 1px dashed rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+}
+
+.markers {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 10px;
+    color: var(--gray-800);
+}
+
+.marker {
+    position: absolute;
+}
+
+.north {
+    top: 6px;
+    color: #e11d48;
+    font-size: 11px;
+}
+
+.south {
+    bottom: 6px;
+}
+
+.east {
+    right: 6px;
+}
+
+.west {
+    left: 6px;
+}
+
+.needle {
+    width: 4px;
+    height: 50%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform-origin: bottom center;
+}
+
+.needleTop {
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 25px solid #e11d48;
+    /* Crimson Red */
+    filter: drop-shadow(0 2px 4px rgba(225, 29, 72, 0.4));
+}
+
+.needleBottom {
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 25px solid var(--gray-400);
+}
+
+.centerPoint {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: #fff;
+    border: 2px solid var(--gray-800);
+    border-radius: 50%;
+    z-index: 10;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Subtle pulse for the north marker */
+@keyframes north-glow {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.6;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.north {
+    animation: north-glow 2s infinite ease-in-out;
+}

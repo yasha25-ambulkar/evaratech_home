@@ -7,9 +7,7 @@ export default function GlassMapControls() {
 
     const handleZoomIn = () => map.zoomIn();
     const handleZoomOut = () => map.zoomOut();
-    const handleLocate = () => {
-        map.locate({ setView: true, maxZoom: 16 });
-    };
+
 
     return (
         <div className={styles.container}>
@@ -30,14 +28,6 @@ export default function GlassMapControls() {
                     <i className="fas fa-minus"></i>
                 </motion.button>
             </div>
-
-            <motion.button
-                className={`${styles.btn} ${styles.locateBtn}`}
-                onClick={handleLocate}
-                whileTap={{ scale: 0.95 }}
-            >
-                <i className="fas fa-location-arrow"></i>
-            </motion.button>
         </div>
     );
 }

@@ -14,8 +14,7 @@
 
 /* Header Section */
 .header {
-    margin-top: 80px;
-    /* Space for fixed header */
+    margin-top: 0;
     margin-bottom: var(--space-6);
     display: flex;
     justify-content: space-between;

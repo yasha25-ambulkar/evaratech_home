@@ -3,201 +3,59 @@
     position: absolute;
     bottom: 24px;
     left: 24px;
-    width: 60px;
-    /* Initial state */
-    height: 60px;
-    /* Initial state */
-    background: var(--glass-base-light);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: 50%;
-    border: 1px solid var(--glass-border);
-    box-shadow: var(--glass-shadow);
     z-index: 1000;
-    overflow: hidden;
-    /* Hide content when collapsed */
-    transition: box-shadow 0.3s ease;
+    /* Auto width for pill */
+    width: auto;
+    height: auto;
 }
 
-.container:hover {
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
-}
 
-/* Trigger Button (Circular) */
+/* Trigger Button (Pill Shape) */
 .triggerBtn {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: none;
-    background: transparent;
-    cursor: pointer;
+    /* Layout */
     display: flex;
-    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    color: var(--color-primary-500);
-    z-index: 2;
+    gap: 8px;
+    padding: 8px 16px;
+
+    /* Visuals */
+    background: rgba(255, 255, 255, 0.9);
+    /* Opaque white like screenshot */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 50px;
+    /* Pill shape */
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    /* Subtle border */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    /* Soft shadow */
+    cursor: pointer;
+
+    /* Text Color */
+    color: #333;
+    transition: all 0.2s ease;
 }
 
-.triggerBtn i {
-    font-size: 20px;
-    margin-bottom: 2px;
+.triggerBtn:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    transform: translateY(-1px);
+    background: #ffffff;
 }
 
 .triggerText {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-}
-
-/* Expandable Content */
-.contentContainer {
-    display: none;
-    /* Hidden by default */
-    flex-direction: column;
-    padding: 16px;
-    height: 100%;
-    overflow-y: auto;
-    opacity: 0;
-    /* Animated */
-    width: 100%;
-}
-
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.title {
     font-size: 16px;
-    font-weight: 700;
-    color: var(--text-primary);
-    margin: 0;
-}
-
-.closeBtn {
-    border: none;
-    background: transparent;
-    color: #999;
-    cursor: pointer;
-    font-size: 16px;
-    padding: 4px;
-    transition: color 0.2s;
-}
-
-.closeBtn:hover {
-    color: #ff4444;
-}
-
-/* Sections */
-.section {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.sectionTitle {
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--color-primary-500);
-    text-transform: uppercase;
-    margin: 0 0 4px 0;
-    letter-spacing: 0.5px;
-}
-
-.divider {
-    height: 1px;
-    background-color: var(--border-color);
-    width: 100%;
-    margin: 12px 0;
-}
-
-.layerList {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.layerItem {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    cursor: pointer;
-    transition: opacity 0.2s ease;
-    user-select: none;
-    padding: 4px 6px;
-    border-radius: 6px;
-}
-
-.layerItem:hover {
-    background-color: var(--bg-hover);
-}
-
-.layerItem.active {
-    opacity: 1;
-}
-
-.layerItem:not(.active) {
-    opacity: 0.5;
-}
-
-/* Indicators */
-.indicatorWrapper {
-    width: 24px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.pointIndicator {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.pointIndicator i {
-    font-size: 12px;
-}
-
-.textIcon {
-    font-size: 12px;
-    font-weight: 700;
-    font-family: sans-serif;
-}
-
-.lineIndicator {
-    width: 24px;
-    height: 3px;
-    border-radius: 2px;
-}
-
-/* Labels */
-.layerLabel {
-    font-size: 13px;
-    color: var(--text-primary);
-    font-weight: 500;
-}
-
-.hiddenCheckbox {
-    display: none;
+    /* Larger text */
+    font-weight: 600;
+    /* Medium-Bold */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #333;
+    letter-spacing: 0;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
     .container {
         bottom: 80px;
-        /* Above bottom nav on mobile */
-        left: 12px;
+        left: 16px;
     }
 }

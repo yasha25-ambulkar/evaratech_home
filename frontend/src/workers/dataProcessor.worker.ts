@@ -1,5 +1,6 @@
 /* eslint-disable no-restricted-globals */
 import { INodeData } from '../models/NodeEntity';
+import { NodeStatus } from '../models/enums';
 
 interface FilterPayload {
     nodes: INodeData[];
@@ -22,9 +23,9 @@ self.onmessage = (e: MessageEvent) => {
         // Count stats
         const stats = {
             total: nodes.length,
-            normal: nodes.filter((n: INodeData) => n.status === 'Normal').length,
-            warning: nodes.filter((n: INodeData) => n.status === 'Warning').length,
-            critical: nodes.filter((n: INodeData) => n.status === 'Critical').length,
+            normal: nodes.filter((n: INodeData) => n.status === NodeStatus.Normal).length,
+            warning: nodes.filter((n: INodeData) => n.status === NodeStatus.Warning).length,
+            critical: nodes.filter((n: INodeData) => n.status === NodeStatus.Critical).length,
         };
 
         const end = performance.now();

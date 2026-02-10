@@ -1,22 +1,18 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+
 import styles from './AllNodes.module.css';
 import NodeFactory from '../../services/NodeFactory';
 import { NodeEntity } from '../../models/NodeEntity';
 import { useNodeFiltering } from '../../hooks/useNodeFiltering';
-import { NodeViewStrategy, GridViewStrategy, VirtualListViewStrategy } from '../../strategies/NodeViewStrategy';
+import { GridViewStrategy } from '../../strategies/NodeViewStrategy';
 import StatCard from '../../components/ui/StatCard/StatCard';
 
 function AllNodes() {
     const [nodes] = useState<NodeEntity[]>(NodeFactory.getAllNodes());
-    const { filter, setFilter, filteredNodes, statusCounts } = useNodeFiltering(nodes);
-    const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+    const { filters, setFilters, filteredNodes, statusCounts } = useNodeFiltering(nodes);
 
-    const strategies: Record<string, NodeViewStrategy> = {
-        grid: new GridViewStrategy(),
-        list: new VirtualListViewStrategy() // Replacing standard list with virtual list as per task
-    };
-
+    const gridStrategy = new GridViewStrategy();
 
     return (
         <div className={styles.container}>
@@ -26,36 +22,34 @@ function AllNodes() {
                         <h1 className={styles.title}>All Nodes</h1>
                         <p className={styles.subtitle}>Monitor all water infrastructure nodes</p>
                     </div>
-                    <Link to="/map" className={styles.mapBtn}>
-                        <i className="fas fa-map-marked-alt"></i> View on Map
-                    </Link>
+
                 </div>
 
                 {/* Stats */}
                 <div className={styles.stats}>
                     <StatCard
-                        icon="fas fa-circle-nodes"
+                        icon={<i className="fas fa-circle-nodes"></i>}
                         label="Total Nodes"
                         value={statusCounts.total}
                         trend="neutral"
                         color="blue"
                     />
                     <StatCard
-                        icon="fas fa-check-circle"
+                        icon={<i className="fas fa-check-circle"></i>}
                         label="Normal"
                         value={statusCounts.normal}
                         trend="neutral"
                         color="green"
                     />
                     <StatCard
-                        icon="fas fa-exclamation-triangle"
+                        icon={<i className="fas fa-exclamation-triangle"></i>}
                         label="Warning"
                         value={statusCounts.warning}
-                        trend="down" // assuming warning is bad if present? or just neutral.
+                        trend="down"
                         color="orange"
                     />
                     <StatCard
-                        icon="fas fa-times-circle"
+                        icon={<i className="fas fa-times-circle"></i>}
                         label="Critical"
                         value={statusCounts.critical}
                         trend="down"
@@ -66,53 +60,93 @@ function AllNodes() {
                 <div className={styles.controls}>
                     <div className={styles.filters}>
                         <button
-                            className={filter === 'all' ? styles.filterActive : styles.filterBtn}
-                            onClick={() => setFilter('all')}
+                            className={filters.includes('all') ? styles.filterActive : styles.filterBtn}
+                            onClick={() => setFilters(['all'])}
                         >
                             All
+
                         </button>
+                        <Link
+                            to="/products/evaratank"
+                            className={styles.productFilterBtn}
+                        >
+                            EvaraTank
+                        </Link>
+                        <Link
+                            to="/products/evaraflow"
+                            className={styles.productFilterBtn}
+                        >
+                            EvaraFlow
+                        </Link>
+                        <Link
+                            to="/products/evaradeep"
+                            className={styles.productFilterBtn}
+                        >
+                            EvaraDeep
+                        </Link>
+                        <div className={styles.filterDivider} />
                         <button
-                            className={filter === 'pump' ? styles.filterActive : styles.filterBtn}
-                            onClick={() => setFilter('pump')}
+                            className={filters.includes('pump') ? styles.filterActive : styles.filterBtn}
+                            onClick={() => {
+                                if (filters.includes('pump')) {
+                                    const newFilters = filters.filter(f => f !== 'pump');
+                                    setFilters(newFilters.length ? newFilters : ['all']);
+                                } else {
+                                    const newFilters = filters.filter(f => f !== 'all');
+                                    setFilters([...newFilters, 'pump']);
+                                }
+                            }}
                         >
                             Pumps
                         </button>
                         <button
-                            className={filter === 'sump' ? styles.filterActive : styles.filterBtn}
-                            onClick={() => setFilter('sump')}
+                            className={filters.includes('sump') ? styles.filterActive : styles.filterBtn}
+                            onClick={() => {
+                                if (filters.includes('sump')) {
+                                    const newFilters = filters.filter(f => f !== 'sump');
+                                    setFilters(newFilters.length ? newFilters : ['all']);
+                                } else {
+                                    const newFilters = filters.filter(f => f !== 'all');
+                                    setFilters([...newFilters, 'sump']);
+                                }
+                            }}
                         >
                             Sumps
                         </button>
                         <button
-                            className={filter === 'tank' ? styles.filterActive : styles.filterBtn}
-                            onClick={() => setFilter('tank')}
+                            className={filters.includes('tank') ? styles.filterActive : styles.filterBtn}
+                            onClick={() => {
+                                if (filters.includes('tank')) {
+                                    const newFilters = filters.filter(f => f !== 'tank');
+                                    setFilters(newFilters.length ? newFilters : ['all']);
+                                } else {
+                                    const newFilters = filters.filter(f => f !== 'all');
+                                    setFilters([...newFilters, 'tank']);
+                                }
+                            }}
                         >
                             Tanks
                         </button>
                         <button
-                            className={filter === 'bore' ? styles.filterActive : styles.filterBtn}
-                            onClick={() => setFilter('bore')}
+                            className={filters.includes('bore') ? styles.filterActive : styles.filterBtn}
+                            onClick={() => {
+                                if (filters.includes('bore')) {
+                                    const newFilters = filters.filter(f => f !== 'bore');
+                                    setFilters(newFilters.length ? newFilters : ['all']);
+                                } else {
+                                    const newFilters = filters.filter(f => f !== 'all');
+                                    setFilters([...newFilters, 'bore']);
+                                }
+                            }}
                         >
                             Borewells
                         </button>
                     </div>
 
-                    <div className={styles.viewToggle}>
-                        {Object.values(strategies).map(strategy => (
-                            <button
-                                key={strategy.id}
-                                className={viewMode === strategy.id ? styles.viewActive : styles.viewBtn}
-                                onClick={() => setViewMode(strategy.id as 'grid' | 'list')}
-                                title={strategy.label}
-                            >
-                                <i className={strategy.icon}></i>
-                            </button>
-                        ))}
-                    </div>
                 </div>
 
-                {/* Nodes Grid/List Rendered by Strategy */}
-                {strategies[viewMode].render(filteredNodes)}
+                {/* Nodes Grid rendered by default */}
+                {gridStrategy.render(filteredNodes)}
 
                 {filteredNodes.length === 0 && (
                     <div className={styles.empty}>
@@ -121,7 +155,7 @@ function AllNodes() {
                     </div>
                 )}
             </div>
-        </div>
+        </div >
     );
 }
 
