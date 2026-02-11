@@ -67,8 +67,16 @@
     justify-content: center;
     gap: 6px;
     transition: background 0.2s;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .detailsBtn:hover {
     background: var(--color-primary-600);
+}
+
+.detailsBtn:focus {
+    outline: none;
 }

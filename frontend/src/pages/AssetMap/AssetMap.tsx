@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 // ... (imports remain same, just update top line)
 
@@ -6,14 +6,16 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 
 // Imports continued...
 import { useNavigate, useLocation } from 'react-router-dom';
-import { MapContainer, TileLayer, Marker, Tooltip, GeoJSON, useMap, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, GeoJSON, useMap, Popup } from 'react-leaflet';
 import L from 'leaflet';
-import { assetDatabase } from '@data/assets.data';
 import { pipelineGeoJSON } from '@data/pipelines.data';
 import { iiitBoundaryGeoJSON } from '@data/iiit_boundary.data';
+import { pumpHousesGeoJSON } from '@data/pumpHouses.data';
+import { sumpsGeoJSON } from '@data/sumps.data';
+import { ohtsGeoJSON } from '@data/ohts.data';
+import { borewellsGeoJSON } from '@data/borewells.data';
 import { MAP_CONFIG, COLORS } from '@data/constants';
 import { useUIStore, useMapLayersStore } from '../../store';
-import AssetDetailModal from '@components/layout/AssetDetailModal/AssetDetailModal';
 import LayerControl from '@components/map/LayerControl/LayerControl';
 import SystemDashboard from '@components/dashboard/SystemDashboard/SystemDashboard';
 import StatusNode from '@components/dashboard/StatusNode/StatusNode';
@@ -23,9 +25,12 @@ import styles from './AssetMap.module.css';
 
 // Phase 12: Glass Components
 import GlassMapControls from '@components/map/controls/GlassMapControls';
-import GlassPopupCard from '@components/map/GlassPopupCard/GlassPopupCard';
 import Compass from '@components/map/Compass/Compass';
+import FloatingAssetPanel from '@components/map/FloatingAssetPanel/FloatingAssetPanel'; // Phase 2
+import AssetHoverPreview from '@components/map/AssetHoverPreview/AssetHoverPreview'; // New Hover Preview
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAssets } from '../../hooks/useAssets';
+import { useAssetHover } from '../../hooks/useAssetHover'; // Phase 1: Hover System
 
 // Fix Leaflet default icon issue
 import icon from 'leaflet/dist/images/marker-icon.png';
@@ -257,12 +262,18 @@ function CampusBoundaryLayer() {
     );
 }
 
-import { useAssets } from '../../hooks/useAssets';
-
 function AssetMap() {
     // Global UI State
     const { activePanel, setActivePanel, selectedAsset, openSidebar, closeAll } = useUIStore();
     const { assets } = useAssets();
+
+    // Phase 1: Hover System Integration
+    const {
+        hoveredAsset,
+        handleAssetHover,
+        handleForceClose,
+        resetAutoCloseTimer,
+    } = useAssetHover();
 
     const showSystemDash = activePanel === 'system';
     const showStatusDash = activePanel === 'status';
@@ -271,13 +282,15 @@ function AssetMap() {
     const { visibleLayers } = useMapLayersStore();
     const location = useLocation();
 
-    const handleDetailNode = (node: Asset | null) => {
-        if (node) {
-            openSidebar(node);
+
+    // Phase 1: Testing - Log hover state changes
+    useEffect(() => {
+        if (hoveredAsset) {
+            console.log('🎯 Asset Hovered:', hoveredAsset.name, '| Type:', hoveredAsset.type);
         } else {
-            closeAll();
+            console.log('❌ Hover cleared');
         }
-    };
+    }, [hoveredAsset]);
 
     const [filters, setFilters] = useState({
         types: {
@@ -312,42 +325,6 @@ function AssetMap() {
 
 
     // Filter assets based on multiple criteria - MEMOIZED
-    const filteredAssets = useMemo(() => {
-        return assets.filter(asset => {
-            // 1. Check Type Filter
-            if (!filters.types[asset.type as keyof typeof filters.types]) return false;
-
-            // 2. Check Status Filter
-            const status = asset.status.toLowerCase();
-            if (status === 'normal' || status === 'working') {
-                if (!filters.status.active) return false;
-            } else if (status === 'critical' || status === 'warning') {
-                if (!filters.status.critical) return false;
-            } else {
-                if (!filters.status.inactive) return false;
-            }
-
-            // 3. Keep existing logic for specific layer visibility (LayerControl)
-            if (asset.type === 'pump' && !visibleLayers.pumps) return false;
-            if (asset.type === 'sump' && !visibleLayers.sumps) return false;
-            if (asset.type === 'tank' && !visibleLayers.tanks) return false;
-
-            // Fixed: Check both iiitBores and govtBores visibility
-            if (asset.type === 'bore') {
-                if (!visibleLayers.iiitBores) return false;
-                const isNotWorking = asset.status === 'Not Working';
-                if (isNotWorking && !visibleLayers.nonWorkingBores) return false;
-            }
-
-            if (asset.type === 'govt') {
-                if (!visibleLayers.govtBores) return false;
-                const isNotWorking = asset.status === 'Not Working';
-                if (isNotWorking && !visibleLayers.nonWorkingBores) return false;
-            }
-
-            return true;
-        });
-    }, [assets, filters, visibleLayers]);
 
     return (
         <div className={styles.container}>
@@ -399,33 +376,161 @@ function AssetMap() {
                 {/* IIIT Campus Boundary */}
                 <CampusBoundaryLayer />
 
-                {filteredAssets.map((asset) => {
-                    const assetData = assetDatabase[asset.name];
-                    const status = assetData?.status || 'Normal';
+                {pumpHousesGeoJSON.features.map((feature) => {
+                    // GeoJSON format is [Lng, Lat], Leaflet needs [Lat, Lng]
+                    const position: [number, number] = [
+                        feature.geometry.coordinates[1],
+                        feature.geometry.coordinates[0]
+                    ];
+
+                    const assetObj: Asset = {
+                        id: feature.properties.id,
+                        name: feature.properties.name,
+                        type: 'pump',
+                        status: feature.properties.status as any,
+                        position: position,
+                        specs: feature.properties.specs,
+                        capacity: feature.properties.capacity
+                    };
+
                     return (
                         <Marker
-                            key={asset.id}
-                            position={asset.position}
-                            icon={createCustomIcon(asset.type, status)}
+                            key={feature.properties.id}
+                            position={position}
+                            icon={createCustomIcon('pump', feature.properties.status)}
                             eventHandlers={{
-                                click: () => handleMarkerClick(asset),
+                                mouseover: () => {
+                                    handleAssetHover(assetObj);
+                                },
+                                mouseout: () => {
+                                    // Don't close on mouseout - let auto-close timer handle it
+                                },
                             }}
-                        >
-                            <Tooltip direction="top" offset={[0, -10]} opacity={1} permanent={false}>
-                                {asset.name}
-                            </Tooltip>
-                            <Popup className={styles.glassPopup}>
-                                <GlassPopupCard
-                                    name={asset.name}
-                                    type={asset.type}
-                                    status={asset.status}
-                                    specs={asset.specs}
-                                    onDetails={() => handleDetailNode(asset)}
-                                />
-                            </Popup>
-                        </Marker>
+                        />
                     );
                 })}
+
+                {/* Sump Assets Layer */}
+                {sumpsGeoJSON.features.map((feature) => {
+                    const position: [number, number] = [
+                        feature.geometry.coordinates[1],
+                        feature.geometry.coordinates[0]
+                    ];
+
+                    const assetObj: Asset = {
+                        id: feature.properties.id,
+                        name: feature.properties.name,
+                        type: 'sump',
+                        status: feature.properties.status as any,
+                        position: position,
+                        specs: feature.properties.specs,
+                        capacity: feature.properties.capacity
+                    };
+
+                    return (
+                        <Marker
+                            key={feature.properties.id}
+                            position={position}
+                            icon={createCustomIcon('sump', feature.properties.status)}
+                            eventHandlers={{
+                                mouseover: () => {
+                                    handleAssetHover(assetObj);
+                                },
+                                mouseout: () => { },
+                            }}
+                        />
+                    );
+                })}
+
+                {/* OHT (Overhead Tank) Assets Layer */}
+                {ohtsGeoJSON.features.map((feature) => {
+                    const position: [number, number] = [
+                        feature.geometry.coordinates[1],
+                        feature.geometry.coordinates[0]
+                    ];
+
+                    const assetObj: Asset = {
+                        id: feature.properties.id,
+                        name: feature.properties.name,
+                        type: 'tank',
+                        status: feature.properties.status as any,
+                        position: position,
+                        specs: feature.properties.specs,
+                        capacity: feature.properties.capacity
+                    };
+
+                    return (
+                        <Marker
+                            key={feature.properties.id}
+                            position={position}
+                            icon={createCustomIcon('tank', feature.properties.status)}
+                            eventHandlers={{
+                                mouseover: () => {
+                                    handleAssetHover(assetObj);
+                                },
+                                mouseout: () => { },
+                            }}
+                        />
+                    );
+                })}
+
+                {/* Borewell Assets Layer */}
+                {borewellsGeoJSON.features.map((feature) => {
+                    // GeoJSON format is [Lng, Lat], Leaflet needs [Lat, Lng]
+                    const position: [number, number] = [
+                        feature.geometry.coordinates[1],
+                        feature.geometry.coordinates[0]
+                    ];
+
+                    // Determine asset type based on ID prefix
+                    const assetType: AssetType = feature.properties.id.startsWith('BW-G') ? 'govt' : 'bore';
+
+                    const assetObj: Asset = {
+                        id: feature.properties.id,
+                        name: feature.properties.name,
+                        type: assetType,
+                        status: feature.properties.status as any,
+                        position: position,
+                        specs: feature.properties.specs,
+                        capacity: feature.properties.capacity
+                    };
+
+                    return (
+                        <Marker
+                            key={feature.properties.id}
+                            position={position}
+                            icon={createCustomIcon(assetType, feature.properties.status)}
+                            eventHandlers={{
+                                mouseover: () => {
+                                    handleAssetHover(assetObj);
+                                },
+                                mouseout: () => { },
+                            }}
+                        />
+                    );
+                })}
+
+                {/* Phase 1: Map-Anchored Asset Hover Preview (Tooltip) */}
+                {hoveredAsset && !selectedAsset && (
+                    <Popup
+                        position={hoveredAsset.position}
+                        closeButton={false}
+                        autoPan={false}
+                        className={styles.hoverPopup}
+                        offset={[0, -20]}
+                    >
+                        <AssetHoverPreview
+                            asset={hoveredAsset}
+                            onClose={handleForceClose}
+                            onViewDetails={(asset) => {
+                                handleMarkerClick(asset);
+                                handleForceClose();
+                            }}
+                            onMouseEnter={resetAutoCloseTimer}
+                            onMouseLeave={resetAutoCloseTimer}
+                        />
+                    </Popup>
+                )}
             </MapContainer>
 
             {/* Dashboard Controls - Updated Style */}
@@ -477,12 +582,16 @@ function AssetMap() {
                 )}
             </AnimatePresence>
 
-            {/* Asset Detail Modal (Pop-up Style) */}
-            <AssetDetailModal
-                isOpen={activePanel === 'sidebar' || activePanel === 'nodeDetail' || !!selectedAsset}
-                onClose={closeAll}
-                asset={selectedAsset}
-            />
+
+            {/* Phase 2: Detailed Asset Panel (Click-based) */}
+            <AnimatePresence>
+                {selectedAsset && (
+                    <FloatingAssetPanel
+                        asset={selectedAsset}
+                        onClose={closeAll}
+                    />
+                )}
+            </AnimatePresence>
         </div>
     );
 }

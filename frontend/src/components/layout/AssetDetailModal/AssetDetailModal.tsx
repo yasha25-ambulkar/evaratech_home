@@ -79,7 +79,7 @@ function AssetDetailModal({ isOpen, onClose, asset }: AssetDetailModalProps) {
                                         <span className={styles.value}>{asset.capacity}</span>
                                     </div>
                                     <div className={styles.dataRow}>
-                                        <span className={styles.label}>Maintenance</span>
+                                        <span className={styles.label}>Location / Specs</span>
                                         <span className={styles.value}>{asset.specs}</span>
                                     </div>
 
@@ -87,6 +87,12 @@ function AssetDetailModal({ isOpen, onClose, asset }: AssetDetailModalProps) {
                                         <span className={styles.label}>Current Status</span>
                                         <span className={`${styles.statusBadge} ${isNormalStatus ? styles.statusNormal : styles.statusCritical}`}>
                                             {asset.status}
+                                        </span>
+                                    </div>
+                                    <div className={styles.dataRow}>
+                                        <span className={styles.label}>Coordinates</span>
+                                        <span className={styles.value}>
+                                            {asset.position ? `${asset.position[0].toFixed(4)}, ${asset.position[1].toFixed(4)}` : 'N/A'}
                                         </span>
                                     </div>
                                 </div>
@@ -179,9 +185,10 @@ function AssetDetailModal({ isOpen, onClose, asset }: AssetDetailModalProps) {
                             </div>
                         </div>
                     </motion.div>
-                </div>
-            )}
-        </AnimatePresence>
+                </div >
+            )
+            }
+        </AnimatePresence >
     );
 }
 

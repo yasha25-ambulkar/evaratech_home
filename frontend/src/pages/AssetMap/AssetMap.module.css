@@ -102,10 +102,26 @@
 }
 
 /* Custom Popup Glass Style */
+.hoverPopup :global(.leaflet-popup-content-wrapper) {
+    background: transparent !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+.hoverPopup :global(.leaflet-popup-content) {
+    margin: 0 !important;
+    width: auto !important;
+}
+
+.hoverPopup :global(.leaflet-popup-tip-container) {
+    display: none !important;
+}
+
 :global(.leaflet-popup-content-wrapper) {
-    background: var(--glass-base-heavy);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    background: #ffffff;
+    /* Removed backdrop-filter to make it opaque */
     border-radius: 16px;
     box-shadow: var(--glass-shadow);
     border: 1px solid var(--glass-border);
@@ -117,7 +133,7 @@
 }
 
 :global(.leaflet-popup-tip) {
-    background: var(--glass-base-heavy);
+    background: #ffffff;
 }
 
 :global(.leaflet-popup-close-button) {
