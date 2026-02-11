@@ -10,11 +10,11 @@ import {
     Tooltip,
     ResponsiveContainer
 } from 'recharts';
-import type { Asset } from '../../../types';
+import { BaseAsset } from '../../../models/Asset';
 import styles from './FloatingAssetPanel.module.css';
 
 interface FloatingAssetPanelProps {
-    asset: Asset;
+    asset: BaseAsset;
     onClose: () => void;
 }
 
@@ -81,7 +81,7 @@ const FloatingAssetPanel = memo(function FloatingAssetPanel({
         return () => document.removeEventListener('keydown', handleKeyDown);
     }, [onClose]);
 
-    const statusColor = useMemo(() => getStatusColor(asset.status), [asset.status]);
+    const statusColor = useMemo(() => asset.getDisplayColor(), [asset]);
 
     return (
         <div className={styles.wrapper}>
@@ -128,7 +128,7 @@ const FloatingAssetPanel = memo(function FloatingAssetPanel({
                             <InfoRow label="Asset ID" value={asset.id} />
                             <InfoRow label="Type" value={asset.type} />
                             <InfoRow label="Capacity" value={asset.capacity} />
-                            <InfoRow label="Location / Specs" value={asset.specs || 'N/A'} />
+                            <InfoRow label="Location / Specs" value={asset.getFormattedLocation()} />
                             <div className={styles.infoRow}>
                                 <span className={styles.label}>Current Status</span>
                                 <span className={styles.statusBadge} style={{ '--badge-color': statusColor } as any}>
@@ -243,12 +243,5 @@ const ControlToggle = ({ label, active, onChange }: { label: string, active: boo
     </div>
 );
 
-function getStatusColor(status: string): string {
-    const s = status.toLowerCase();
-    if (s === 'normal' || s === 'working' || s === 'running' || s === 'active') return '#10b981';
-    if (s === 'warning') return '#f59e0b';
-    if (s === 'critical') return '#ef4444';
-    return '#64748b';
-}
 
 export default FloatingAssetPanel;

@@ -3,12 +3,13 @@ import { useAssets } from '../../../hooks/useAssets';
 import { useNodeFiltering } from '../../../hooks/useNodeFiltering';
 import NodeFactory from '../../../services/NodeFactory';
 import { INodeData } from '../../../models/NodeEntity';
-import type { Asset } from '../../../types';
+import { NodeStatus } from '../../../models/enums';
+import { BaseAsset } from '../../../models/Asset';
 import styles from './StatusNode.module.css';
 import SquareStatusCard from './SquareStatusCard';
 
 interface StatusNodeProps {
-    onNodeSelect: (node: Asset) => void;
+    onNodeSelect: (node: BaseAsset) => void;
 }
 
 function StatusNode({ onNodeSelect }: StatusNodeProps) {
@@ -21,9 +22,8 @@ function StatusNode({ onNodeSelect }: StatusNodeProps) {
                 id: asset.id,
                 name: asset.name,
                 type: asset.type as any,
-                status: asset.status === 'running' || asset.status === 'active' || asset.status === 'working' ? 'Normal' :
-                    asset.status === 'alert' || asset.isCritical ? 'Critical' : 'Normal',
-                location: 'Main Campus',
+                status: asset.isCritical ? NodeStatus.Critical : NodeStatus.Normal,
+                location: asset.getFormattedLocation(),
                 lastUpdate: 'Just now'
             };
             return NodeFactory.createNode(nodeData);
@@ -32,10 +32,13 @@ function StatusNode({ onNodeSelect }: StatusNodeProps) {
 
     // REUSABLE LOGIC: using the same hook as AllNodes page
     const {
-        filter: typeFilter,
-        setFilter: setTypeFilter,
+        filters: currentFilters,
+        setFilters,
         filteredNodes: typeFilteredNodes
     } = useNodeFiltering(nodeEntities);
+
+    const typeFilter = currentFilters[0] || 'all';
+    const setTypeFilter = (f: string) => setFilters([f]);
 
     // Calculate Type Counts manually for the tabs
     const typeCounts = useMemo(() => ({

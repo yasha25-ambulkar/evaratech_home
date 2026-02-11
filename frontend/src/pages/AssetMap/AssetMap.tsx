@@ -1,36 +1,29 @@
-import { useState, useEffect, useCallback } from 'react';
-
-// ... (imports remain same, just update top line)
-
-// ...
-
-// Imports continued...
+import { useState, useEffect, useCallback, memo, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, GeoJSON, useMap, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import { pipelineGeoJSON } from '@data/pipelines.data';
 import { iiitBoundaryGeoJSON } from '@data/iiit_boundary.data';
-import { pumpHousesGeoJSON } from '@data/pumpHouses.data';
-import { sumpsGeoJSON } from '@data/sumps.data';
-import { ohtsGeoJSON } from '@data/ohts.data';
-import { borewellsGeoJSON } from '@data/borewells.data';
-import { MAP_CONFIG, COLORS } from '@data/constants';
+import { MAP_CONFIG } from '@data/constants';
 import { useUIStore, useMapLayersStore } from '../../store';
 import LayerControl from '@components/map/LayerControl/LayerControl';
 import SystemDashboard from '@components/dashboard/SystemDashboard/SystemDashboard';
 import StatusNode from '@components/dashboard/StatusNode/StatusNode';
-import FilterPanel from '@components/filters/FilterPanel/FilterPanel'; // Import FilterPanel
-import type { Asset, AssetType } from '../../types';
+import FilterPanel from '@components/filters/FilterPanel/FilterPanel';
+
 import styles from './AssetMap.module.css';
 
-// Phase 12: Glass Components
+// Phase 2: OOP Principles
+import { AssetRenderer } from '../../strategies/AssetRenderer';
+
+// Components
 import GlassMapControls from '@components/map/controls/GlassMapControls';
 import Compass from '@components/map/Compass/Compass';
-import FloatingAssetPanel from '@components/map/FloatingAssetPanel/FloatingAssetPanel'; // Phase 2
-import AssetHoverPreview from '@components/map/AssetHoverPreview/AssetHoverPreview'; // New Hover Preview
+import FloatingAssetPanel from '@components/map/FloatingAssetPanel/FloatingAssetPanel';
+import AssetHoverPreview from '@components/map/AssetHoverPreview/AssetHoverPreview';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAssets } from '../../hooks/useAssets';
-import { useAssetHover } from '../../hooks/useAssetHover'; // Phase 1: Hover System
+import { useAssetHover } from '../../hooks/useAssetHover';
 
 // Fix Leaflet default icon issue
 import icon from 'leaflet/dist/images/marker-icon.png';
@@ -44,50 +37,6 @@ let DefaultIcon = L.icon({
 });
 
 L.Marker.prototype.options.icon = DefaultIcon;
-
-
-// Create custom marker icons with letters
-// Create custom marker icons with letters
-function createCustomIcon(type: AssetType, status: string = 'Normal') {
-    const colorMap: Record<AssetType, string> = {
-        pump: COLORS.pump,
-        sump: COLORS.sump,
-        tank: COLORS.tank,
-        bore: COLORS.bore,
-        govt: COLORS.govt,
-        sensor: COLORS.sensor,
-    };
-
-    // Map asset types to their initial letters
-    const letterMap: Record<AssetType, string> = {
-        pump: 'P',
-        sump: 'S',
-        tank: 'T',
-        bore: 'B',
-        govt: 'B',  // Changed from G to B to match all borewells
-        sensor: 'S',
-    };
-
-    let color = colorMap[type];
-
-    if (status === 'Not Working') {
-        color = '#9e9e9e'; // Grey for non-working
-    } else if (status === 'Critical' || status === 'Warning') {
-        color = '#d32f2f'; // Red for critical/warning
-    }
-
-    const letter = letterMap[type];
-
-    return L.divIcon({
-        className: 'custom-marker',
-        html: `<div class="${styles.glassMarker} ${status === 'Critical' ? styles.critical : ''}" style="--marker-color: ${color}">
-            <span>${letter}</span>
-        </div>`,
-        iconSize: [32, 32],
-        iconAnchor: [16, 32],
-    });
-}
-
 
 // Component to handle map clicks for closing sidebar
 function MapClickHandler({ onMapClick }: { onMapClick: () => void }) {
@@ -107,7 +56,7 @@ function MapClickHandler({ onMapClick }: { onMapClick: () => void }) {
 }
 
 // Map Controller for Search Navigation
-function MapController({ selectedAsset }: { selectedAsset: Asset | null | undefined }) {
+function MapController({ selectedAsset }: { selectedAsset: BaseAsset | null | undefined }) {
     const map = useMap();
 
     useEffect(() => {
@@ -262,10 +211,154 @@ function CampusBoundaryLayer() {
     );
 }
 
+// Component to monitor map bounds for spatial optimization
+function MapBoundsMonitor({ onBoundsChange }: { onBoundsChange: (bounds: L.LatLngBounds) => void }) {
+    const map = useMap();
+
+    useEffect(() => {
+        const handleMove = () => {
+            onBoundsChange(map.getBounds());
+        };
+        map.on('moveend', handleMove);
+        // Initial bounds
+        handleMove();
+        return () => { map.off('moveend', handleMove); };
+    }, [map, onBoundsChange]);
+
+    return null;
+}
+
+// ---------------------------------------------------------
+// 🏗️ MEMOIZED ASSET LAYERS (Refactored for Spatial Optimization)
+// ---------------------------------------------------------
+
+const PumpLayer = memo(({ assets, bounds, onHover }: {
+    assets: BaseAsset[],
+    bounds: L.LatLngBounds | null,
+    onHover: (asset: BaseAsset) => void
+}) => {
+    const visibleAssets = useMemo(() => {
+        return assets.filter(asset =>
+            asset.type === 'pump' &&
+            (!bounds || bounds.contains(L.latLng(asset.position[0], asset.position[1])))
+        );
+    }, [assets, bounds]);
+
+    return (
+        <>
+            {visibleAssets.map((asset) => (
+                <Marker
+                    key={asset.id}
+                    position={asset.position}
+                    icon={AssetRenderer.createIcon(asset)}
+                    eventHandlers={{ mouseover: () => onHover(asset) }}
+                />
+            ))}
+        </>
+    );
+});
+
+const SumpLayer = memo(({ assets, bounds, onHover }: {
+    assets: BaseAsset[],
+    bounds: L.LatLngBounds | null,
+    onHover: (asset: BaseAsset) => void
+}) => {
+    const visibleAssets = useMemo(() => {
+        return assets.filter(asset =>
+            asset.type === 'sump' &&
+            (!bounds || bounds.contains(L.latLng(asset.position[0], asset.position[1])))
+        );
+    }, [assets, bounds]);
+
+    return (
+        <>
+            {visibleAssets.map((asset) => (
+                <Marker
+                    key={asset.id}
+                    position={asset.position}
+                    icon={AssetRenderer.createIcon(asset)}
+                    eventHandlers={{ mouseover: () => onHover(asset) }}
+                />
+            ))}
+        </>
+    );
+});
+
+const TankLayer = memo(({ assets, bounds, onHover }: {
+    assets: BaseAsset[],
+    bounds: L.LatLngBounds | null,
+    onHover: (asset: BaseAsset) => void
+}) => {
+    const visibleAssets = useMemo(() => {
+        return assets.filter(asset =>
+            asset.type === 'tank' &&
+            (!bounds || bounds.contains(L.latLng(asset.position[0], asset.position[1])))
+        );
+    }, [assets, bounds]);
+
+    return (
+        <>
+            {visibleAssets.map((asset) => (
+                <Marker
+                    key={asset.id}
+                    position={asset.position}
+                    icon={AssetRenderer.createIcon(asset)}
+                    eventHandlers={{ mouseover: () => onHover(asset) }}
+                />
+            ))}
+        </>
+    );
+});
+
+const BoreLayer = memo(({ assets, bounds, onHover }: {
+    assets: BaseAsset[],
+    bounds: L.LatLngBounds | null,
+    onHover: (asset: BaseAsset) => void
+}) => {
+    const visibleAssets = useMemo(() => {
+        return assets.filter(asset =>
+            (asset.type === 'bore' || asset.type === 'govt') &&
+            (!bounds || bounds.contains(L.latLng(asset.position[0], asset.position[1])))
+        );
+    }, [assets, bounds]);
+
+    return (
+        <>
+            {visibleAssets.map((asset) => (
+                <Marker
+                    key={asset.id}
+                    position={asset.position}
+                    icon={AssetRenderer.createIcon(asset)}
+                    eventHandlers={{ mouseover: () => onHover(asset) }}
+                />
+            ))}
+        </>
+    );
+});
+
+// Component to show data source status (Phase 3: Reliability)
+function ConnectionBadge({ source }: { source: 'Real-time' | 'Mock' | 'Hybrid' }) {
+    const isOffline = source === 'Mock';
+    return (
+        <motion.div
+            className={styles.connectionBadge}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            style={{
+                backgroundColor: isOffline ? 'rgba(239, 68, 68, 0.9)' : 'rgba(16, 185, 129, 0.9)',
+                color: '#fff'
+            }}
+        >
+            <i className={`fas ${isOffline ? 'fa-triangle-exclamation' : 'fa-signal'}`}></i>
+            <span>{isOffline ? 'Offline Mode (Mock)' : 'Real-time Sync'}</span>
+        </motion.div>
+    );
+}
+
 function AssetMap() {
     // Global UI State
     const { activePanel, setActivePanel, selectedAsset, openSidebar, closeAll } = useUIStore();
-    const { assets } = useAssets();
+    const { assets, assetMap, dataSource } = useAssets();
 
     // Phase 1: Hover System Integration
     const {
@@ -280,6 +373,7 @@ function AssetMap() {
     const isFilterPanelOpen = activePanel === 'filters';
 
     const { visibleLayers } = useMapLayersStore();
+    const [mapBounds, setMapBounds] = useState<L.LatLngBounds | null>(null);
     const location = useLocation();
 
 
@@ -312,14 +406,14 @@ function AssetMap() {
     // Handle Search Navigation (Phase 24.3)
     useEffect(() => {
         if (location.state?.focusAsset) {
-            const asset = assets.find(a => a.id === location.state.focusAsset.id);
+            const asset = assetMap[location.state.focusAsset.id];
             if (asset) {
                 handleMarkerClick(asset);
             }
         }
-    }, [location.state, assets]);
+    }, [location.state, assetMap]);
 
-    const handleMarkerClick = useCallback((asset: Asset) => {
+    const handleMarkerClick = useCallback((asset: BaseAsset) => {
         openSidebar(asset);
     }, [openSidebar]);
 
@@ -341,6 +435,9 @@ function AssetMap() {
 
             {/* INDEX Panel (LayerControl) - Top Left Floating */}
             <LayerControl />
+
+            {/* Connection Health Indicator */}
+            <ConnectionBadge source={dataSource} />
 
             <MapContainer
                 center={MAP_CONFIG.center}
@@ -376,139 +473,12 @@ function AssetMap() {
                 {/* IIIT Campus Boundary */}
                 <CampusBoundaryLayer />
 
-                {pumpHousesGeoJSON.features.map((feature) => {
-                    // GeoJSON format is [Lng, Lat], Leaflet needs [Lat, Lng]
-                    const position: [number, number] = [
-                        feature.geometry.coordinates[1],
-                        feature.geometry.coordinates[0]
-                    ];
-
-                    const assetObj: Asset = {
-                        id: feature.properties.id,
-                        name: feature.properties.name,
-                        type: 'pump',
-                        status: feature.properties.status as any,
-                        position: position,
-                        specs: feature.properties.specs,
-                        capacity: feature.properties.capacity
-                    };
-
-                    return (
-                        <Marker
-                            key={feature.properties.id}
-                            position={position}
-                            icon={createCustomIcon('pump', feature.properties.status)}
-                            eventHandlers={{
-                                mouseover: () => {
-                                    handleAssetHover(assetObj);
-                                },
-                                mouseout: () => {
-                                    // Don't close on mouseout - let auto-close timer handle it
-                                },
-                            }}
-                        />
-                    );
-                })}
-
-                {/* Sump Assets Layer */}
-                {sumpsGeoJSON.features.map((feature) => {
-                    const position: [number, number] = [
-                        feature.geometry.coordinates[1],
-                        feature.geometry.coordinates[0]
-                    ];
-
-                    const assetObj: Asset = {
-                        id: feature.properties.id,
-                        name: feature.properties.name,
-                        type: 'sump',
-                        status: feature.properties.status as any,
-                        position: position,
-                        specs: feature.properties.specs,
-                        capacity: feature.properties.capacity
-                    };
-
-                    return (
-                        <Marker
-                            key={feature.properties.id}
-                            position={position}
-                            icon={createCustomIcon('sump', feature.properties.status)}
-                            eventHandlers={{
-                                mouseover: () => {
-                                    handleAssetHover(assetObj);
-                                },
-                                mouseout: () => { },
-                            }}
-                        />
-                    );
-                })}
-
-                {/* OHT (Overhead Tank) Assets Layer */}
-                {ohtsGeoJSON.features.map((feature) => {
-                    const position: [number, number] = [
-                        feature.geometry.coordinates[1],
-                        feature.geometry.coordinates[0]
-                    ];
-
-                    const assetObj: Asset = {
-                        id: feature.properties.id,
-                        name: feature.properties.name,
-                        type: 'tank',
-                        status: feature.properties.status as any,
-                        position: position,
-                        specs: feature.properties.specs,
-                        capacity: feature.properties.capacity
-                    };
-
-                    return (
-                        <Marker
-                            key={feature.properties.id}
-                            position={position}
-                            icon={createCustomIcon('tank', feature.properties.status)}
-                            eventHandlers={{
-                                mouseover: () => {
-                                    handleAssetHover(assetObj);
-                                },
-                                mouseout: () => { },
-                            }}
-                        />
-                    );
-                })}
-
-                {/* Borewell Assets Layer */}
-                {borewellsGeoJSON.features.map((feature) => {
-                    // GeoJSON format is [Lng, Lat], Leaflet needs [Lat, Lng]
-                    const position: [number, number] = [
-                        feature.geometry.coordinates[1],
-                        feature.geometry.coordinates[0]
-                    ];
-
-                    // Determine asset type based on ID prefix
-                    const assetType: AssetType = feature.properties.id.startsWith('BW-G') ? 'govt' : 'bore';
-
-                    const assetObj: Asset = {
-                        id: feature.properties.id,
-                        name: feature.properties.name,
-                        type: assetType,
-                        status: feature.properties.status as any,
-                        position: position,
-                        specs: feature.properties.specs,
-                        capacity: feature.properties.capacity
-                    };
-
-                    return (
-                        <Marker
-                            key={feature.properties.id}
-                            position={position}
-                            icon={createCustomIcon(assetType, feature.properties.status)}
-                            eventHandlers={{
-                                mouseover: () => {
-                                    handleAssetHover(assetObj);
-                                },
-                                mouseout: () => { },
-                            }}
-                        />
-                    );
-                })}
+                {/* Optimized Asset Layers */}
+                <MapBoundsMonitor onBoundsChange={setMapBounds} />
+                <PumpLayer assets={assets} bounds={mapBounds} onHover={handleAssetHover} />
+                <SumpLayer assets={assets} bounds={mapBounds} onHover={handleAssetHover} />
+                <TankLayer assets={assets} bounds={mapBounds} onHover={handleAssetHover} />
+                <BoreLayer assets={assets} bounds={mapBounds} onHover={handleAssetHover} />
 
                 {/* Phase 1: Map-Anchored Asset Hover Preview (Tooltip) */}
                 {hoveredAsset && !selectedAsset && (
@@ -569,10 +539,13 @@ function AssetMap() {
                     <div className={`${styles.dashboardOverlay} animate-fade-in`}>
                         <StatusNode
                             onNodeSelect={(node) => {
-                                // Find asset by node ID and select it
-                                const asset = assets.find(a =>
-                                    a.name.toLowerCase().replace(/\s+/g, '-') === (node as any).nodeId || a.id === node.id
-                                );
+                                // Find asset by ID (O(1)) or name search (O(N))
+                                let asset: BaseAsset | undefined = assetMap[node.id];
+                                if (!asset) {
+                                    asset = assets.find(a =>
+                                        a.name.toLowerCase().replace(/\s+/g, '-') === (node as any).nodeId
+                                    );
+                                }
                                 if (asset) {
                                     handleMarkerClick(asset);
                                 }

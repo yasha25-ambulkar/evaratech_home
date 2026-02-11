@@ -1,13 +1,13 @@
 import React, { memo } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronRight, X } from 'lucide-react';
-import type { Asset } from '../../../types';
+import { BaseAsset } from '../../../models/Asset';
 import styles from './AssetHoverPreview.module.css';
 
 interface AssetHoverPreviewProps {
-    asset: Asset;
+    asset: BaseAsset;
     onClose: () => void;
-    onViewDetails: (asset: Asset) => void;
+    onViewDetails: (asset: BaseAsset) => void;
     onMouseEnter?: () => void;
     onMouseLeave?: () => void;
 }
@@ -64,7 +64,7 @@ const AssetHoverPreview = memo(function AssetHoverPreview({
                 <p className={styles.description}>{asset.name}</p>
                 <div className={styles.metadata}>
                     <span className={styles.metadataLabel}>Location:</span>
-                    <span className={styles.metadataValue}>{asset.specs || 'IIIT Campus'}</span>
+                    <span className={styles.metadataValue}>{asset.getFormattedLocation()}</span>
                 </div>
             </div>
 

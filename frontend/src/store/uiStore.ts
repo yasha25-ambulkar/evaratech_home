@@ -1,24 +1,24 @@
 import { create } from 'zustand';
-import type { Asset } from '../types';
+import { BaseAsset } from '../models/Asset';
 
 interface UIStore {
     // Shared state
     activePanel: 'none' | 'sidebar' | 'system' | 'status' | 'filters' | 'notifications' | 'userMenu' | 'nodeDetail' | 'more';
-    selectedAsset: Asset | null;
+    selectedAsset: BaseAsset | null;
 
     // Hover state management (Phase 1)
-    hoveredAsset: Asset | null;
+    hoveredAsset: BaseAsset | null;
     hoverStartTime: number | null;
     isPanelLocked: boolean;
     autoCloseTimer: NodeJS.Timeout | null;
 
     // Actions
     setActivePanel: (panel: UIStore['activePanel']) => void;
-    openSidebar: (asset: Asset) => void;
+    openSidebar: (asset: BaseAsset) => void;
     closeAll: () => void;
 
     // Hover actions (Phase 1)
-    setHoveredAsset: (asset: Asset | null) => void;
+    setHoveredAsset: (asset: BaseAsset | null) => void;
     lockPanel: () => void;
     unlockPanel: () => void;
     closeHoverPanel: () => void;

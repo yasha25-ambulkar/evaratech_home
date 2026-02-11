@@ -1,6 +1,6 @@
 import { useEffect, useCallback, useRef } from 'react';
 import { useUIStore } from '../store/uiStore';
-import type { Asset } from '../types';
+import { BaseAsset } from '../models/Asset';
 
 /**
  * Custom hook for managing asset hover interactions with intelligent timing
@@ -32,7 +32,7 @@ export function useAssetHover() {
      * Handle asset hover with debouncing
      * Prevents jitter when mouse moves between close markers
      */
-    const handleAssetHover = useCallback((asset: Asset | null) => {
+    const handleAssetHover = useCallback((asset: BaseAsset | null) => {
         // Clear debounce timer
         if (debounceTimerRef.current) {
             clearTimeout(debounceTimerRef.current);
