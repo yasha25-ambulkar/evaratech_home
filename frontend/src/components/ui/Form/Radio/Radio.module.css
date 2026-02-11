@@ -1,0 +1,146 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+}
+
+.wrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    cursor: pointer;
+    user-select: none;
+}
+
+.wrapper:has(.disabled) {
+    cursor: not-allowed;
+}
+
+/* Hide native radio */
+.input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* Custom Radio */
+.radio {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 2px solid var(--color-border);
+    border-radius: 50%;
+    background: var(--color-bg-input);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Sizes */
+.radio.sm {
+    width: 16px;
+    height: 16px;
+}
+
+.radio.md {
+    width: 20px;
+    height: 20px;
+}
+
+.radio.lg {
+    width: 24px;
+    height: 24px;
+}
+
+/* Hover */
+.wrapper:hover .radio:not(.disabled) {
+    border-color: var(--color-primary);
+    background: var(--color-primary-alpha);
+}
+
+/* Checked State */
+.radio.checked {
+    border-color: var(--color-primary);
+    background: var(--color-bg-input);
+}
+
+/* Error State */
+.radio.error {
+    border-color: var(--color-error);
+}
+
+.radio.error.checked {
+    border-color: var(--color-error);
+}
+
+/* Disabled State */
+.radio.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Inner Dot */
+.dot {
+    width: 50%;
+    height: 50%;
+    border-radius: 50%;
+    background: var(--color-primary);
+    animation: radioScale 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.radio.error .dot {
+    background: var(--color-error);
+}
+
+@keyframes radioScale {
+    0% {
+        transform: scale(0);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Focus */
+.input:focus-visible+.radio {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* Label */
+.label {
+    font-size: var(--text-sm);
+    color: var(--color-text-primary);
+}
+
+.label.disabled {
+    color: var(--color-text-disabled);
+}
+
+/* Helper Text */
+.helperText {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    margin-left: calc(var(--space-2) + 20px);
+    /* Align with label */
+}
+
+.errorText {
+    color: var(--color-error);
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+
+    .radio,
+    .dot {
+        transition: none;
+        animation: none;
+    }
+}

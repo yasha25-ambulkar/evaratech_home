@@ -1,10 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
+
+// Design System - Import FIRST for proper CSS cascade
+import './styles/designSystem/index.css';
+
+// Application Styles
 import './styles/global.css';
 import './styles/glass.css';
 import './styles/themes.css';
 import './styles/animations.css';
+
 import { ThemeProvider } from './contexts/ThemeContext';
 
 import { registerSW } from './pwa';
@@ -26,3 +32,4 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 );
 
 registerSW();
+

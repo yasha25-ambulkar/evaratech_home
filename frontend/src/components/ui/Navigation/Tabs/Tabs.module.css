@@ -1,0 +1,102 @@
+.tabs {
+    position: relative;
+    width: 100%;
+}
+
+.tabList {
+    position: relative;
+    display: flex;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.tabs.vertical .tabList {
+    flex-direction: column;
+    border-bottom: none;
+    border-right: 1px solid var(--color-border);
+}
+
+/* Tab */
+.tab {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-4);
+    background: none;
+    border: none;
+    color: var(--color-text-secondary);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    white-space: nowrap;
+    font-family: inherit;
+}
+
+.tab:hover:not(.disabled) {
+    color: var(--color-text-primary);
+    background: var(--color-bg-hover);
+}
+
+.tab.active {
+    color: var(--color-primary);
+}
+
+.tab.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.tab:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: -2px;
+    z-index: 1;
+}
+
+/* Icon */
+.icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+/* Label */
+.label {
+    display: inline-flex;
+    align-items: center;
+}
+
+/* Indicator */
+.indicator {
+    position: absolute;
+    background: var(--color-primary);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
+}
+
+.tabs.horizontal .indicator {
+    bottom: 0;
+    height: 2px;
+}
+
+.tabs.vertical .indicator {
+    right: 0;
+    width: 2px;
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+    .tab:hover:not(.disabled) {
+        background: var(--color-bg-hover-dark, rgba(255, 255, 255, 0.05));
+    }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+
+    .tab,
+    .indicator {
+        transition: none;
+    }
+}

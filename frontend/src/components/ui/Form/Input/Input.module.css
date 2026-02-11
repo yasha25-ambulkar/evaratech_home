@@ -1,0 +1,257 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    width: 100%;
+}
+
+/* Label */
+.label {
+    display: block;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-1);
+}
+
+.label.required {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+}
+
+.asterisk {
+    color: var(--color-error);
+    font-size: var(--text-sm);
+}
+
+.label.disabled {
+    color: var(--color-text-disabled);
+    cursor: not-allowed;
+}
+
+/* Input Wrapper */
+.inputWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: var(--color-bg-input);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+.inputWrapper:hover:not(.disabled):not(.readonly) {
+    border-color: var(--color-border-hover);
+}
+
+.inputWrapper.focused {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-primary-alpha);
+}
+
+/* Sizes */
+.inputWrapper.sm {
+    height: 32px;
+    padding: 0 var(--space-3);
+    font-size: var(--text-sm);
+}
+
+.inputWrapper.md {
+    height: 40px;
+    padding: 0 var(--space-4);
+    font-size: var(--text-base);
+}
+
+.inputWrapper.lg {
+    height: 48px;
+    padding: 0 var(--space-5);
+    font-size: var(--text-lg);
+}
+
+/* States */
+.inputWrapper.error {
+    border-color: var(--color-error);
+}
+
+.inputWrapper.error.focused {
+    border-color: var(--color-error);
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.inputWrapper.success {
+    border-color: var(--color-success);
+}
+
+.inputWrapper.success.focused {
+    border-color: var(--color-success);
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+}
+
+.inputWrapper.warning {
+    border-color: var(--color-warning);
+}
+
+.inputWrapper.warning.focused {
+    border-color: var(--color-warning);
+    box-shadow: 0 0 0 3px rgba(251, 146, 60, 0.1);
+}
+
+.inputWrapper.disabled {
+    background: var(--color-bg-disabled);
+    border-color: var(--color-border);
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.inputWrapper.readonly {
+    background: var(--color-bg-secondary);
+    cursor: default;
+}
+
+/* Input */
+.input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: var(--color-text-primary);
+    font-family: inherit;
+    font-size: inherit;
+    padding: 0;
+    width: 100%;
+}
+
+.input::placeholder {
+    color: var(--color-text-placeholder);
+}
+
+.input:disabled {
+    cursor: not-allowed;
+}
+
+.input:read-only {
+    cursor: default;
+}
+
+/* Remove number input spinners */
+.input[type='number']::-webkit-inner-spin-button,
+.input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.input[type='number'] {
+    -moz-appearance: textfield;
+}
+
+/* Icons */
+.prefixIcon,
+.suffixIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-secondary);
+    flex-shrink: 0;
+}
+
+.prefixIcon {
+    margin-right: var(--space-2);
+}
+
+.suffixIcon {
+    margin-left: var(--space-2);
+}
+
+.inputWrapper.hasPrefix .input {
+    padding-left: 0;
+}
+
+.inputWrapper.hasSuffix .input {
+    padding-right: 0;
+}
+
+/* Suffix Container */
+.suffixContainer {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    margin-left: var(--space-2);
+}
+
+/* Clear Button */
+.clearButton,
+.passwordToggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border: none;
+    background: transparent;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s ease;
+    padding: 0;
+    font-size: 14px;
+}
+
+.clearButton:hover,
+.passwordToggle:hover {
+    background: var(--color-bg-hover);
+    color: var(--color-text-primary);
+}
+
+.clearButton:active,
+.passwordToggle:active {
+    transform: scale(0.95);
+}
+
+/* Footer */
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--space-2);
+    font-size: var(--text-xs);
+}
+
+.message {
+    flex: 1;
+}
+
+.helperMessage {
+    color: var(--color-text-secondary);
+}
+
+.errorMessage {
+    color: var(--color-error);
+}
+
+.counter {
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+    .inputWrapper {
+        background: var(--color-bg-input-dark, rgba(255, 255, 255, 0.05));
+    }
+
+    .inputWrapper.disabled {
+        background: var(--color-bg-disabled-dark, rgba(255, 255, 255, 0.02));
+    }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+
+    .inputWrapper,
+    .clearButton,
+    .passwordToggle {
+        transition: none;
+    }
+}

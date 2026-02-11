@@ -5,8 +5,10 @@ import AssetStatusPieChart from '@components/charts/AssetStatusPieChart/AssetSta
 import AssetTypeBarChart from '@components/charts/AssetTypeBarChart/AssetTypeBarChart';
 import WaterFlowCanvas from '@components/3d/WaterFlowVisualization/WaterFlowCanvas';
 import Footer from '@components/layout/Footer/Footer';
-import StatCard from '@components/ui/StatCard/StatCard';
+import EnhancedStatCard from '@components/ui/EnhancedStatCard/EnhancedStatCard';
+import { Grid, StatsGrid, ChartGrid } from '@components/layout/GridSystem/GridSystem';
 import { CircularBuffer } from '../../models/dsa/CircularBuffer';
+import { Factory, CheckCircle, AlertTriangle, Brain } from 'lucide-react';
 import styles from './Dashboard.module.css';
 
 // Sample data for charts
@@ -76,41 +78,47 @@ function Dashboard() {
 
                 {selectedView === 'overview' ? (
                     <>
-                        {/* Stats Cards */}
-                        <div className={styles.statsGrid}>
-                            <StatCard
-                                icon="🏭"
-                                label="Total Assets"
+                        {/* Enhanced Stats Cards */}
+                        <StatsGrid>
+                            <EnhancedStatCard
+                                title="Total Assets"
                                 value={70}
-                                trendText="+2 this month"
-                                trend="up"
+                                icon={<Factory size={24} />}
+                                trend={{ value: 2, isUp: true, text: "+2 this month" }}
                                 color="blue"
+                                variant="elevated"
+                                progress={85}
                             />
-                            <StatCard
-                                icon="✅"
-                                label="Active Assets"
+                            <EnhancedStatCard
+                                title="Active Assets"
                                 value={60}
-                                percentage={85.7}
-                                trend="neutral"
+                                subtitle="85.7% uptime"
+                                icon={<CheckCircle size={24} />}
+                                trend={{ value: 85.7, isUp: true }}
                                 color="green"
+                                variant="elevated"
+                                progress={85.7}
                             />
-                            <StatCard
-                                icon="⚠️"
-                                label="Warnings"
+                            <EnhancedStatCard
+                                title="System Warnings"
                                 value={5}
-                                trendText="-1 from last week"
-                                trend="down"
+                                icon={<AlertTriangle size={24} />}
+                                trend={{ value: 1, isUp: false, text: "-1 from last week" }}
                                 color="orange"
+                                variant="elevated"
+                                progress={12}
                             />
-                            <StatCard
-                                icon="🧠"
-                                label="System Intelligence"
-                                value="OPTIMIZED"
-                                trendText="AI Assistant Online"
-                                trend="up"
+                            <EnhancedStatCard
+                                title="AI Intelligence"
+                                value="OPTIMAL"
+                                subtitle="Predictive analysis active"
+                                icon={<Brain size={24} />}
+                                trend={{ value: 98, isUp: true, text: "Efficiency score" }}
                                 color="purple"
+                                variant="elevated"
+                                progress={98}
                             />
-                        </div>
+                        </StatsGrid>
 
                         {/* Intelligence Insights Section */}
                         <div className={styles.intelligenceBanner}>
@@ -130,8 +138,8 @@ function Dashboard() {
                             </div>
                         </div>
 
-                        {/* Charts Grid */}
-                        <div className={styles.chartsGrid}>
+                        {/* Enhanced Charts Grid */}
+                        <ChartGrid>
                             <div className={styles.chartCard}>
                                 <h2>Asset Status Distribution</h2>
                                 <AssetStatusPieChart data={assetStatusData} />
@@ -151,7 +159,7 @@ function Dashboard() {
                                 <h2>Flow Rate (24 Hours)</h2>
                                 <FlowRateChart data={flowRateHistoricalData} />
                             </div>
-                        </div>
+                        </ChartGrid>
                     </>
                 ) : (
                     <div className={styles.visualization3D}>

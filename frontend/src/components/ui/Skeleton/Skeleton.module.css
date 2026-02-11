@@ -1,0 +1,135 @@
+/**
+ * Skeleton Loader Styles
+ * Version: 1.0.0
+ * 
+ * Professional loading placeholders with smooth animations
+ */
+
+/* ============================================
+   BASE SKELETON
+   ============================================ */
+.skeleton {
+    background: var(--color-gray-200);
+    border-radius: var(--radius-sm);
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+    line-height: 1;
+
+    /* Prevent layout shift */
+    vertical-align: middle;
+}
+
+/* Dark mode */
+:global(.dark) .skeleton {
+    background: var(--color-gray-700);
+}
+
+/* ============================================
+   VARIANTS
+   ============================================ */
+
+/* Text variant - single line of text */
+.text {
+    height: 1em;
+    border-radius: var(--radius-xs);
+    transform-origin: 0 60%;
+    transform: scale(1, 0.6);
+}
+
+/* Circular variant - for avatars */
+.circular {
+    border-radius: 50%;
+}
+
+/* Rectangular variant - sharp corners */
+.rectangular {
+    border-radius: 0;
+}
+
+/* Rounded variant - for cards */
+.rounded {
+    border-radius: var(--radius-lg);
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+/* Pulse animation - opacity fade */
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.4;
+    }
+}
+
+.pulse {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Wave animation - shimmer effect */
+@keyframes wave {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.wave::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.3),
+            transparent);
+    animation: wave 1.5s linear infinite;
+}
+
+/* Dark mode wave */
+:global(.dark) .wave::after {
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.1),
+            transparent);
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .pulse {
+        animation: none;
+        opacity: 0.7;
+    }
+
+    .wave::after {
+        animation: none;
+        display: none;
+    }
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+/* Ensure skeletons don't overflow on mobile */
+@media (max-width: 768px) {
+    .skeleton {
+        max-width: 100%;
+    }
+}

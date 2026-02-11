@@ -15,6 +15,8 @@ const Reports = lazy(() => import('@pages/Reports/Reports'));
 const ProductPage = lazy(() => import('@pages/ProductPage/ProductPage'));
 const Login = lazy(() => import('@pages/Login/Login'));
 const GirlsHostel = lazy(() => import('@pages/GirlsHostel/GirlsHostel'));
+const ComponentShowcase = lazy(() => import('@pages/ComponentShowcase/ComponentShowcase'));
+const AllComponentsShowcase = lazy(() => import('@pages/AllComponentsShowcase/AllComponentsShowcase'));
 const UserManagement = lazy(() => import('@pages/UserManagement/UserManagement'));
 const AuditLog = lazy(() => import('@components/admin/AuditLog/AuditLog'));
 const SuperAdminPanel = lazy(() => import('@pages/Admin/SuperAdminPanel'));
@@ -69,6 +71,8 @@ function AppContent() {
                                 <Route path="/products/:productType" element={<ProductPage />} />
                                 <Route path="/girls-hostel" element={<GirlsHostel />} />
                                 <Route path="/users" element={<UserManagement />} />
+                                <Route path="/components" element={<ComponentShowcase />} />
+                                <Route path="/all-components" element={<AllComponentsShowcase />} />
                             </Route>
 
                             <Route element={<ProtectedRoute allowedRoles={['COMMAND', 'SUPER_ADMIN', 'ADMIN']} />}>

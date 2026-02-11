@@ -1,0 +1,672 @@
+/**
+ * Advanced Grid Layout System - Professional Responsive Design
+ * Version: 2.0.0
+ * 
+ * Integrated with EvaraTech Design System
+ */
+
+/* ============================================
+   BASE GRID
+   ============================================ */
+.grid {
+    display: grid;
+    width: 100%;
+}
+
+.gridItem {
+    display: flex;
+    flex-direction: column;
+}
+
+/* ============================================
+   GAP SYSTEM
+   ============================================ */
+.gap-none {
+    gap: 0;
+}
+
+.gap-xs {
+    gap: var(--space-1);
+}
+
+.gap-sm {
+    gap: var(--space-2);
+}
+
+.gap-md {
+    gap: var(--space-4);
+}
+
+.gap-lg {
+    gap: var(--space-6);
+}
+
+.gap-xl {
+    gap: var(--space-8);
+}
+
+/* ============================================
+   COLUMN SYSTEM - BASE (MOBILE FIRST)
+   ============================================ */
+.cols-1 {
+    grid-template-columns: repeat(1, 1fr);
+}
+
+.cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.cols-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.cols-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.cols-5 {
+    grid-template-columns: repeat(5, 1fr);
+}
+
+.cols-6 {
+    grid-template-columns: repeat(6, 1fr);
+}
+
+.cols-7 {
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.cols-8 {
+    grid-template-columns: repeat(8, 1fr);
+}
+
+.cols-9 {
+    grid-template-columns: repeat(9, 1fr);
+}
+
+.cols-10 {
+    grid-template-columns: repeat(10, 1fr);
+}
+
+.cols-11 {
+    grid-template-columns: repeat(11, 1fr);
+}
+
+.cols-12 {
+    grid-template-columns: repeat(12, 1fr);
+}
+
+/* ============================================
+   SPAN SYSTEM
+   ============================================ */
+.span-1 {
+    grid-column: span 1;
+}
+
+.span-2 {
+    grid-column: span 2;
+}
+
+.span-3 {
+    grid-column: span 3;
+}
+
+.span-4 {
+    grid-column: span 4;
+}
+
+.span-5 {
+    grid-column: span 5;
+}
+
+.span-6 {
+    grid-column: span 6;
+}
+
+.span-7 {
+    grid-column: span 7;
+}
+
+.span-8 {
+    grid-column: span 8;
+}
+
+.span-9 {
+    grid-column: span 9;
+}
+
+.span-10 {
+    grid-column: span 10;
+}
+
+.span-11 {
+    grid-column: span 11;
+}
+
+.span-12 {
+    grid-column: span 12;
+}
+
+/* ============================================
+   SMALL BREAKPOINT: 640px
+   ============================================ */
+@media (min-width: 640px) {
+    .sm-cols-1 {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    .sm-cols-2 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .sm-cols-3 {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .sm-cols-4 {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .sm-cols-5 {
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+    .sm-cols-6 {
+        grid-template-columns: repeat(6, 1fr);
+    }
+
+    .sm-cols-7 {
+        grid-template-columns: repeat(7, 1fr);
+    }
+
+    .sm-cols-8 {
+        grid-template-columns: repeat(8, 1fr);
+    }
+
+    .sm-cols-9 {
+        grid-template-columns: repeat(9, 1fr);
+    }
+
+    .sm-cols-10 {
+        grid-template-columns: repeat(10, 1fr);
+    }
+
+    .sm-cols-11 {
+        grid-template-columns: repeat(11, 1fr);
+    }
+
+    .sm-cols-12 {
+        grid-template-columns: repeat(12, 1fr);
+    }
+
+    .sm-span-1 {
+        grid-column: span 1;
+    }
+
+    .sm-span-2 {
+        grid-column: span 2;
+    }
+
+    .sm-span-3 {
+        grid-column: span 3;
+    }
+
+    .sm-span-4 {
+        grid-column: span 4;
+    }
+
+    .sm-span-5 {
+        grid-column: span 5;
+    }
+
+    .sm-span-6 {
+        grid-column: span 6;
+    }
+
+    .sm-span-7 {
+        grid-column: span 7;
+    }
+
+    .sm-span-8 {
+        grid-column: span 8;
+    }
+
+    .sm-span-9 {
+        grid-column: span 9;
+    }
+
+    .sm-span-10 {
+        grid-column: span 10;
+    }
+
+    .sm-span-11 {
+        grid-column: span 11;
+    }
+
+    .sm-span-12 {
+        grid-column: span 12;
+    }
+}
+
+/* ============================================
+   MEDIUM BREAKPOINT: 768px
+   ============================================ */
+@media (min-width: 768px) {
+    .md-cols-1 {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    .md-cols-2 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .md-cols-3 {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .md-cols-4 {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .md-cols-5 {
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+    .md-cols-6 {
+        grid-template-columns: repeat(6, 1fr);
+    }
+
+    .md-cols-7 {
+        grid-template-columns: repeat(7, 1fr);
+    }
+
+    .md-cols-8 {
+        grid-template-columns: repeat(8, 1fr);
+    }
+
+    .md-cols-9 {
+        grid-template-columns: repeat(9, 1fr);
+    }
+
+    .md-cols-10 {
+        grid-template-columns: repeat(10, 1fr);
+    }
+
+    .md-cols-11 {
+        grid-template-columns: repeat(11, 1fr);
+    }
+
+    .md-cols-12 {
+        grid-template-columns: repeat(12, 1fr);
+    }
+
+    .md-span-1 {
+        grid-column: span 1;
+    }
+
+    .md-span-2 {
+        grid-column: span 2;
+    }
+
+    .md-span-3 {
+        grid-column: span 3;
+    }
+
+    .md-span-4 {
+        grid-column: span 4;
+    }
+
+    .md-span-5 {
+        grid-column: span 5;
+    }
+
+    .md-span-6 {
+        grid-column: span 6;
+    }
+
+    .md-span-7 {
+        grid-column: span 7;
+    }
+
+    .md-span-8 {
+        grid-column: span 8;
+    }
+
+    .md-span-9 {
+        grid-column: span 9;
+    }
+
+    .md-span-10 {
+        grid-column: span 10;
+    }
+
+    .md-span-11 {
+        grid-column: span 11;
+    }
+
+    .md-span-12 {
+        grid-column: span 12;
+    }
+}
+
+/* ============================================
+   LARGE BREAKPOINT: 1024px
+   ============================================ */
+@media (min-width: 1024px) {
+    .lg-cols-1 {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    .lg-cols-2 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .lg-cols-3 {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .lg-cols-4 {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .lg-cols-5 {
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+    .lg-cols-6 {
+        grid-template-columns: repeat(6, 1fr);
+    }
+
+    .lg-cols-7 {
+        grid-template-columns: repeat(7, 1fr);
+    }
+
+    .lg-cols-8 {
+        grid-template-columns: repeat(8, 1fr);
+    }
+
+    .lg-cols-9 {
+        grid-template-columns: repeat(9, 1fr);
+    }
+
+    .lg-cols-10 {
+        grid-template-columns: repeat(10, 1fr);
+    }
+
+    .lg-cols-11 {
+        grid-template-columns: repeat(11, 1fr);
+    }
+
+    .lg-cols-12 {
+        grid-template-columns: repeat(12, 1fr);
+    }
+
+    .lg-span-1 {
+        grid-column: span 1;
+    }
+
+    .lg-span-2 {
+        grid-column: span 2;
+    }
+
+    .lg-span-3 {
+        grid-column: span 3;
+    }
+
+    .lg-span-4 {
+        grid-column: span 4;
+    }
+
+    .lg-span-5 {
+        grid-column: span 5;
+    }
+
+    .lg-span-6 {
+        grid-column: span 6;
+    }
+
+    .lg-span-7 {
+        grid-column: span 7;
+    }
+
+    .lg-span-8 {
+        grid-column: span 8;
+    }
+
+    .lg-span-9 {
+        grid-column: span 9;
+    }
+
+    .lg-span-10 {
+        grid-column: span 10;
+    }
+
+    .lg-span-11 {
+        grid-column: span 11;
+    }
+
+    .lg-span-12 {
+        grid-column: span 12;
+    }
+}
+
+/* ============================================
+   EXTRA LARGE BREAKPOINT: 1280px
+   ============================================ */
+@media (min-width: 1280px) {
+    .xl-cols-1 {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    .xl-cols-2 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .xl-cols-3 {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .xl-cols-4 {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .xl-cols-5 {
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+    .xl-cols-6 {
+        grid-template-columns: repeat(6, 1fr);
+    }
+
+    .xl-cols-7 {
+        grid-template-columns: repeat(7, 1fr);
+    }
+
+    .xl-cols-8 {
+        grid-template-columns: repeat(8, 1fr);
+    }
+
+    .xl-cols-9 {
+        grid-template-columns: repeat(9, 1fr);
+    }
+
+    .xl-cols-10 {
+        grid-template-columns: repeat(10, 1fr);
+    }
+
+    .xl-cols-11 {
+        grid-template-columns: repeat(11, 1fr);
+    }
+
+    .xl-cols-12 {
+        grid-template-columns: repeat(12, 1fr);
+    }
+
+    .xl-span-1 {
+        grid-column: span 1;
+    }
+
+    .xl-span-2 {
+        grid-column: span 2;
+    }
+
+    .xl-span-3 {
+        grid-column: span 3;
+    }
+
+    .xl-span-4 {
+        grid-column: span 4;
+    }
+
+    .xl-span-5 {
+        grid-column: span 5;
+    }
+
+    .xl-span-6 {
+        grid-column: span 6;
+    }
+
+    .xl-span-7 {
+        grid-column: span 7;
+    }
+
+    .xl-span-8 {
+        grid-column: span 8;
+    }
+
+    .xl-span-9 {
+        grid-column: span 9;
+    }
+
+    .xl-span-10 {
+        grid-column: span 10;
+    }
+
+    .xl-span-11 {
+        grid-column: span 11;
+    }
+
+    .xl-span-12 {
+        grid-column: span 12;
+    }
+}
+
+/* ============================================
+   SPECIALIZED GRID LAYOUTS
+   ============================================ */
+
+/* Stats Grid - Consistent height cards */
+.statsGrid {
+    align-items: stretch;
+}
+
+.statsGrid.autoFit {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(var(--min-width, 280px), 1fr));
+    gap: var(--space-6);
+}
+
+/* Chart Grid - Variable heights */
+.chartGrid {
+    align-items: start;
+}
+
+/* Dashboard Grid - Mixed content */
+.dashboardGrid {
+    align-items: start;
+}
+
+.dashboardGrid.variant-default {
+    /* Default spacing - uses parent gap */
+}
+
+.dashboardGrid.variant-dense {
+    /* Tighter spacing for more content - gap set via component */
+}
+
+.dashboardGrid.variant-spacious {
+    /* More breathing room - gap set via component */
+}
+
+/* Analytics Grid */
+.analyticsGrid {
+    align-items: start;
+}
+
+/* ============================================
+   AUTO-FIT AND AUTO-FILL UTILITIES
+   ============================================ */
+.autoFit {
+    grid-template-columns: repeat(auto-fit, minmax(var(--min-width, 250px), 1fr));
+}
+
+.autoFill {
+    grid-template-columns: repeat(auto-fill, minmax(var(--min-width, 250px), 1fr));
+}
+
+/* ============================================
+   SPECIAL GRID PATTERNS
+   ============================================ */
+
+/* Masonry Grid */
+.masonryGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-auto-rows: auto;
+    gap: var(--space-6);
+}
+
+.masonryGrid>* {
+    grid-row: span 1;
+}
+
+/* Compact Grid for Small Cards */
+.compactGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: var(--space-4);
+}
+
+/* Feature Grid for Marketing/Presentation */
+.featureGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-8);
+    align-items: center;
+}
+
+/* ============================================
+   CONTAINER QUERIES SUPPORT
+   ============================================ */
+@container (min-width: 300px) {
+    .containerSm {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@container (min-width: 600px) {
+    .containerMd {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@container (min-width: 900px) {
+    .containerLg {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+@media print {
+    .grid {
+        display: block;
+    }
+
+    .gridItem {
+        display: block;
+        page-break-inside: avoid;
+        margin-bottom: var(--space-4);
+    }
+}

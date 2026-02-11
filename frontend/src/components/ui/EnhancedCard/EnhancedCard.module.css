@@ -1,0 +1,368 @@
+/**
+ * Enhanced Card System - Premium Professional Design
+ * Version: 2.0.0
+ * 
+ * Integrated with EvaraTech Design System
+ * Supports: light/dark/true-black themes, accessibility, responsive design
+ */
+
+/* ============================================
+   BASE CARD FOUNDATION
+   ============================================ */
+.card {
+    position: relative;
+    border-radius: var(--radius-lg);
+    transition: all var(--transition-base);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+
+    /* Consistent border system */
+    border: 1px solid var(--color-border);
+
+    /* Premium shadow system */
+    box-shadow: var(--shadow-sm);
+
+    /* Smooth transitions */
+    will-change: transform, box-shadow;
+}
+
+/* ============================================
+   SIZE VARIANTS - Consistent Height System
+   ============================================ */
+.sm {
+    min-height: 120px;
+}
+
+.md {
+    min-height: 160px;
+}
+
+.lg {
+    min-height: 200px;
+}
+
+.xl {
+    min-height: 280px;
+}
+
+/* ============================================
+   VISUAL VARIANTS
+   ============================================ */
+
+/* Base - Clean, minimal card */
+.base {
+    background: var(--color-surface);
+    backdrop-filter: blur(var(--blur-sm));
+    -webkit-backdrop-filter: blur(var(--blur-sm));
+}
+
+/* Elevated - Premium shadow depth */
+.elevated {
+    background: var(--color-surface-elevated);
+    backdrop-filter: blur(var(--blur-md));
+    -webkit-backdrop-filter: blur(var(--blur-md));
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--color-border-light);
+}
+
+/* Interactive - Clickable card */
+.interactive {
+    background: var(--color-surface);
+    backdrop-filter: blur(var(--blur-sm));
+    -webkit-backdrop-filter: blur(var(--blur-sm));
+    cursor: pointer;
+    user-select: none;
+}
+
+/* Glass - Glassmorphism effect */
+.glass {
+    background: var(--glass-background);
+    backdrop-filter: blur(var(--blur-lg)) saturate(180%);
+    -webkit-backdrop-filter: blur(var(--blur-lg)) saturate(180%);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+}
+
+/* Solid - Opaque background */
+.solid {
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-md);
+}
+
+/* Outlined - Border emphasis */
+.outlined {
+    background: transparent;
+    border: 2px solid var(--color-border-dark);
+    box-shadow: none;
+}
+
+.outlined:hover {
+    border-color: var(--color-primary-500);
+    background: var(--color-hover);
+}
+
+/* ============================================
+   INTERACTIVE STATES
+   ============================================ */
+.hoverable:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl);
+    border-color: var(--color-primary-200);
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.clickable:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.clickable:active {
+    transform: translateY(0) scale(0.98);
+}
+
+/* Disabled State */
+.disabled {
+    opacity: var(--opacity-60);
+    cursor: not-allowed;
+    pointer-events: none;
+    filter: grayscale(30%);
+}
+
+/* ============================================
+   PREMIUM HIGHLIGHT EFFECT
+   ============================================ */
+.highlight {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.6) 50%,
+            transparent 100%);
+    opacity: 0;
+    transition: opacity var(--transition-base);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.hoverable:hover .highlight,
+.interactive:hover .highlight {
+    opacity: 1;
+}
+
+[data-theme="dark"] .highlight,
+[data-theme="true-black"] .highlight {
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.3) 50%,
+            transparent 100%);
+}
+
+/* ============================================
+   LOADING STATES
+   ============================================ */
+.loading {
+    pointer-events: none;
+    user-select: none;
+}
+
+.loadingOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(var(--blur-sm));
+    -webkit-backdrop-filter: blur(var(--blur-sm));
+    z-index: var(--z-20);
+    border-radius: inherit;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.shimmer {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.6) 50%,
+            transparent 100%);
+    animation: shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        left: -100%;
+    }
+
+    100% {
+        left: 100%;
+    }
+}
+
+/* ============================================
+   HEADER, CONTENT, FOOTER SECTIONS
+   ============================================ */
+.header {
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--color-border-light);
+    margin-bottom: var(--space-4);
+}
+
+.content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.footer {
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border-light);
+    margin-top: var(--space-4);
+}
+
+/* ============================================
+   DARK MODE ADAPTATIONS
+   ============================================ */
+[data-theme='dark'] .card,
+[data-theme='true-black'] .card {
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px -1px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme='dark'] .elevated,
+[data-theme='true-black'] .elevated {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme='dark'] .hoverable:hover,
+[data-theme='true-black'] .hoverable:hover {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme='dark'] .loadingOverlay {
+    background: rgba(30, 41, 59, 0.85);
+}
+
+[data-theme='true-black'] .loadingOverlay {
+    background: rgba(0, 0, 0, 0.85);
+}
+
+[data-theme='dark'] .solid,
+[data-theme='true-black'] .solid {
+    background: var(--color-surface);
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+@media (max-width: 768px) {
+    .card {
+        border-radius: var(--radius-md);
+    }
+
+    .sm {
+        min-height: 100px;
+    }
+
+    .md {
+        min-height: 140px;
+    }
+
+    .lg {
+        min-height: 180px;
+    }
+
+    .xl {
+        min-height: 240px;
+    }
+
+    .header,
+    .footer {
+        padding-top: var(--space-3);
+        padding-bottom: var(--space-3);
+        margin-top: var(--space-3);
+        margin-bottom: var(--space-3);
+    }
+}
+
+@media (max-width: 640px) {
+    .card {
+        border-radius: var(--radius-sm);
+    }
+}
+
+/* ============================================
+   ACCESSIBILITY - FOCUS STATES
+   ============================================ */
+.card:focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+    border-radius: var(--radius-lg);
+}
+
+.clickable:focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+}
+
+/* High Contrast Mode */
+[data-high-contrast="true"] .card {
+    border: 2px solid var(--color-border);
+}
+
+[data-high-contrast="true"] .outlined {
+    border-width: 3px;
+}
+
+/* ============================================
+   REDUCED MOTION SUPPORT
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+    .card {
+        transition: none;
+    }
+
+    .shimmer {
+        animation: none;
+    }
+
+    .hoverable:hover {
+        transform: none;
+    }
+
+    .clickable:active {
+        transform: none;
+    }
+
+    .highlight {
+        transition: none;
+    }
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+@media print {
+    .card {
+        box-shadow: none;
+        border: 1px solid #000;
+        page-break-inside: avoid;
+    }
+
+    .loadingOverlay {
+        display: none;
+    }
+}

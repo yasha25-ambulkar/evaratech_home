@@ -1,0 +1,41 @@
+.skeletonTable {
+    width: 100%;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+}
+
+.header {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: var(--space-4);
+    padding: var(--space-4);
+    background: var(--color-gray-50);
+    border-bottom: 1px solid var(--color-border);
+}
+
+:global(.dark) .header {
+    background: var(--color-gray-800);
+}
+
+.body {
+    display: flex;
+    flex-direction: column;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: var(--space-4);
+    padding: var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.row:last-child {
+    border-bottom: none;
+}
+
+.cell {
+    display: flex;
+    align-items: center;
+}

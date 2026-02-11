@@ -1,0 +1,12 @@
+.scale {
+    transition-property: transform, opacity;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .scale {
+        transition: none !important;
+        transform: none !important;
+    }
+}

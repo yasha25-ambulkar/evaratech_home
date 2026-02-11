@@ -1,0 +1,73 @@
+.buttonGroup {
+    display: inline-flex;
+    position: relative;
+}
+
+.buttonGroup.horizontal {
+    flex-direction: row;
+}
+
+.buttonGroup.vertical {
+    flex-direction: column;
+}
+
+.buttonGroup.fullWidth {
+    width: 100%;
+}
+
+.buttonGroup.fullWidth>* {
+    flex: 1;
+}
+
+/* Horizontal spacing */
+.buttonGroup.horizontal> :global(*:not(:first-child)) {
+    margin-left: -1px;
+}
+
+/* Vertical spacing */
+.buttonGroup.vertical> :global(*:not(:first-child)) {
+    margin-top: -1px;
+}
+
+/* Border radius - Horizontal */
+.buttonGroup.horizontal> :global(.first) {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.buttonGroup.horizontal> :global(.middle) {
+    border-radius: 0;
+}
+
+.buttonGroup.horizontal> :global(.last) {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+/* Border radius - Vertical */
+.buttonGroup.vertical> :global(.first) {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.buttonGroup.vertical> :global(.middle) {
+    border-radius: 0;
+}
+
+.buttonGroup.vertical> :global(.last) {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+/* Z-index on hover */
+.buttonGroup> :global(*:hover) {
+    z-index: 1;
+}
+
+.buttonGroup> :global(*:focus) {
+    z-index: 2;
+}
+
+.buttonGroup> :global(*:active) {
+    z-index: 1;
+}

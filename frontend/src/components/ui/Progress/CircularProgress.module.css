@@ -1,0 +1,103 @@
+/**
+ * Circular Progress Styles
+ * Version: 1.0.0
+ */
+
+/* ============================================
+   BASE CONTAINER
+   ============================================ */
+.circularProgress {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ============================================
+   SVG
+   ============================================ */
+.svg {
+    transform: rotate(-90deg);
+    display: block;
+}
+
+/* Track (background circle) */
+.track {
+    fill: none;
+    stroke: var(--color-gray-200);
+}
+
+:global(.dark) .track {
+    stroke: var(--color-gray-700);
+}
+
+/* Progress circle */
+.progress {
+    fill: none;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================
+   INDETERMINATE ANIMATION
+   ============================================ */
+@keyframes spin {
+    0% {
+        transform: rotate(-90deg);
+    }
+
+    100% {
+        transform: rotate(270deg);
+    }
+}
+
+.indeterminate .svg {
+    animation: spin 1.4s linear infinite;
+}
+
+.indeterminate .progress {
+    stroke-dashoffset: 0;
+    animation: dash 1.4s ease-in-out infinite;
+}
+
+@keyframes dash {
+    0% {
+        stroke-dashoffset: 0;
+    }
+
+    50% {
+        stroke-dashoffset: calc(var(--circumference, 100) * -0.5);
+    }
+
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+/* ============================================
+   CENTER LABEL
+   ============================================ */
+.label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-text-primary);
+    white-space: nowrap;
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+    .progress {
+        transition: none;
+    }
+
+    .indeterminate .svg,
+    .indeterminate .progress {
+        animation: none;
+    }
+}

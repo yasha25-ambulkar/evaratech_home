@@ -13,6 +13,9 @@ import GlassDonutChart from '../../ui/chart/GlassDonutChart';
 import NodeRow from '../NodeRow/NodeRow';
 import SegmentedControl from '../../ui/segmented-control/SegmentedControl';
 
+// Grid System
+import { DashboardGrid } from '../../layout/GridSystem/GridSystem';
+
 // Components
 import AlertPanel from '../../alerts/AlertPanel/AlertPanel';
 import MigrationPanel from '../../admin/MigrationPanel/MigrationPanel';
@@ -130,7 +133,9 @@ function SystemDashboard() {
                 </ScaleIn>
             </div>
 
-            <div className={styles.grid}>
+
+            {/* Main Dashboard Grid - Using Design System */}
+            <DashboardGrid variant="default">
                 {/* 1. Total Storage */}
                 <MetricCard
                     title="Total Storage"
@@ -223,46 +228,46 @@ function SystemDashboard() {
                         centerLabel="Total"
                     />
                 </GlassCard>
+            </DashboardGrid>
 
-                {/* Alerts Panel - Consumes full width or specific col span */}
-                <div className={styles.alertContainer}>
-                    <AlertPanel />
+            {/* Alerts Section - Outside Grid */}
+            <div className={styles.alertContainer}>
+                <AlertPanel />
+            </div>
+
+            {/* Admin Migration Panel - Only for admin users */}
+            {user?.role === 'ADMIN' && (
+                <div className={styles.migrationContainer}>
+                    <MigrationPanel />
                 </div>
+            )}
 
-                {/* Admin Migration Panel - Only for admin users */}
-                {user?.role === 'ADMIN' && (
-                    <div className={styles.migrationContainer}>
-                        <MigrationPanel />
+            {/* Node Status List - Full Width */}
+            <div className={styles.nodeListContainer}>
+                <GlassCard className={styles.nodeListCard} variant="base">
+                    <div className={styles.cardHeader}>
+                        <h3 className={styles.cardTitle}>Live Status</h3>
+                        <button className={styles.viewAllBtn}>View All</button>
                     </div>
-                )}
-
-                {/* Node Status List - Full Width */}
-                <div className={styles.nodeListContainer}>
-                    <GlassCard className={styles.nodeListCard} variant="base">
-                        <div className={styles.cardHeader}>
-                            <h3 className={styles.cardTitle}>Live Status</h3>
-                            <button className={styles.viewAllBtn}>View All</button>
-                        </div>
-                        <div className={styles.nodeList}>
-                            {nodes.slice(0, 5).map((node) => (
-                                <NodeRow
-                                    key={node.id}
-                                    name={node.name}
-                                    type={node.type}
-                                    status={(() => {
-                                        const s = (node.status || 'inactive').toLowerCase();
-                                        if (['running', 'active', 'working', 'flowing', 'normal'].includes(s)) return 'active';
-                                        if (s === 'warning') return 'warning';
-                                        if (['critical', 'not working', 'error'].includes(s)) return 'error';
-                                        return 'inactive';
-                                    })()}
-                                    value={node.type === 'pump' ? (node.status === 'Running' ? 'Running' : 'Off') : `${node.capacity}`}
-                                    subValue="Updated just now"
-                                />
-                            ))}
-                        </div>
-                    </GlassCard>
-                </div>
+                    <div className={styles.nodeList}>
+                        {nodes.slice(0, 5).map((node) => (
+                            <NodeRow
+                                key={node.id}
+                                name={node.name}
+                                type={node.type}
+                                status={(() => {
+                                    const s = (node.status || 'inactive').toLowerCase();
+                                    if (['running', 'active', 'working', 'flowing', 'normal'].includes(s)) return 'active';
+                                    if (s === 'warning') return 'warning';
+                                    if (['critical', 'not working', 'error'].includes(s)) return 'error';
+                                    return 'inactive';
+                                })()}
+                                value={node.type === 'pump' ? (node.status === 'Running' ? 'Running' : 'Off') : `${node.capacity}`}
+                                subValue="Updated just now"
+                            />
+                        ))}
+                    </div>
+                </GlassCard>
             </div>
         </StaggerContainer>
     );

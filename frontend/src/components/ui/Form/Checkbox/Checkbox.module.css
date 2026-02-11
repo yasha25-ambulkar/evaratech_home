@@ -1,0 +1,144 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+}
+
+.wrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    cursor: pointer;
+    user-select: none;
+}
+
+.wrapper:has(.disabled) {
+    cursor: not-allowed;
+}
+
+/* Hide native checkbox */
+.input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* Custom Checkbox */
+.checkbox {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-bg-input);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Sizes */
+.checkbox.sm {
+    width: 16px;
+    height: 16px;
+}
+
+.checkbox.md {
+    width: 20px;
+    height: 20px;
+}
+
+.checkbox.lg {
+    width: 24px;
+    height: 24px;
+}
+
+/* Hover */
+.wrapper:hover .checkbox:not(.disabled) {
+    border-color: var(--color-primary);
+    background: var(--color-primary-alpha);
+}
+
+/* Checked State */
+.checkbox.checked,
+.checkbox.indeterminate {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+/* Error State */
+.checkbox.error {
+    border-color: var(--color-error);
+}
+
+.checkbox.error.checked,
+.checkbox.error.indeterminate {
+    background: var(--color-error);
+    border-color: var(--color-error);
+}
+
+/* Disabled State */
+.checkbox.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Checkmark Icon */
+.icon {
+    width: 100%;
+    height: 100%;
+    color: white;
+    animation: checkmarkScale 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes checkmarkScale {
+    0% {
+        transform: scale(0);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Focus */
+.input:focus-visible+.checkbox {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* Label */
+.label {
+    font-size: var(--text-sm);
+    color: var(--color-text-primary);
+}
+
+.label.disabled {
+    color: var(--color-text-disabled);
+}
+
+/* Helper Text */
+.helperText {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    margin-left: calc(var(--space-2) + 20px);
+    /* Align with label */
+}
+
+.errorText {
+    color: var(--color-error);
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+
+    .checkbox,
+    .icon {
+        transition: none;
+        animation: none;
+    }
+}

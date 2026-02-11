@@ -1,0 +1,62 @@
+/**
+ * Design System - Index
+ * Version: 2.0.0
+ * 
+ * Centralized import for all design system styles
+ * Import this file in your main application entry point
+ */
+
+/* Core Design System */
+@import './tokens.css';
+@import './colors.css';
+@import './typography.css';
+@import './spacing.css';
+
+/* Global Resets and Base Styles */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: var(--leading-normal);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+body {
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    transition: background-color var(--transition-base), color var(--transition-base);
+}
+
+/* Smooth scrolling */
+@media (prefers-reduced-motion: no-preference) {
+    html {
+        scroll-behavior: smooth;
+    }
+}
+
+/* Focus visible styles */
+:focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+}
+
+/* Selection styles */
+::selection {
+    background-color: var(--color-primary-200);
+    color: var(--color-text-primary);
+}
+
+[data-theme="dark"] ::selection,
+[data-theme="true-black"] ::selection {
+    background-color: var(--color-primary-700);
+    color: var(--color-text-inverse);
+}

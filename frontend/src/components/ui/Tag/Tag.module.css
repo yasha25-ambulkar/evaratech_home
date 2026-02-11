@@ -1,0 +1,146 @@
+.tag {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+/* Sizes */
+.tag.sm {
+    height: 24px;
+    padding: 0 var(--space-2);
+    font-size: var(--text-xs);
+    gap: var(--space-1);
+}
+
+.tag.md {
+    height: 28px;
+    padding: 0 var(--space-3);
+    font-size: var(--text-sm);
+}
+
+.tag.lg {
+    height: 32px;
+    padding: 0 var(--space-4);
+    font-size: var(--text-base);
+}
+
+/* Variants */
+.tag.primary {
+    background: var(--color-primary-alpha, rgba(59, 130, 246, 0.1));
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary-alpha, rgba(59, 130, 246, 0.3));
+}
+
+.tag.success {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--color-success);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.tag.warning {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--color-warning);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.tag.error {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--color-error);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* Icon */
+.icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.tag.sm .icon {
+    font-size: 12px;
+}
+
+.tag.md .icon {
+    font-size: 14px;
+}
+
+.tag.lg .icon {
+    font-size: 16px;
+}
+
+/* Label */
+.label {
+    display: inline-flex;
+    align-items: center;
+    line-height: 1;
+}
+
+/* Remove button */
+.remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    padding: 0;
+    margin-left: var(--space-1);
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-sm);
+    color: currentColor;
+    opacity: 0.6;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.remove:hover {
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.tag.sm .remove {
+    width: 14px;
+    height: 14px;
+}
+
+.tag.lg .remove {
+    width: 18px;
+    height: 18px;
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+    .tag.primary {
+        background: rgba(59, 130, 246, 0.15);
+    }
+
+    .tag.success {
+        background: rgba(16, 185, 129, 0.15);
+    }
+
+    .tag.warning {
+        background: rgba(245, 158, 11, 0.15);
+    }
+
+    .tag.error {
+        background: rgba(239, 68, 68, 0.15);
+    }
+
+    .remove:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+
+    .tag,
+    .remove {
+        transition: none;
+    }
+}
