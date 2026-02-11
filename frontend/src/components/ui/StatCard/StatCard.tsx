@@ -7,7 +7,7 @@ interface StatCardProps {
     percentage?: number;
     trendText?: string;
     trend?: 'up' | 'down' | 'neutral';
-    color?: 'blue' | 'green' | 'orange' | 'red';
+    color?: 'blue' | 'green' | 'orange' | 'red' | 'purple';
 }
 
 function StatCard({ icon, value, label, percentage, trendText, trend = 'neutral', color = 'blue' }: StatCardProps) {

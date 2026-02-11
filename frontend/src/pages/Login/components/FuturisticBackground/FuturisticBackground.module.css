@@ -1,0 +1,42 @@
+.bgContainer {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: #020617;
+    overflow: hidden;
+}
+
+.meshGradient {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(at 0% 0%, hsla(210, 100%, 15%, 1) 0, transparent 50%),
+        radial-gradient(at 100% 0%, hsla(190, 100%, 15%, 1) 0, transparent 50%),
+        radial-gradient(at 100% 100%, hsla(220, 100%, 15%, 1) 0, transparent 50%),
+        radial-gradient(at 0% 100%, hsla(200, 100%, 15%, 1) 0, transparent 50%);
+    filter: blur(80px);
+    opacity: 0.8;
+}
+
+.orb {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+}
+
+.particle {
+    position: absolute;
+    background: #fff;
+    border-radius: 50%;
+    pointer-events: none;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, transparent 0%, rgba(2, 6, 23, 0.6) 100%);
+}

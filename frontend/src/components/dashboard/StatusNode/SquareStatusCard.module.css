@@ -138,3 +138,25 @@
 .footer {
     display: none;
 }
+.prediction {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 11px;
+    color: #fca5a5;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 700;
+}
+
+.prediction i {
+    font-size: 12px;
+    animation: flash 2s infinite;
+}
+
+@keyframes flash {
+    0% { opacity: 0.4; }
+    50% { opacity: 1; }
+    100% { opacity: 0.4; }
+}

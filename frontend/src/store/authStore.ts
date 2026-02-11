@@ -1,11 +1,13 @@
 import { create } from 'zustand';
 import { supabase } from '../services/supabase.service';
 
+export type UserRole = 'COMMAND' | 'SUPER_ADMIN' | 'ADMIN' | 'DISTRIBUTOR' | 'CUSTOMER';
+
 interface User {
     id: string;
     email: string;
     name?: string;
-    role: 'admin' | 'editor' | 'viewer';
+    role: UserRole;
     avatar?: string;
 }
 
@@ -39,7 +41,7 @@ export const useAuthStore = create<AuthState>((set) => ({
                 id: 'dummy-user-123',
                 email: 'user@test.com',
                 name: 'Test User',
-                role: 'admin',
+                role: 'SUPER_ADMIN',
                 avatar: 'https://ui-avatars.com/api/?name=Test+User&background=0ea5e9&color=fff'
             };
 
@@ -68,7 +70,7 @@ export const useAuthStore = create<AuthState>((set) => ({
                     id: data.user.id,
                     email: data.user.email || '',
                     name: data.user.user_metadata?.full_name,
-                    role: data.user.user_metadata?.role || 'viewer',
+                    role: (data.user.user_metadata?.role as UserRole) || 'CUSTOMER',
                     avatar: data.user.user_metadata?.avatar_url
                 };
 
@@ -133,27 +135,17 @@ export const useAuthStore = create<AuthState>((set) => ({
     checkSession: async () => {
         set({ isLoading: true });
 
-        // Check for dummy auth persistence
-        if (localStorage.getItem('evara_dummy_auth')) {
-            const dummyUser: User = {
-                id: 'dummy-user-123',
-                email: 'user@test.com',
-                name: 'Test User',
-                role: 'admin',
-                avatar: 'https://ui-avatars.com/api/?name=Test+User&background=0ea5e9&color=fff'
-            };
-
-            set({
-                user: dummyUser,
-                isAuthenticated: true,
-                isLoading: false,
-                session: { user: { id: 'dummy-user-123' } }
-            });
-            return;
-        }
+        // Safety timeout to prevent infinite loading loop
+        const timeout = setTimeout(() => {
+            const state = useAuthStore.getState();
+            if (state.isLoading) {
+                set({ isLoading: false, error: 'Session check timed out' });
+            }
+        }, 10000);
 
         try {
             const { data: { session } } = await supabase.auth.getSession();
+            clearTimeout(timeout);
 
             if (session?.user) {
                 set({
@@ -161,7 +153,7 @@ export const useAuthStore = create<AuthState>((set) => ({
                         id: session.user.id,
                         email: session.user.email || '',
                         name: session.user.user_metadata?.full_name,
-                        role: session.user.user_metadata?.role || 'viewer',
+                        role: (session.user.user_metadata?.role as UserRole) || 'CUSTOMER',
                         avatar: session.user.user_metadata?.avatar_url
                     },
                     session: session,

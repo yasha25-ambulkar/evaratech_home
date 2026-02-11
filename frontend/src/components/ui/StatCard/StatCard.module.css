@@ -134,3 +134,11 @@
         font-size: 1.5rem;
     }
 }
+.purple {
+    border-left: 4px solid #8b5cf6;
+}
+
+.purple .icon {
+    background: rgba(139, 92, 246, 0.1);
+    color: #a78bfa;
+}

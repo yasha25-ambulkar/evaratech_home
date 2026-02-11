@@ -13,8 +13,8 @@ import FilterPanel from '@components/filters/FilterPanel/FilterPanel';
 
 import styles from './AssetMap.module.css';
 
-// Phase 2: OOP Principles
 import { AssetRenderer } from '../../strategies/AssetRenderer';
+import { BaseAsset } from '../../models/Asset';
 
 // Components
 import GlassMapControls from '@components/map/controls/GlassMapControls';

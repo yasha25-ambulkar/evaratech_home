@@ -103,13 +103,31 @@ function Dashboard() {
                                 color="orange"
                             />
                             <StatCard
-                                icon="💧"
-                                label="Avg TDS"
-                                value="142 ppm"
-                                trendText="Normal"
-                                trend="neutral"
-                                color="blue"
+                                icon="🧠"
+                                label="System Intelligence"
+                                value="OPTIMIZED"
+                                trendText="AI Assistant Online"
+                                trend="up"
+                                color="purple"
                             />
+                        </div>
+
+                        {/* Intelligence Insights Section */}
+                        <div className={styles.intelligenceBanner}>
+                            <div className={styles.bannerInfo}>
+                                <h2><i className="fas fa-microchip"></i> AI Predictive Insights</h2>
+                                <p>System predicts normal operations for the next 24 hours. No critical anomalies detected.</p>
+                            </div>
+                            <div className={styles.bannerStats}>
+                                <div className={styles.bannerStatItem}>
+                                    <span className={styles.statLabel}>Efficiency Score</span>
+                                    <span className={styles.statVal}>98%</span>
+                                </div>
+                                <div className={styles.bannerStatItem}>
+                                    <span className={styles.statLabel}>Next Tank Empty (Est.)</span>
+                                    <span className={styles.statVal}>14h 22m</span>
+                                </div>
+                            </div>
                         </div>
 
                         {/* Charts Grid */}

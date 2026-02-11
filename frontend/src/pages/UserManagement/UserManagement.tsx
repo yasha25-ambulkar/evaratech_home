@@ -6,7 +6,7 @@ interface UserData {
     id: string;
     name: string;
     email: string;
-    role: 'command' | 'admin_distributor' | 'customer_user';
+    role: 'COMMAND' | 'SUPER_ADMIN' | 'ADMIN' | 'DISTRIBUTOR' | 'CUSTOMER';
     status: 'active' | 'inactive';
     lastActive: string;
     avatar: string;
@@ -16,9 +16,9 @@ interface UserData {
 const MOCK_USERS: UserData[] = [
     {
         id: '1',
-        name: 'Command (Super Admin)',
+        name: 'Command Terminal',
         email: 'command@evaratech.com',
-        role: 'command',
+        role: 'COMMAND',
         status: 'active',
         lastActive: 'Just now',
         avatar: 'https://ui-avatars.com/api/?name=Command&background=0ea5e9&color=fff',
@@ -26,23 +26,23 @@ const MOCK_USERS: UserData[] = [
     },
     {
         id: '2',
-        name: 'Admin/Distributor',
-        email: 'admin@evaratech.com',
-        role: 'admin_distributor',
+        name: 'Regional SuperAdmin',
+        email: 'superadmin@evaratech.com',
+        role: 'SUPER_ADMIN',
         status: 'active',
         lastActive: '2 hours ago',
-        avatar: 'https://ui-avatars.com/api/?name=Admin&background=8b5cf6&color=fff',
-        description: "Product distributor & deployment partners - Limited operational access."
+        avatar: 'https://ui-avatars.com/api/?name=Super&background=8b5cf6&color=fff',
+        description: "Governance & Regional oversight."
     },
     {
         id: '3',
-        name: 'Customer/End User',
-        email: 'customer@evaratech.com',
-        role: 'customer_user',
-        status: 'inactive',
-        lastActive: '2 days ago',
-        avatar: 'https://ui-avatars.com/api/?name=Customer&background=10b981&color=fff',
-        description: "End consumer or organization - Device-specific access."
+        name: 'Distributor Primary',
+        email: 'distributor@evaratech.com',
+        role: 'DISTRIBUTOR',
+        status: 'active',
+        lastActive: '5 hours ago',
+        avatar: 'https://ui-avatars.com/api/?name=Dist&background=10b981&color=fff',
+        description: "Product distributor & deployment partners."
     }
 ];
 
@@ -71,18 +71,21 @@ export default function UserManagement() {
 
     const getRoleBadgeClass = (role: string) => {
         switch (role) {
-            case 'command': return styles.commandBadge;
-            case 'admin_distributor': return styles.distributorBadge;
-            case 'customer_user': return styles.customerBadge;
+            case 'COMMAND': return styles.commandBadge;
+            case 'SUPER_ADMIN': return styles.superAdminBadge;
+            case 'ADMIN': return styles.adminBadge;
+            case 'DISTRIBUTOR': return styles.distributorBadge;
             default: return styles.customerBadge;
         }
     };
 
     const getRoleLabel = (role: string) => {
         switch (role) {
-            case 'command': return 'COMMAND (SUPER ADMIN)';
-            case 'admin_distributor': return 'ADMIN/DISTRIBUTOR';
-            case 'customer_user': return 'CUSTOMER/END USER';
+            case 'COMMAND': return 'COMMAND (INTERNAL)';
+            case 'SUPER_ADMIN': return 'SUPER ADMIN (REGIONAL)';
+            case 'ADMIN': return 'ADMIN';
+            case 'DISTRIBUTOR': return 'DISTRIBUTOR';
+            case 'CUSTOMER': return 'CUSTOMER';
             default: return role;
         }
     };
@@ -148,7 +151,7 @@ export default function UserManagement() {
                                                 <span className={`${styles.badge} ${getRoleBadgeClass(user.role)}`}>
                                                     {getRoleLabel(user.role)}
                                                 </span>
-                                                {user.role === 'command' && (
+                                                {user.role === 'COMMAND' && (
                                                     <span className={styles.systemAuthorityBadge} title="Full Internal Command Authority">
                                                         <i className="fas fa-crown"></i>
                                                     </span>
@@ -157,8 +160,9 @@ export default function UserManagement() {
                                         </td>
                                         <td>
                                             <div className={styles.accessScope}>
-                                                {user.role === 'command' ? 'Full Authority' :
-                                                    user.role === 'admin_distributor' ? 'Limited Operational' : 'Device-Specific'}
+                                                {user.role === 'COMMAND' ? 'Full Authority' :
+                                                    user.role === 'SUPER_ADMIN' ? 'Regional Oversight' :
+                                                        user.role === 'DISTRIBUTOR' ? 'Operational Access' : 'Device-Specific'}
                                             </div>
                                         </td>
                                         <td>
@@ -207,24 +211,27 @@ export default function UserManagement() {
                             <div className={styles.formGroup}>
                                 <label>Role</label>
                                 <select defaultValue={selectedUser.role}>
-                                    <option value="command">Command (Super Admin)</option>
-                                    <option value="admin_distributor">Admin/Distributor</option>
-                                    <option value="customer_user">Customer/End User</option>
+                                    <option value="COMMAND">Command (Internal)</option>
+                                    <option value="SUPER_ADMIN">SuperAdmin (Regional)</option>
+                                    <option value="DISTRIBUTOR">Distributor</option>
+                                    <option value="CUSTOMER">Customer</option>
                                 </select>
                             </div>
 
                             <div className={styles.authorityNotice}>
                                 <div className={styles.authorityLabel}>Governance & System Authority</div>
                                 <p className={styles.authorityDescription}>
-                                    {selectedUser.role === 'command'
+                                    {selectedUser.role === 'COMMAND'
                                         ? "Evaratech internal command authority - Full system access across all users, devices, and deployments."
-                                        : (selectedUser.role === 'admin_distributor')
-                                            ? "Product distributor & deployment partners - Limited operational access."
-                                            : "End consumer or organization - Device-specific access."
+                                        : (selectedUser.role === 'SUPER_ADMIN')
+                                            ? "Regional governance & oversight authority."
+                                            : (selectedUser.role === 'DISTRIBUTOR')
+                                                ? "Product distributor & deployment partners."
+                                                : "End consumer or organization - Device-specific access."
                                     }
                                 </p>
 
-                                {selectedUser.role === 'command' && (
+                                {selectedUser.role === 'COMMAND' && (
                                     <div className={styles.capabilitiesGrid}>
                                         <div className={styles.capabilitySection}>
                                             <div className={styles.sectionTitle}>Global Management</div>
@@ -253,7 +260,7 @@ export default function UserManagement() {
                                     </div>
                                 )}
 
-                                {selectedUser.role === 'admin_distributor' && (
+                                {selectedUser.role === 'DISTRIBUTOR' && (
                                     <div className={styles.capabilitiesGrid}>
                                         <div className={styles.capabilitySection}>
                                             <div className={styles.sectionTitle}>Partner Operations</div>
@@ -282,7 +289,7 @@ export default function UserManagement() {
                                     </div>
                                 )}
 
-                                {selectedUser.role === 'customer_user' && (
+                                {selectedUser.role === 'CUSTOMER' && (
                                     <div className={styles.capabilitiesGrid}>
                                         <div className={styles.capabilitySection}>
                                             <div className={styles.sectionTitle}>My Monitoring</div>
@@ -311,19 +318,19 @@ export default function UserManagement() {
                                     </div>
                                 )}
 
-                                {selectedUser.role === 'command' && (
+                                {selectedUser.role === 'COMMAND' && (
                                     <div className={styles.fullAccessBadge}>
                                         <i className="fas fa-shield-alt"></i> UNRESTRICTED COMMAND AUTHORITY
                                     </div>
                                 )}
 
-                                {selectedUser.role === 'admin_distributor' && (
+                                {selectedUser.role === 'DISTRIBUTOR' && (
                                     <div className={styles.partnerAccessBadge}>
                                         <i className="fas fa-handshake"></i> LIMITED OPERATIONAL ACCESS
                                     </div>
                                 )}
 
-                                {selectedUser.role === 'customer_user' && (
+                                {selectedUser.role === 'CUSTOMER' && (
                                     <div className={styles.customerAccessBadge}>
                                         <i className="fas fa-house-user"></i> DEVICE-SPECIFIC ACCESS
                                     </div>

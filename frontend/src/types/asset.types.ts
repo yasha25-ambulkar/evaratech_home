@@ -18,8 +18,14 @@ export interface Asset {
     position: [number, number]; // [lat, lng]
     capacity: string;
     specs: string;
+    location?: string;
     status: AssetStatus;
     isCritical?: boolean;
+    predictions?: {
+        estimated_empty_at?: string;
+        estimated_full_at?: string;
+        trend?: 'rising' | 'falling' | 'stable';
+    };
 }
 
 export interface AssetDatabaseEntry {

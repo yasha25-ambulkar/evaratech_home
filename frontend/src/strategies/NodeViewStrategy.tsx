@@ -85,6 +85,7 @@ export class VirtualListViewStrategy implements NodeViewStrategy {
     render(nodes: NodeEntity[]): React.ReactNode {
         return (
             <div style={{ height: '600px', width: '100%' }}>
+                {/* @ts-ignore */}
                 <AutoSizer>
                     {({ height, width }: { height: number; width: number }) => (
                         <FixedSizeList

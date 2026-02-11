@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
-
+import { motion, AnimatePresence } from 'framer-motion';
+import FuturisticBackground from './components/FuturisticBackground/FuturisticBackground';
 import styles from './Login.module.css';
-
-// For this implementation, since we created checking capabilities for dummy users in the store, 
-// we just need to wire up the form.
 
 function Login() {
     const [email, setEmail] = useState('');
@@ -33,80 +31,118 @@ function Login() {
         if (success) {
             navigate('/dashboard');
         } else {
-            setError('Invalid email or password');
+            setError('Invalid credentials. Access Denied.');
         }
     };
 
     return (
         <div className={styles.container}>
-            {/* Background elements */}
-            <div className={styles.bgOverlay}></div>
-            <div className={styles.glow} style={{ top: '10%', left: '10%', animationDelay: '0s' }}></div>
-            <div className={styles.glow} style={{ bottom: '20%', right: '10%', animationDelay: '2s' }}></div>
+            <FuturisticBackground />
 
-            <div className={styles.card}>
-                <div className={styles.logoSection}>
-                    {/* Use a placeholder text logo if image is missing, but structure for image is here */}
-                    {/* We will try to use the generated logo if placed in public, for now simple img tag */}
-                    <div className={styles.logoWrapper}>
-                        <img src="/logo.png" alt="EvaraTech" className={styles.logo} onError={(e) => {
-                            e.currentTarget.style.display = 'none';
-                            e.currentTarget.nextElementSibling?.classList.remove('hidden');
-                        }} />
-                        <div className={`hidden ${styles.textLogo}`}>
-                            <span className={styles.logoIcon}>💧</span>
-                            EvaraTech
-                        </div>
-                    </div>
-                    <p className={styles.subtitle}>Smart Water Infrastructure</p>
+            <motion.div
+                className={styles.card}
+                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            >
+                {/* Decorative scanning line */}
+                <motion.div
+                    className={styles.scanner}
+                    animate={{ top: ['0%', '100%', '0%'] }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                />
+
+                <div className={styles.header}>
+                    <motion.div
+                        className={styles.logoContainer}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.5, duration: 1 }}
+                    >
+                        <img src="/evaratech-logo-new.png" alt="EvaraTech Logo" className={styles.logoImg} />
+                    </motion.div>
+                    <p className={styles.subtitle}>Unified Intelligence Terminal</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className={styles.form}>
-                    <div className={styles.inputGroup}>
-                        <label htmlFor="email">Email / User ID</label>
-                        <input
-                            id="email"
-                            type="text"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            placeholder="Enter your email"
-                            className={styles.input}
-                            disabled={isLoading}
-                        />
-                    </div>
+                    <motion.div
+                        className={styles.inputWrapper}
+                        initial={{ x: -20, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{ delay: 0.7 }}
+                    >
+                        <div className={styles.inputContainer}>
+                            <i className="fas fa-user-shield"></i>
+                            <input
+                                type="text"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder="ACCESS ID"
+                                className={styles.input}
+                                disabled={isLoading}
+                            />
+                        </div>
+                    </motion.div>
 
-                    <div className={styles.inputGroup}>
-                        <label htmlFor="password">Password</label>
-                        <input
-                            id="password"
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            placeholder="Enter your password"
-                            className={styles.input}
-                            disabled={isLoading}
-                        />
-                    </div>
+                    <motion.div
+                        className={styles.inputWrapper}
+                        initial={{ x: -20, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{ delay: 0.8 }}
+                    >
+                        <div className={styles.inputContainer}>
+                            <i className="fas fa-key"></i>
+                            <input
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                placeholder="SECURITY CODE"
+                                className={styles.input}
+                                disabled={isLoading}
+                            />
+                        </div>
+                    </motion.div>
 
-                    {error && <div className={styles.errorMessage}>{error}</div>}
-
-                    <div className={styles.actions}>
-                        <a href="#" className={styles.forgotPassword}>Forgot Password?</a>
-                    </div>
-
-                    <button type="submit" className={styles.submitBtn} disabled={isLoading}>
-                        {isLoading ? (
-                            <span className={styles.loader}></span>
-                        ) : (
-                            'Sign In'
+                    <AnimatePresence>
+                        {error && (
+                            <motion.div
+                                className={styles.error}
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: 'auto' }}
+                                exit={{ opacity: 0, height: 0 }}
+                            >
+                                <span className={styles.errorText}>
+                                    <i className="fas fa-triangle-exclamation"></i>
+                                    {error}
+                                </span>
+                            </motion.div>
                         )}
-                    </button>
+                    </AnimatePresence>
+
+                    <motion.button
+                        type="submit"
+                        className={styles.submitBtn}
+                        whileHover={{ scale: 1.02, boxShadow: '0 0 20px rgba(56, 189, 248, 0.4)' }}
+                        whileTap={{ scale: 0.98 }}
+                        disabled={isLoading}
+                    >
+                        {isLoading ? (
+                            <div className={styles.loader}></div>
+                        ) : (
+                            <span className={styles.btnContent}>
+                                AUTHORIZE <i className="fas fa-arrow-right"></i>
+                            </span>
+                        )}
+                    </motion.button>
                 </form>
 
                 <div className={styles.footer}>
-                    <p>Protected by EvaraTech Security Systems</p>
+                    <div className={styles.systemStatus}>
+                        <span className={styles.statusDot}></span>
+                        SYSTEM ONLINE v3.0-py
+                    </div>
                 </div>
-            </div>
+            </motion.div>
         </div>
     );
 }

@@ -2,7 +2,7 @@ import { useSearchParams, Link } from 'react-router-dom';
 import { useMemo, useState } from 'react';
 import NodeFactory from '../../services/NodeFactory';
 import { ProductType } from '../../models/enums';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import styles from './StationDetails.module.css';
 
 function StationDetails() {

@@ -2,8 +2,7 @@ import { useMemo, useState } from 'react';
 // import { useEvaraTechDataStore } from '../../../store/evaratechDataStore';
 import { AreaChart, Area, XAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import styles from './SystemDashboard.module.css';
-import { motion } from 'framer-motion';
-import { useAuth } from '../../../contexts/AuthContext';
+import { useAuthStore } from '../../../store/authStore';
 
 // Design System Components
 import GlassCard from '../../ui/card/GlassCard';
@@ -56,7 +55,7 @@ import { useAssets } from '../../../hooks/useAssets';
 function SystemDashboard() {
     const { assets: nodes } = useAssets();
     const [timeRange, setTimeRange] = useState<'24h' | '7d' | '30d'>('24h');
-    const { user } = useAuth();
+    const { user } = useAuthStore();
 
     // Calculate System Metrics
     const metrics = useMemo(() => {
@@ -231,7 +230,7 @@ function SystemDashboard() {
                 </div>
 
                 {/* Admin Migration Panel - Only for admin users */}
-                {user?.role === 'admin' && (
+                {user?.role === 'ADMIN' && (
                     <div className={styles.migrationContainer}>
                         <MigrationPanel />
                     </div>

@@ -10,16 +10,11 @@ import {
     UserCircle,
     Menu,
     Activity,
-    FileText,
-    Settings,
-    LogOut,
     Info,
-    History,
-    ArrowRight
 } from 'lucide-react';
 
 import { useAuthStore } from '../../../store/authStore';
-import { useAlertStore } from '../../../store/alertStore';
+import { useAlertStore, Alert } from '../../../store/alertStore';
 import styles from './Header.module.css';
 
 import { useUIStore } from '../../../store/uiStore';
@@ -30,7 +25,7 @@ function Header() {
     const location = useLocation();
     const navigate = useNavigate();
     const { logout, user } = useAuthStore();
-    const { alerts, unreadCount, markAsRead } = useAlertStore();
+    const { alerts, unreadCount, markAsRead }: { alerts: Alert[], unreadCount: number, markAsRead: (id: string) => void } = useAlertStore();
 
     // Global UI State
     const { activePanel, setActivePanel } = useUIStore();
@@ -103,6 +98,12 @@ function Header() {
                         <ShieldCheck size={18} strokeWidth={2} />
                         {t('nav.admin')}
                     </Link>
+                    {(user?.role === 'COMMAND' || user?.role === 'SUPER_ADMIN') && (
+                        <Link to="/admin" className={`${styles.navLink} ${isActive('/admin')}`}>
+                            <Activity size={18} strokeWidth={2} />
+                            Command
+                        </Link>
+                    )}
                 </nav>
 
                 {/* Right Side Actions */}
@@ -129,7 +130,7 @@ function Header() {
                                 >
                                     <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
                                         {alerts.slice(0, 5).map(alert => {
-                                            const { icon, color } = getSeverityIcon(alert.severity);
+                                            const { color } = getSeverityIcon(alert.severity);
                                             return (
                                                 <GlassMenuItem
                                                     key={alert.id}

@@ -29,8 +29,8 @@ const SquareStatusCard: React.FC<SquareStatusCardProps> = ({ node, onClick }) =>
         }
     };
 
-    const statusColor = node.status === 'active' || node.status === 'running' ? 'green' :
-        node.status === 'alert' || node.isCritical ? 'red' : 'gray';
+    const statusColor = node.status === 'Active' || node.status === 'Running' ? 'green' :
+        node.status === 'Critical' || node.isCritical ? 'red' : 'gray';
 
     return (
         <div className={`${styles.card} ${styles[getTypeColor(node.type)]}`} onClick={onClick}>
@@ -47,6 +47,12 @@ const SquareStatusCard: React.FC<SquareStatusCardProps> = ({ node, onClick }) =>
                     <span className={styles.type}>{node.type}</span>
                     <span className={styles.location}>{node.location || 'Main Campus'}</span>
                 </div>
+
+                {node.predictions?.estimated_empty_at && (
+                    <div className={styles.prediction}>
+                        <i className="fas fa-clock"></i> Empty in 14h (Est.)
+                    </div>
+                )}
             </div>
 
             <div className={styles.footer}>

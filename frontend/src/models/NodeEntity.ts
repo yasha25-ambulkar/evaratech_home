@@ -45,6 +45,7 @@ export abstract class NodeEntity {
     get currentLevelMeters() { return this.data.currentLevelMeters; }
     get dailyUsage() { return this.data.dailyUsage; }
     get refillCycles() { return this.data.refillCycles; }
+    get consumptionHistory() { return this.data.consumptionHistory || []; }
 
     abstract getTypeIcon(): string;
     abstract getTypeColor(): string;
