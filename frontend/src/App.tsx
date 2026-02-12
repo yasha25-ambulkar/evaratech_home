@@ -28,7 +28,7 @@ import { ToastProvider } from './context/ToastContext';
 import { notificationService } from './services/notification.service';
 import { AnimatePresence, motion } from 'framer-motion';
 import ProtectedRoute from './components/common/ProtectedRoute';
-import AIAssistantChat from './components/ai/AIAssistantChat';
+
 import { useAuthStore } from './store/authStore';
 
 function AppContent() {
@@ -84,7 +84,6 @@ function AppContent() {
                 </AnimatePresence>
             </Suspense>
 
-            {isAuthenticated && <AIAssistantChat />}
         </>
     );
 }
