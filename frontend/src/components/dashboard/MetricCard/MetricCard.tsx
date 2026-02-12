@@ -56,21 +56,16 @@ export default function MetricCard({
                     className={styles.iconBubble}
                     style={{
                         color: color,
-                        backgroundColor: `${color} 15` // 10% opacity roughly if hex, might fail if var. 
-                        // Better approach: use a mapping or specific prop. 
-                        // For now, let's assume we pass full style or just use 'color' for text and a generic light bg 
                     }}
                 >
-                    {/* If color starts with var, we can't easily add opacity. We'll use a trick or just simple bg */}
-                    <i className={icon} style={{ color }}></i>
-                    {/* Background layer */}
-                    <div className={styles.iconBg} style={{ background: color, opacity: 0.1 }} />
+                    <i className={icon} style={{ color, position: 'relative', zIndex: 2 }}></i>
+                    <div className={styles.iconBg} style={{ background: color, opacity: 0.12 }} />
                 </div>
 
                 {trend && (
-                    <div className={`${styles.trend} ${trend.isUp ? styles.up : styles.down} `}>
-                        <i className={`fas fa - arrow - ${trend.isUp ? 'up' : 'down'} `}></i>
-                        {trend.value}%
+                    <div className={`${styles.trend} ${trend.isUp ? styles.up : styles.down}`}>
+                        <i className={`fas fa-arrow-${trend.isUp ? 'up' : 'down'}`}></i>
+                        <span>{trend.value}%</span>
                     </div>
                 )}
             </div>

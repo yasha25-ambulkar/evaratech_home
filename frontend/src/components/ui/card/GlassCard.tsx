@@ -30,7 +30,7 @@ export default function GlassCard({
         <motion.div
             className={`${baseClass} ${className}`}
             style={{
-                padding: noPadding ? '0' : 'var(--space-6)',
+                padding: noPadding ? '0' : 'var(--space-5)',
                 position: 'relative',
                 overflow: 'hidden'
             }}
@@ -40,20 +40,6 @@ export default function GlassCard({
             transition={{ duration: 0.3 }}
             {...props}
         >
-            {/* Specular Highlight / Shine Effect */}
-            <div
-                style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    height: '1px',
-                    background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.6) 50%, transparent 100%)',
-                    opacity: 0.5,
-                    pointerEvents: 'none'
-                }}
-            />
-
             {children}
         </motion.div>
     );

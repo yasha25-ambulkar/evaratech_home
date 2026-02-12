@@ -1,29 +1,22 @@
-/* Floating Glass Header - iOS Dynamic Island Feel */
+/* Fixed Header with Subtle Separation */
 
 .header {
     position: fixed;
-    /* Force fixed to span viewport */
     top: 0;
     left: 0;
     width: 100%;
-    /* Safer than 100vw to avoid scrollbar overlap */
     height: 72px;
     z-index: 9999;
-    background: rgba(255, 255, 255, 0.85);
-    /* White Glass */
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
-    /* No border radius - Fully attached bar */
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
     border-radius: 0;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-    /* Subtle shadow only */
-
+    box-shadow: none;
     display: flex;
     align-items: center;
     padding: 0 12px;
-    /* Tighter padding on edges */
-    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1), background 0.1s ease;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1), background 0.1s ease;
 }
 
 /* ... Theme blocks kept same ... */

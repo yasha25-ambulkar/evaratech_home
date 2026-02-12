@@ -3,12 +3,12 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    padding: 120px var(--space-4) var(--space-8) var(--space-4);
+    padding: 120px var(--space-6) var(--space-8) var(--space-6);
 }
 
 .content {
     flex: 1;
-    max-width: 1180px;
+    max-width: 1280px;
     margin: 0 auto;
     width: 100%;
 }
@@ -18,15 +18,16 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: var(--space-8);
+    padding-bottom: var(--space-6);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
 }
 
 .header h1 {
-    font-size: 28px;
+    font-size: 32px;
     font-weight: 700;
     color: var(--text-primary);
     margin: 0;
     letter-spacing: -0.015em;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .viewToggle {
@@ -72,35 +73,30 @@
 .statsGrid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 32px;
+    gap: var(--space-6);
     margin-bottom: var(--space-8);
 }
 
 .statCard {
-    /* 1. Translucent Base */
-    background: rgba(255, 255, 255, 0.4);
-    /* 2. High Vibrancy Frosting */
+    background: rgba(255, 255, 255, 0.5);
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
-    /* 3. Sharp Edge */
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    /* 4. Soft Blue Depth */
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
-
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 4px 16px 0 rgba(31, 38, 135, 0.08);
     border-radius: var(--radius-lg);
-    padding: var(--space-6);
+    padding: var(--space-5);
     display: flex;
     align-items: center;
     gap: var(--space-4);
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     min-width: 0;
 }
 
 .statCard:hover {
-    background: rgba(255, 255, 255, 0.55);
-    border-color: rgba(255, 255, 255, 0.8);
-    box-shadow: 0 15px 45px rgba(31, 38, 135, 0.1);
-    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.6);
+    border-color: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 8px 24px rgba(31, 38, 135, 0.1);
+    transform: translateY(-2px);
 }
 
 .statIcon {
@@ -120,28 +116,28 @@
 }
 
 .statInfo h3 {
-    margin: 0 0 var(--space-1) 0;
-    color: var(--text-muted);
-    font-size: 14px;
+    margin: 0 0 var(--space-2) 0;
+    color: var(--gray-600);
+    font-size: 13px;
     font-weight: 500;
     letter-spacing: -0.005em;
-    text-transform: uppercase;
     line-height: 1.4;
 }
 
 .statValue {
     margin: 0;
-    font-size: 24px;
+    font-size: 28px;
     font-weight: 700;
-    color: var(--text-primary);
+    color: var(--gray-900);
     letter-spacing: -0.02em;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    line-height: 1.2;
+    line-height: 1;
     white-space: nowrap;
+    font-feature-settings: "tnum";
+    font-variant-numeric: tabular-nums;
 }
 
 .statChange {
-    font-size: 13px;
+    font-size: 12px;
     color: var(--status-success);
     font-weight: 600;
     margin-top: var(--space-1);
@@ -155,30 +151,23 @@
 }
 
 .chartCard {
-    /* 1. Translucent Base */
     background: #ffffff;
-    /* backdrop-filter: blur(20px) saturate(180%); */
-    /* -webkit-backdrop-filter: blur(20px) saturate(180%); */
-    /* 3. Sharp Edge */
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    /* 4. Soft Blue Depth */
-    box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.08);
-
-    border-radius: var(--radius-xl);
-    padding: var(--space-6);
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 12px rgba(31, 38, 135, 0.06);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .chartCard:hover {
-    background: rgba(255, 255, 255, 0.6);
-    border-color: rgba(255, 255, 255, 0.8);
-    box-shadow: 0 20px 60px rgba(31, 38, 135, 0.12);
+    border-color: rgba(0, 0, 0, 0.08);
+    box-shadow: 0 8px 20px rgba(31, 38, 135, 0.08);
 }
 
 .chartCard h2 {
-    margin: 0 0 var(--space-5) 0;
-    color: var(--text-primary);
-    font-size: 18px;
+    margin: 0 0 var(--space-4) 0;
+    color: var(--gray-900);
+    font-size: 16px;
     font-weight: 600;
     letter-spacing: -0.01em;
 }
@@ -271,53 +260,57 @@
 }
 .intelligenceBanner {
     grid-column: 1 / -1;
-    background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(37, 99, 235, 0.1) 100%);
-    border: 1px solid rgba(139, 92, 246, 0.3);
-    border-radius: 12px;
-    padding: 24px;
-    margin-bottom: 24px;
+    background: rgba(37, 99, 235, 0.04);
+    border: 1px solid rgba(37, 99, 235, 0.1);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    margin-bottom: var(--space-6);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    backdrop-filter: blur(10px);
 }
 
 .bannerInfo h2 {
-    color: #8b5cf6;
-    margin: 0 0 8px 0;
-    font-size: 1.25rem;
+    color: var(--color-primary-500);
+    margin: 0 0 var(--space-1) 0;
+    font-size: 16px;
+    font-weight: 600;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: var(--space-2);
 }
 
 .bannerInfo p {
-    color: #a1a1aa;
+    color: var(--gray-600);
     margin: 0;
-    font-size: 0.95rem;
+    font-size: 14px;
+    font-weight: 500;
 }
 
 .bannerStats {
     display: flex;
-    gap: 32px;
+    gap: var(--space-6);
 }
 
 .bannerStatItem {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
 }
 
 .statLabel {
-    color: #a1a1aa;
-    font-size: 0.8rem;
+    color: var(--gray-500);
+    font-size: 11px;
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    margin-bottom: 4px;
+    margin-bottom: var(--space-1);
 }
 
 .statVal {
-    color: #f4f4f5;
-    font-size: 1.5rem;
+    color: var(--gray-900);
+    font-size: 20px;
     font-weight: 700;
+    font-feature-settings: "tnum";
+    font-variant-numeric: tabular-nums;
 }

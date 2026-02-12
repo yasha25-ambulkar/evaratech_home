@@ -4,25 +4,27 @@
     justify-content: space-between;
     height: 100%;
     min-height: 160px;
+    padding: var(--space-4);
 }
 
 .header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 12px;
+    margin-bottom: var(--space-4);
 }
 
 .iconBubble {
     position: relative;
-    width: 48px;
-    height: 48px;
-    border-radius: 16px;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 20px;
     overflow: hidden;
+    flex-shrink: 0;
 }
 
 .iconBg {
@@ -30,16 +32,17 @@
     inset: 0;
     width: 100%;
     height: 100%;
+    border-radius: 12px;
 }
 
 .trend {
     font-size: 12px;
     font-weight: 600;
-    padding: 4px 10px;
-    border-radius: 20px;
+    padding: var(--space-1) var(--space-2);
+    border-radius: 12px;
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: var(--space-1);
 }
 
 .trend.up {
@@ -55,20 +58,21 @@
 .content {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: var(--space-3);
 }
 
 .title {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
     color: var(--gray-500);
     margin: 0;
+    letter-spacing: -0.005em;
 }
 
 .valueRow {
     display: flex;
     align-items: baseline;
-    gap: 4px;
+    gap: var(--space-1);
 }
 
 .value {
@@ -78,13 +82,13 @@
     letter-spacing: -0.02em;
     font-feature-settings: "tnum";
     font-variant-numeric: tabular-nums;
+    line-height: 1.2;
 }
 
 .unit {
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 500;
-    color: var(--gray-400);
-    margin-left: 2px;
+    color: var(--gray-500);
 }
 
 .subtext {
@@ -96,15 +100,14 @@
 
 .progressContainer {
     width: 100%;
-    height: 6px;
+    height: 4px;
     background: var(--gray-100);
-    border-radius: 4px;
-    margin-top: 8px;
-    margin-bottom: 4px;
+    border-radius: 2px;
     overflow: hidden;
+    margin-top: var(--space-2);
 }
 
 .progressBar {
     height: 100%;
-    border-radius: 4px;
+    border-radius: 2px;
 }
